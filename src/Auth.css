@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+/* Centralização do container */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  padding: 20px;
+}
+
+.auth-wrapper {
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.auth-wrapper:hover {
+  transform: scale(1.02);
+}
+
+h2 {
+  font-size: 3rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 12px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+/* button:hover {
+  background-color: #0056b3;
+} */
+.remember-me {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  justify-items: center; /* Alinha os itens horizontalmente */
+  align-items: center;   /* Alinha os itens verticalmente */
+  width: 100%;           /* Garante que o container ocupe toda a largura disponível */
+  height: 100%;          /* Garante que o container ocupe toda a altura disponível */
+}
+.remember-me input {
+  justify-self: center;  /* Alinha o input horizontalmente ao centro da célula */
+  align-self: center;    /* Alinha o input verticalmente ao centro da célula */
+}
+.toggle-btn {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #007bff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 10px 20px;
+
+}
+
+.toggle-btn:hover {
+  color: #0056b3;
+}
+
+label {
+  display: flex;
+  align-items: center;
+}
+
+
+input:focus,
+button:focus {
+  outline: none;
+  border-color: #007bff;
+}
+input#rememberMe { 
+margin:0
+}
+
+
+/* Estilos para o Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Responsividade para dispositivos móveis e tablets */
+@media (max-width: 1024px) {
+  * {
+    box-sizing: border-box;
+  }
+
+  .app-container {
+    padding: 0;
+  }
+
+  .auth-wrapper {
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100vw;
+    min-height: 100vh;
+    max-width: none;
+    margin: auto;
+    transition: all 0.3s ease-in-out;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+  }
+
+  input,
+  button {
+    font-size: 0.9rem;
+  }
+
+  .toggle-btn {
+    font-size: 1rem;
+    margin-top: 10px; /* Mais espaço entre os botões */
+  }
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 2rem;
+  }
+
+  .auth-wrapper {
+    padding: 15px;
+  }
+
+  input,
+  button {
+    font-size: 0.9rem;
+  }
+
+  .toggle-btn {
+    font-size: 1rem;
+    margin-top: 12px;
+  }
+}
+
+
+.toggle-btn {
+  color: #6c63ff; /* Cor roxa suave (ajuste de acordo com o seu tema) */
+  font-size: 14px;
+  text-decoration: none;
+  padding: 5px 0;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.toggle-btn:hover {
+  color: #007bff; /* Cor dourada suave para o hover */
+  text-decoration: underline;
+}

@@ -47,6 +47,9 @@
       "last 1 safari version"
     ]
   },
+  "engines": {
+  "node": ">=20.0.0"
+},
   "devDependencies": {
     "jest": "^27.5.1"
   }

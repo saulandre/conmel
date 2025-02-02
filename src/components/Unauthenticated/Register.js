@@ -21,11 +21,13 @@ const AuthContainer = styled.div`
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden; /* Impede o scroll */
 `;
 
 // Wrapper do formulário
 const AuthWrapper = styled.div`
-  padding: 30px;
+  padding: 20px;
   border-radius: 16px;
   width: 100%;
   max-width: 400px;
@@ -38,16 +40,25 @@ const AuthWrapper = styled.div`
     transform: translateY(-5px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
   }
+
+  @media (max-width: 600px) {
+    padding: 15px;
+    max-width: 90%; /* Reduz a largura máxima em telas pequenas */
+  }
 `;
 
 // Título
 const Title = styled.h2`
   text-align: center;
   color: #22223b;
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 20px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem; /* Reduz o tamanho do título em telas pequenas */
+  }
 `;
 
 // Wrapper dos inputs
@@ -56,21 +67,25 @@ const InputWrapper = styled.div`
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px;
   background-color: #f8f9fa;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 
   &:focus-within {
     border-color: #4a4e69;
     box-shadow: 0 0 8px rgba(74, 78, 105, 0.5);
+  }
+
+  @media (max-width: 600px) {
+    padding: 8px; /* Reduz o padding em telas pequenas */
   }
 `;
 
 // Inputs
 const Input = styled.input`
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 12px;
   border: none;
   border-radius: 12px;
   font-size: 1rem;
@@ -85,6 +100,10 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
 `;
 
@@ -111,6 +130,11 @@ const Button = styled.button`
     background: #aaa;
     cursor: not-allowed;
   }
+
+  @media (max-width: 600px) {
+    padding: 10px; /* Reduz o padding em telas pequenas */
+    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 // Mensagem de erro
@@ -120,6 +144,10 @@ const ErrorMessage = styled.p`
   text-align: center;
   margin-top: 10px;
   font-family: 'Poppins', sans-serif;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 // Link estilizado
@@ -137,12 +165,20 @@ const StyledLink = styled(Link)`
     color: #335c67;
     text-decoration: underline;
   }
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 // Ícones
 const Icon = styled.span`
   margin-right: 10px;
   color: #4a4e69;
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem; /* Reduz o tamanho do ícone em telas pequenas */
+  }
 `;
 
 const Register = () => {

@@ -2,6 +2,9 @@
   "name": "nome-do-projeto",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0" 
+  },
   "dependencies": {
     "@babel/runtime": "^7.26.7",
     "@date-io/date-fns": "^3.2.0",
@@ -47,9 +50,7 @@
       "last 1 safari version"
     ]
   },
-  "engines": {
-  "node": ">=20.0.0" 
-},
+ 
   "devDependencies": {
     "jest": "^27.5.1"
   }

@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   // Função para recuperar o token de autenticação do localStorage
   const getToken = () => {
     try {
-      return localStorage.getItem('authToken'); // Tenta recuperar o token
+      return localStorage.getItem('token'); // Tenta recuperar o token
     } catch {
       return null; // Retorna null se houver erro
     }
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   // Função para salvar o token de autenticação no localStorage
   const setToken = (token) => {
     try {
-      localStorage.setItem('authToken', token); // Tenta salvar o token no localStorage
+      localStorage.setItem('token', token); // Tenta salvar o token no localStorage
     } catch {
       console.error('Erro ao salvar o token.'); // Exibe erro no console caso falhe
     }
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   // Função para remover o token e limpar o estado de autenticação
   const clearAuth = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     setUserId(null);
     setUserName(null);
     setIsVerified(false);
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       // Se houver um token, envia uma requisição para verificar sua validade
       axios
-        .post('http://localhost:4000/auth/verify-token', { token })
+        .post('http://localhost:4000/auth/verificar', { token })
         .then((response) => {
           if (response.data.success) {
             // Se o token for válido, define os dados do usuário

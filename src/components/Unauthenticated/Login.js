@@ -1,42 +1,64 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance'; // Certifique-se de que axiosInstance está configurado corretamente
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
+// Animação de fundo
+const gradientAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+// Container principal
 const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background-size: 200% 200%;
+  animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
 `;
 
+// Wrapper do formulário
 const AuthWrapper = styled.div`
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 30px;
   width: 100%;
   max-width: 400px;
   text-align: center;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+  }
 `;
 
+// Título
 const Title = styled.h1`
   font-size: 2rem;
   color: #22223b;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   margin-bottom: 30px;
 `;
 
+// Formulário
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
 `;
 
+// Wrapper dos inputs
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -44,7 +66,7 @@ const InputWrapper = styled.div`
   border-radius: 12px;
   padding: 12px;
   background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
   &:focus-within {
     border-color: #22223b;
@@ -52,6 +74,7 @@ const InputWrapper = styled.div`
   }
 `;
 
+// Inputs
 const Input = styled.input`
   flex: 1;
   padding: 10px;
@@ -60,34 +83,34 @@ const Input = styled.input`
   outline: none;
   background: transparent;
   color: #333;
+  font-family: 'Poppins', sans-serif;
 
   &::placeholder {
     color: #aaa;
   }
 `;
 
+// Ícones
 const Icon = styled(FontAwesomeIcon)`
   color: #22223b;
   font-size: 1.2rem;
   margin-right: 10px;
 `;
 
+// Botão de submit
 const Button = styled.button`
   padding: 15px;
   font-size: 1rem;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #fff;
-  background: linear-gradient(135deg, #22223b, #22223b);
-    border: none;
+  background: linear-gradient(135deg, #22223b, #4a4e69);
+  border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-
-
-    background: linear-gradient(135deg, #22223b, #335c67);
-
+    background: linear-gradient(135deg, #4a4e69, #22223b);
     transform: scale(1.03);
   }
 
@@ -97,12 +120,14 @@ const Button = styled.button`
   }
 `;
 
+// Container do "Manter conectado"
 const RememberMeContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 0.9rem;
   color: #555;
+  font-family: 'Poppins', sans-serif;
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -110,6 +135,7 @@ const RememberMeContainer = styled.div`
   }
 `;
 
+// Label do "Manter conectado"
 const RememberMeLabel = styled.label`
   cursor: pointer;
   display: flex;
@@ -117,17 +143,22 @@ const RememberMeLabel = styled.label`
   gap: 5px;
 `;
 
+// Mensagem de erro
 const ErrorMessage = styled.p`
   color: #d32f2f;
   font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
 `;
 
+// Link de "Esqueci a senha"
 const ForgotPasswordLink = styled.a`
   color: #22223b;
   font-size: 0.9rem;
   margin-top: 20px;
   display: block;
   text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  transition: color 0.3s;
 
   &:hover {
     text-decoration: underline;
@@ -135,12 +166,15 @@ const ForgotPasswordLink = styled.a`
   }
 `;
 
+// Link de "Criar conta"
 const SignupLink = styled.a`
   color: #22223b;
   font-size: 0.9rem;
   margin-top: 10px;
   display: block;
   text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  transition: color 0.3s;
 
   &:hover {
     text-decoration: underline;
@@ -154,6 +188,8 @@ const Login = () => {
     password: '',
     rememberMe: false,
   });
+  
+  
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -172,32 +208,50 @@ const Login = () => {
       setError('Todos os campos são obrigatórios.');
       return;
     }
-
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Por favor, insira um e-mail válido.');
       return;
     }
-
+  
     try {
       setLoading(true);
       setError(null);
-      const response = await axiosInstance.post('http://localhost:4000/auth/login', formData);
+      console.log("Enviando requisição para login...");
+  
+      const response = await axiosInstance.post('http://localhost:4000/api/auth/entrar', formData, { timeout: 5000 });
+  
+      console.log("Resposta recebida:", response);
       const { token, user } = response.data;
-
+  
+      console.log("Token:", token);
+      console.log("User:", user);
+      console.log("User isVerified:", user.isVerified);
+  
       localStorage.setItem('token', token);
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('isVerified', user.isVerified);
       localStorage.setItem('userId', user.id);
-
+  
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());
-
+  
+      console.log("Usuário autenticado. Redirecionando para:", user.isVerified ? "/gestor" : "/verificar");
       navigate(user.isVerified ? '/gestor' : '/verificar');
     } catch (err) {
-      console.error(err);
-      setError('Erro ao fazer login. Por favor, tente novamente.');
+      console.error("Erro ao fazer login:", err);
+      if (err.response) {
+        console.error("Resposta do servidor:", err.response.data);
+        setError(err.response.data.message || 'Erro ao fazer login. Tente novamente.');
+      } else if (err.request) {
+        console.error("Sem resposta do servidor:", err.request);
+        setError('Sem resposta do servidor. Verifique sua conexão.');
+      } else {
+        console.error("Erro ao configurar a requisição:", err.message);
+        setError('Erro ao configurar a requisição.');
+      }
     } finally {
       setLoading(false);
     }
@@ -217,6 +271,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               required
+                autoComplete="username"
             />
           </InputWrapper>
           <InputWrapper>
@@ -227,7 +282,7 @@ const Login = () => {
               placeholder="Digite sua senha"
               value={formData.password}
               onChange={handleChange}
-              required
+              autoComplete="current-password"              required
             />
           </InputWrapper>
           <RememberMeContainer>
@@ -245,8 +300,8 @@ const Login = () => {
             {loading ? 'Entrando...' : 'Entrar'}
           </Button>
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <ForgotPasswordLink href="/recuperar-senha">Esqueci a senha</ForgotPasswordLink>
-          <SignupLink href="/novaconta">Ainda não é cadastrado? Crie sua conta</SignupLink>
+          <ForgotPasswordLink href="/recuperarsenha">Esqueci a senha</ForgotPasswordLink>
+          <SignupLink href="/registrar">Ainda não é cadastrado? Crie sua conta</SignupLink>
         </Form>
       </AuthWrapper>
     </AuthContainer>

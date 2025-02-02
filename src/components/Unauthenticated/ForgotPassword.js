@@ -1,98 +1,138 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-// Styled Components
-const ForgotPasswordContainer = styled.div`
+// Animação de fundo
+const gradientAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+// Container principal
+const AuthContainer = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #6a5acd, #9370db);
-  color: #fff;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background-size: 200% 200%;
+  animation: ${gradientAnimation} 10s ease infinite;
+  padding: 20px;
 `;
 
-const FormContainer = styled.div`
-  background-color: #fff;
+// Wrapper do formulário
+const AuthWrapper = styled.div`
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 40px;
-  border-radius: 12px;
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   text-align: center;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-`;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
 
-const Title = styled.h2`
-  font-size: 2rem;
-  color: #9370db;
-  margin-bottom: 20px;
-  font-family: "Roboto", sans-serif;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #333;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #6200ea;
-    box-shadow: 0 0 8px rgba(98, 0, 234, 0.5);
+  &:hover {
+    transform: translateY(-5px);
   }
+`;
+
+// Título
+const Title = styled.h2`
+  font-size: 1.8rem;
+  color: #22223b;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+`;
+
+// Wrapper dos inputs
+const InputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+  margin-bottom: 20px;
+
+  &:focus-within {
+    border-color: #22223b;
+    box-shadow: 0 0 5px rgba(34, 34, 59, 0.3);
+  }
+`;
+
+// Input
+const Input = styled.input`
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
 
   &::placeholder {
     color: #aaa;
   }
 `;
+
+// Botão
 const Button = styled.button`
-  padding: 12px;
+  width: 100%;
+  padding: 15px;
   font-size: 1rem;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #fff;
-  background: linear-gradient(135deg, #6a5acd, #9370db);
-    border: none;
+  background: ${props => props.disabled ? '#aaa' : 'linear-gradient(135deg, #22223b, #4a4e69)'};
+  border: none;
   border-radius: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  transition: all 0.3s ease;
+  margin-top: 10px;
 
   &:hover {
-
-
-    background: linear-gradient(135deg, #5b4bc1, #8365c8);
-
-    transform: scale(1.03);
-  }
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+    background: ${props => props.disabled ? '#aaa' : 'linear-gradient(135deg, #4a4e69, #22223b)'};
+    transform: ${props => props.disabled ? 'none' : 'scale(1.02)'};
   }
 `;
 
-const BackToLogin = styled.p`
-  margin-top: 20px;
-  font-size: 1rem;
-  color: #6200ea;
-  cursor: pointer;
-  transition: color 0.3s ease;
+// Link de voltar
+const BackLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #22223b;
+  font-size: 0.9rem;
+  margin-top: 25px;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  transition: color 0.3s;
 
   &:hover {
+    color: #335c67;
     text-decoration: underline;
-    color: #4500a8;
   }
 `;
 
-const ErrorMessage = styled.p`
-  color: red;
-  font-size: 1rem;
-  margin-top: -10px;
-  margin-bottom: 20px;
+// Mensagem
+const StatusMessage = styled.p`
+  color: ${props => props.error ? '#d32f2f' : '#2e7d32'};
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: ${props => props.error ? '#ffebee' : '#e8f5e9'};
 `;
 
 const ForgotPassword = () => {
@@ -107,41 +147,63 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     if (!isValidEmail(email)) {
-      setMessage("Por favor, insira um e-mail válido.");
+      setMessage({ type: 'error', content: 'Por favor, insira um e-mail válido.' });
       return;
     }
 
     setIsSubmitting(true);
     setMessage(null);
 
+    // Simulação de requisição à API
     setTimeout(() => {
       setIsSubmitting(false);
-      setMessage(
-        "Se o e-mail for válido, enviaremos um link para redefinir sua senha."
-      );
+      setMessage({
+        type: 'success',
+        content: 'Se o e-mail for válido, enviaremos instruções para redefinição de senha.'
+      });
     }, 1500);
   };
 
   return (
-    <ForgotPasswordContainer>
-      <FormContainer>
-        <Title>RECUPERAR SENHA</Title>
+    <AuthContainer>
+      <AuthWrapper>
+        <Title>
+          <FontAwesomeIcon icon={faEnvelope} />
+          Recuperação de Senha
+        </Title>
+
         <form onSubmit={handleSubmit}>
-          <Input
-            type="email"
-            placeholder="Digite seu e-mail"
-            aria-label="Digite seu e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {message && <ErrorMessage>{message}</ErrorMessage>}
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Processando..." : "Recuperar"}
+          <InputWrapper>
+            <FontAwesomeIcon icon={faEnvelope} color="#666" />
+            <Input
+              type="email"
+              placeholder="Digite seu e-mail cadastrado"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isSubmitting}
+            />
+          </InputWrapper>
+
+          {message && (
+            <StatusMessage error={message.type === 'error'}>
+              {message.content}
+            </StatusMessage>
+          )}
+
+          <Button 
+            type="submit" 
+            disabled={isSubmitting || !email}
+          >
+            {isSubmitting ? 'Enviando...' : 'Enviar Instruções'}
           </Button>
         </form>
-        <BackToLogin onClick={() => navigate("/entrar")}>Voltar para a página de login</BackToLogin>
-      </FormContainer>
-    </ForgotPasswordContainer>
+
+        <BackLink to="/entrar">
+          <FontAwesomeIcon icon={faArrowLeft} />
+          Voltar para o Login
+        </BackLink>
+      </AuthWrapper>
+    </AuthContainer>
   );
 };
 

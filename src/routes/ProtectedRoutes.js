@@ -1,19 +1,29 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
-  const isVerified = localStorage.getItem('isVerified'); // Verifica se o usuário foi verificado
   const savedToken = localStorage.getItem('token');
-  
+  const isVerified = localStorage.getItem('isVerified') === 'true'; // Converte para booleano
+  const location = useLocation();
+
+  // Se não houver token, redireciona para a página de login
   if (!savedToken) {
-    return <Navigate to="/login" />; // Se não estiver autenticado, vai para o login
-  }
-  
-  if (savedToken && !isVerified) {
-    return <Navigate to="/verify" />; // Se o usuário estiver autenticado mas não verificado, vai para /verify
+    return <Navigate to="/entrar" state={{ from: location }} replace />;
   }
 
-  return children; // Se estiver autenticado e verificado, exibe a página solicitada
+  // Se houver token, mas o usuário não estiver verificado, redireciona para a página de verificação
+  // (a menos que já esteja na página de verificação)
+  if (savedToken && !isVerified && location.pathname !== '/verificar') {
+    return <Navigate to="/verificar" state={{ from: location }} replace />;
+  }
+
+  // Se o usuário estiver verificado e tentar acessar a página de verificação, redireciona para o dashboard
+  if (savedToken && isVerified && location.pathname === '/verificar') {
+    return <Navigate to="/gestor" replace />;
+  }
+
+  // Se o usuário estiver autenticado e verificado, renderiza o conteúdo protegido (children)
+  return children;
 };
 
 export default ProtectedRoute;

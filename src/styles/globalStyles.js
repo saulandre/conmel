@@ -26,8 +26,7 @@ import { createGlobalStyle } from 'styled-components';
     font-family: Arial, sans-serif;
     background-color: var(--background);
     color: var(--text-color);
-    overflow: hidden; /* Remove a barra de rolagem */
-  }
+    overflow-y: auto  }
 
   a {
     text-decoration: none;

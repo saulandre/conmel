@@ -22,6 +22,8 @@ const AuthContainer = styled.div`
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden; /* Impede o scroll */
 `;
 
 // Wrapper do formulário
@@ -29,7 +31,7 @@ const AuthWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 30px;
+  padding: 20px;
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -40,6 +42,11 @@ const AuthWrapper = styled.div`
     transform: translateY(-5px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
   }
+
+  @media (max-width: 600px) {
+    padding: 15px;
+    max-width: 90%; /* Reduz a largura máxima em telas pequenas */
+  }
 `;
 
 // Título
@@ -48,7 +55,11 @@ const Title = styled.h1`
   color: #22223b;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem; /* Reduz o tamanho do título em telas pequenas */
+  }
 `;
 
 // Formulário
@@ -64,7 +75,7 @@ const InputWrapper = styled.div`
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px;
   background-color: #f9f9f9;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
@@ -72,12 +83,16 @@ const InputWrapper = styled.div`
     border-color: #22223b;
     box-shadow: 0 0 5px #22223b;
   }
+
+  @media (max-width: 600px) {
+    padding: 8px; /* Reduz o padding em telas pequenas */
+  }
 `;
 
 // Inputs
 const Input = styled.input`
   flex: 1;
-  padding: 10px;
+  padding: 8px;
   font-size: 1rem;
   border: none;
   outline: none;
@@ -88,6 +103,10 @@ const Input = styled.input`
   &::placeholder {
     color: #aaa;
   }
+
+  @media (max-width: 600px) {
+    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 // Ícones
@@ -95,11 +114,15 @@ const Icon = styled(FontAwesomeIcon)`
   color: #22223b;
   font-size: 1.2rem;
   margin-right: 10px;
+
+  @media (max-width: 600px) {
+    font-size: 1rem; /* Reduz o tamanho do ícone em telas pequenas */
+  }
 `;
 
 // Botão de submit
 const Button = styled.button`
-  padding: 15px;
+  padding: 12px;
   font-size: 1rem;
   font-family: 'Poppins', sans-serif;
   color: #fff;
@@ -118,6 +141,11 @@ const Button = styled.button`
     background-color: #aaa;
     cursor: not-allowed;
   }
+
+  @media (max-width: 600px) {
+    padding: 10px; /* Reduz o padding em telas pequenas */
+    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 // Container do "Manter conectado"
@@ -132,6 +160,7 @@ const RememberMeContainer = styled.div`
   @media (max-width: 600px) {
     flex-direction: column;
     gap: 10px;
+    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
 `;
 
@@ -148,13 +177,17 @@ const ErrorMessage = styled.p`
   color: #d32f2f;
   font-size: 0.9rem;
   font-family: 'Poppins', sans-serif;
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 // Link de "Esqueci a senha"
 const ForgotPasswordLink = styled.a`
   color: #22223b;
   font-size: 0.9rem;
-  margin-top: 20px;
+  margin-top: 15px;
   display: block;
   text-decoration: none;
   font-family: 'Poppins', sans-serif;
@@ -163,6 +196,10 @@ const ForgotPasswordLink = styled.a`
   &:hover {
     text-decoration: underline;
     color: #335c67;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
 `;
 
@@ -180,6 +217,10 @@ const SignupLink = styled.a`
     text-decoration: underline;
     color: #335c67;
   }
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
+  }
 `;
 
 const Login = () => {
@@ -188,7 +229,6 @@ const Login = () => {
     password: '',
     rememberMe: false,
   });
-  
   
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -271,7 +311,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               required
-                autoComplete="username"
+              autoComplete="username"
             />
           </InputWrapper>
           <InputWrapper>
@@ -282,7 +322,8 @@ const Login = () => {
               placeholder="Digite sua senha"
               value={formData.password}
               onChange={handleChange}
-              autoComplete="current-password"              required
+              autoComplete="current-password"
+              required
             />
           </InputWrapper>
           <RememberMeContainer>

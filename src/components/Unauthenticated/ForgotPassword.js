@@ -169,7 +169,7 @@ const ForgotPassword = () => {
       <AuthWrapper>
         <Title>
           <FontAwesomeIcon icon={faEnvelope} />
-          Recuperação de Senha
+          RECUPERAR SENHA
         </Title>
 
         <form onSubmit={handleSubmit}>

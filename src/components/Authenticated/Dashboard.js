@@ -367,6 +367,7 @@ const Dashboard = () => {
   const [inscricoes, setInscricoes] = useState([]);
   const [theme, setTheme] = useState('professional');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [inscricoes, setInscricoes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {

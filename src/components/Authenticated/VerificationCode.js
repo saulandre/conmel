@@ -166,7 +166,7 @@ const VerificationCode = () => {
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false); // Adicionando estado para controlar a submissão
-
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const token = localStorage.getItem('token');
   const userEmail = JSON.parse(localStorage.getItem('user'))?.userEmail || '';
   const userId = JSON.parse(localStorage.getItem('user'))?.id || '';
@@ -190,8 +190,7 @@ const handleSubmit = async (e) => {
   setIsSubmitting(true); // Indicando que a submissão está em andamento
 
   try {
-    const response = await axios.post(
-      'http://localhost:4000/api/auth/verificar',
+   const response = await axios.post(`${API_URL}/api/auth/registrar`,
       {
         userId: userId,
         verificationCode: code, // Envia o código digitado pelo usuário

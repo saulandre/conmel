@@ -240,7 +240,7 @@ const handleSubmit = async (e) => {
 
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/auth/enviarcodigo',
+        `${API_URL}/api/auth/enviarcodigo`,
         {
           email: userEmail,
         },

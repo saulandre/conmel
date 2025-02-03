@@ -233,7 +233,7 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -260,7 +260,7 @@ const Login = () => {
       setError(null);
       console.log("Enviando requisição para login...");
   
-      const response = await axiosInstance.post('http://localhost:4000/api/auth/entrar', formData, { timeout: 5000 });
+      const response = await axiosInstance.post(`${API_URL}/api/auth/registrar`, {timeout: 5000 });
   
       console.log("Resposta recebida:", response);
       const { token, user } = response.data;

@@ -398,7 +398,13 @@ const Dashboard = () => {
 
   const handleSearch = (e) => setSearch(e.target.value);
 
-
+  const filteredData = inscricoes
+  ? inscricoes.filter(
+      (item) =>
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.institution.toLowerCase().includes(search.toLowerCase())
+    )
+  : [];
 
   return (
     <ThemeProvider theme={themes[theme]}>

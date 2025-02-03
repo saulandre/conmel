@@ -224,6 +224,9 @@ const SignupLink = styled.a`
   }
 `;
 
+
+// Seu estilo continua o mesmo...
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -235,6 +238,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -242,18 +246,20 @@ const Login = () => {
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = formData;
-  
-    if (!email || !password) {
+    console.log("🔵 Iniciando fluxo de login...");
+
+    if (!formData.email || !formData.password) {
+      console.warn("⚠️ Campos vazios no formulário.");
       setError('Todos os campos são obrigatórios.');
       return;
     }
   
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(formData.email)) {
+      console.warn("⚠️ E-mail inválido inserido:", formData.email);
       setError('Por favor, insira um e-mail válido.');
       return;
     }
@@ -261,30 +267,44 @@ const Login = () => {
     try {
       setLoading(true);
       setError(null);
-  
+      console.log("🚀 Enviando requisição para login...");
+
       const response = await axiosInstance.post(`${API_URL}/api/auth/entrar`, formData, { timeout: 5000 });
+
+      console.log("✅ Resposta recebida:", response);
       const { token, user } = response.data;
-  
+
+      console.log("🔑 Token recebido:", token);
+      console.log("👤 Usuário autenticado:", user);
+
       localStorage.setItem('token', token);
-      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('isVerified', user.isVerified);
       localStorage.setItem('userId', user.id);
-  
+
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());
-  
-      navigate(user.isVerified ? '/gestor' : '/verificar');
+
+      console.log("📅 Token válido até:", expirationDate.toISOString());
+
+      const redirectPath = user.isVerified ? '/gestor' : '/verificar';
+      console.log(`🔄 Redirecionando para: ${redirectPath}`);
+      navigate(redirectPath);
     } catch (err) {
-      console.error("Erro ao fazer login:", err);
+      console.error("❌ Erro ao fazer login:", err);
       if (err.response) {
+        console.error("⚠️ Resposta do servidor:", err.response.data);
         setError(err.response.data.message || 'Erro ao fazer login. Tente novamente.');
       } else if (err.request) {
+        console.error("⚠️ Sem resposta do servidor:", err.request);
         setError('Sem resposta do servidor. Verifique sua conexão.');
       } else {
+        console.error("⚠️ Erro ao configurar a requisição:", err.message);
         setError('Erro ao configurar a requisição.');
       }
     } finally {
+      console.log("🔄 Resetando estado de carregamento...");
       setLoading(false);
     }
   };

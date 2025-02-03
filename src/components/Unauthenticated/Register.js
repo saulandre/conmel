@@ -193,7 +193,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -218,7 +218,7 @@ const Register = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post('http://localhost:4000/api/auth/registrar', {
+      const response = await axios.post(`${API_URL}/api/auth/registrar`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,

@@ -260,7 +260,7 @@ const Login = () => {
       setError(null);
       console.log("Enviando requisição para login...");
   
-      const response = await axiosInstance.post(`${API_URL}/api/auth/registrar`, formData, { timeout: 5000 });
+      const response = await axiosInstance.post(`${API_URL}/api/auth/entrar`, formData, { timeout: 5000 });
   
       console.log("Resposta recebida:", response);
       const { token, user } = response.data;

@@ -4,6 +4,7 @@ import axiosInstance from '../../api/axiosInstance'; // Certifique-se de que axi
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 // Animação de fundo
 const gradientAnimation = keyframes`
@@ -241,16 +242,18 @@ const Login = () => {
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) {
+    const { email, password } = formData;
+  
+    if (!email || !password) {
       setError('Todos os campos são obrigatórios.');
       return;
     }
   
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(email)) {
       setError('Por favor, insira um e-mail válido.');
       return;
     }
@@ -258,19 +261,12 @@ const Login = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log("Enviando requisição para login...");
   
       const response = await axiosInstance.post(`${API_URL}/api/auth/entrar`, formData, { timeout: 5000 });
-  
-      console.log("Resposta recebida:", response);
       const { token, user } = response.data;
   
-      console.log("Token:", token);
-      console.log("User:", user);
-      console.log("User isVerified:", user.isVerified);
-  
       localStorage.setItem('token', token);
-      localStorage.setItem('userEmail', formData.email);
+      localStorage.setItem('userEmail', email);
       localStorage.setItem('isVerified', user.isVerified);
       localStorage.setItem('userId', user.id);
   
@@ -278,18 +274,14 @@ const Login = () => {
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());
   
-      console.log("Usuário autenticado. Redirecionando para:", user.isVerified ? "/gestor" : "/verificar");
       navigate(user.isVerified ? '/gestor' : '/verificar');
     } catch (err) {
       console.error("Erro ao fazer login:", err);
       if (err.response) {
-        console.error("Resposta do servidor:", err.response.data);
         setError(err.response.data.message || 'Erro ao fazer login. Tente novamente.');
       } else if (err.request) {
-        console.error("Sem resposta do servidor:", err.request);
         setError('Sem resposta do servidor. Verifique sua conexão.');
       } else {
-        console.error("Erro ao configurar a requisição:", err.message);
         setError('Erro ao configurar a requisição.');
       }
     } finally {

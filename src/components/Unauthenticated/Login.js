@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance'; // Certifique-se de que axiosInstance está configurado corretamente
 import styled, { keyframes } from 'styled-components';
@@ -225,8 +226,6 @@ const SignupLink = styled.a`
 `;
 
 
-// Seu estilo continua o mesmo...
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -238,6 +237,15 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+
+  // Verificação de login ao carregar o componente
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      console.log('Usuário já está logado, redirecionando...');
+      navigate('/gestor'); // Redireciona para a página do painel ou gestor
+    }
+  }, [navigate]); // A dependência de navigate garante que o redirecionamento só aconteça uma vez
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -256,14 +264,14 @@ const Login = () => {
       setError('Todos os campos são obrigatórios.');
       return;
     }
-  
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       console.warn("⚠️ E-mail inválido inserido:", formData.email);
       setError('Por favor, insira um e-mail válido.');
       return;
     }
-  
+
     try {
       setLoading(true);
       setError(null);

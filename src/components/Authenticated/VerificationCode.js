@@ -168,13 +168,10 @@ const VerificationCode = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Adicionando estado para controlar a submissão
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const token = localStorage.getItem('token');
-  let userEmail = '';
-try {
-  userEmail = JSON.parse(localStorage.getItem('userEmail')) || '';
-} catch (error) {
-  console.error('Erro ao parsear userEmail:', error);
-  userEmail = localStorage.getItem('userEmail') || ''; // Fallback para valor simples
-}
+
+  
+  const user = JSON.parse(localStorage.getItem('user'));
+const userEmail = user ? user.userEmail : null;
 
   const userId = JSON.parse(localStorage.getItem('user'))?.id || '';
 // Modificação do Input onChange para permitir apenas números
@@ -197,7 +194,7 @@ const handleSubmit = async (e) => {
   setIsSubmitting(true); // Indicando que a submissão está em andamento
 
   try {
-   const response = await axios.post(`${API_URL}/api/auth/registrar`,
+   const response = await axios.post(`${API_URL}/api/auth/verificar`,
       {
         userId: userId,
         verificationCode: code, // Envia o código digitado pelo usuário
@@ -208,6 +205,7 @@ const handleSubmit = async (e) => {
         },
       }
     );
+    console.log(userId, code, token);
 
     // Verifica se o usuário foi verificado
     if (response.data.user && response.data.user.isVerified) {

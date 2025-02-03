@@ -367,7 +367,7 @@ const Dashboard = () => {
   const [inscricoes, setInscricoes] = useState([]);
   const [theme, setTheme] = useState('professional');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [inscricoes, setInscricoes] = useState([]);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -402,10 +402,11 @@ const Dashboard = () => {
   const filteredData = inscricoes
   ? inscricoes.filter(
       (item) =>
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.institution.toLowerCase().includes(search.toLowerCase())
+        item.name?.toLowerCase().includes(search?.toLowerCase() || "") ||
+        item.institution?.toLowerCase().includes(search?.toLowerCase() || "")
     )
   : [];
+
 
   return (
     <ThemeProvider theme={themes[theme]}>

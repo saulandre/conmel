@@ -168,7 +168,7 @@ const VerificationCode = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Adicionando estado para controlar a submissão
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const token = localStorage.getItem('token');
-  const userEmail = JSON.parse(localStorage.getItem('user'))?.userEmail || '';
+  const userEmail = JSON.parse(localStorage.getItem('userEmail')) || '';
   const userId = JSON.parse(localStorage.getItem('user'))?.id || '';
 // Modificação do Input onChange para permitir apenas números
 const handleCodeChange = (e) => {

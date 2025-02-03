@@ -167,15 +167,19 @@ const VerificationCode = () => {
   const [countdown, setCountdown] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false); // Adicionando estado para controlar a submissão
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-  const token = localStorage.getItem('token');
   let userEmail = '';
-try {
-  userEmail = JSON.parse(localStorage.getItem('userEmail')) || '';
-} catch (error) {
-  console.error('Erro ao parsear userEmail:', error);
-  userEmail = localStorage.getItem('userEmail') || ''; // Fallback para valor simples
-}
-
+  const storedEmail = localStorage.getItem('userEmail');
+  
+  // Verifica se o valor é um JSON válido
+  try {
+    userEmail = storedEmail && storedEmail.startsWith('{') && storedEmail.endsWith('}')
+      ? JSON.parse(storedEmail) 
+      : storedEmail;
+  } catch (error) {
+    console.error('Erro ao parsear userEmail:', error);
+    userEmail = storedEmail || ''; // Se falhar, usa o valor direto
+  }
+  
   const userId = JSON.parse(localStorage.getItem('user'))?.id || '';
 // Modificação do Input onChange para permitir apenas números
 const handleCodeChange = (e) => {

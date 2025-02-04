@@ -508,14 +508,21 @@ const Dashboard = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        
-        const response = await axios.get(`${API_URL}/api/auth/inscricoes`, {
+    
+        const response = await axios.get(`${API_URL}/api/auth/obterinscricoes`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-
-        setInscricoes(response.data);
+    
+        console.log("Resposta da API:", response.data); // Depuração
+    
+        // Verifique se a resposta tem a propriedade "data" que é um array
+        if (!Array.isArray(response.data.data)) {
+          throw new Error('Resposta da API não contém um array válido');
+        }
+    
+        setInscricoes(response.data.data); // Atualiza o estado com o array correto
         setError(null);
       } catch (error) {
         console.error('Erro ao buscar inscrições:', error);
@@ -528,6 +535,7 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
+    
 
     fetchInscricoes();
   }, []);
@@ -548,15 +556,16 @@ const Dashboard = () => {
 
   const handleSearch = (e) => setSearch(e.target.value);
 
-  const filteredData = inscricoes.filter(item => {
-    const searchTerm = search.toLowerCase();
-    return (
-      item.nomeCompleto?.toLowerCase().includes(searchTerm) ||
-      (item.numeroCMEJacas && item.numeroCMEJacas.includes(searchTerm)) ||
-      (item.email && item.email.toLowerCase().includes(searchTerm))
-    );
-  });
-
+  const filteredData = Array.isArray(inscricoes) 
+  ? inscricoes.filter(item => {
+      const searchTerm = search.toLowerCase();
+      return (
+        item.nomeCompleto?.toLowerCase().includes(searchTerm) ||
+        (item.numeroCMEJacas && item.numeroCMEJacas.includes(searchTerm)) ||
+        (item.email && item.email.toLowerCase().includes(searchTerm))
+      );
+    })
+  : [];
   return (
     <ThemeProvider theme={themes[theme]}>
       <Container>

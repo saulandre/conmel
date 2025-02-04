@@ -482,7 +482,7 @@ const [error, setError] = useState(null);
               />
             </SearchBoxContainer>
 
-            {inscricoes.length === 0 ? (
+            {inscricoes.length === 0 || '' ? (
               <EmptyStateMessage>
                 <FiPlus size={24} />
                 Estamos aguardando sua primeira inscrição

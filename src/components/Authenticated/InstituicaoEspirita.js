@@ -141,7 +141,7 @@ const Table = styled.table`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 768px) {
-    display: block;
+  
     width: 100%;
   }
 `;
@@ -248,7 +248,23 @@ const IePage = () => {
 
   const [institutions, setInstitutions] = useState([]); 
   const [selectedInstitution, setSelectedInstitution] = useState(null); 
-  
+  const [formData, setFormData] = useState({
+    CEU: '',
+    NomeIE: '',
+    estado: '',
+    cidade: '',
+    bairro: '',
+    logradouro: '',
+    numero: '',
+    complemento: '',
+    telefone: '',
+    telefoneDIJ: '',
+    dia_evang: '',
+    horario_evang: '',
+    email: '',
+  });
+  const [formMode, setFormMode] = useState(''); 
+
   useEffect(() => {
     const fetchInstitutions = async () => {
       try {
@@ -261,7 +277,27 @@ const IePage = () => {
     fetchInstitutions();
   }, []);
 
- 
+  useEffect(() => {
+    if (selectedInstitution) {
+      setFormData(selectedInstitution);
+    } else {
+      setFormData({
+        CEU: '',
+        NomeIE: '',
+        estado: '',
+        cidade: '',
+        bairro: '',
+        logradouro: '',
+        numero: '',
+        complemento: '',
+        telefone: '',
+        telefoneDIJ: '',
+        dia_evang: '',
+        horario_evang: '',
+        email: '',
+      });
+    }
+  }, [selectedInstitution]);
 
   const handleSelectChange = (e) => {
     const selectedId = e.target.value;
@@ -338,7 +374,32 @@ const IePage = () => {
           )}
 
           <TableContainer>
-        
+            <Table>
+              <TableHead>
+                <tr>
+                  <TableHeaderCell>Campo</TableHeaderCell>
+                  <TableHeaderCell>Valor</TableHeaderCell>
+                </tr>
+              </TableHead>
+              <tbody>
+                {Object.entries(formData).map(([key, value]) => (
+                  key !== "CEU" && key !== "horario_evang" ? (
+                    <TableRow key={key}>
+                      <TableCell>{key}</TableCell>
+                      <TableCell>
+                        <Input
+                          type="text"
+                          name={key}
+                          value={value}
+                          onChange={handleChange}
+                          disabled={formMode === 'adicionar' ? false : true}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ) : null
+                ))}
+              </tbody>
+            </Table>
           </TableContainer>
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "25px" }}>

@@ -143,6 +143,18 @@ const Select = styled.select`
   color: #22223b;
   font-family: 'Poppins', sans-serif;
   appearance: none;
+  @media (max-width: 768px) {
+  select {
+    width: 100vw;
+    height: 100vh;
+    font-size: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: white;
+  }
+}
 `;
 
 const TextArea = styled.textarea`
@@ -515,14 +527,14 @@ const Formulario = () => {
                 <InputLabel>
                   <FiInfo /> Observações
                 </InputLabel>
-                <TextArea rows="3" placeholder="Informações adicionais (se necessário)" />
+                <TextArea rows="3" placeholder="Informações adicionais sobre esta inscrição" />
               </InputGroup>
             </FormGrid>
 
             <CheckboxContainer>
               <CheckboxInput type="checkbox" id="terms" required />
               <CheckboxLabel htmlFor="terms">
-                Li e aceito todas as normas *
+                Declaro que li o plano geral e aceito o plano geral da XLVI COMEJACA. *
               </CheckboxLabel>
             </CheckboxContainer>
 

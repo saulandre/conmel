@@ -10,7 +10,9 @@ import {
   FiLogOut, 
   FiSearch, 
   FiMenu,
-  FiMoon
+  FiMoon,
+  FiLoader,
+  FiAlertTriangle
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -367,19 +369,26 @@ const Dashboard = () => {
   const [inscricoes, setInscricoes] = useState([]);
   const [theme, setTheme] = useState('professional');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInscricoes = async () => {
       try {
+        setLoading(true);
         const response = await axios.get('/api/inscricoes');
         setInscricoes(response.data);
+        setError(null);
       } catch (error) {
         console.error('Erro ao buscar inscrições:', error);
+        setError('Erro ao carregar inscrições');
+        setInscricoes([]);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     fetchInscricoes();
   }, []);
 

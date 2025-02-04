@@ -300,24 +300,44 @@ const TableContainer = styled.div`
   overflow-x: auto;
   border-radius: 0.5rem;
   margin-top: 1rem;
+  position: relative;
+
+  @media (max-width: 768px) {
+    overflow-x: visible;
+    padding: 0 1rem;
+  }
 `;
+
 
 const Table = styled.table`
   width: 100%;
-  min-width: 600px;
   border-collapse: collapse;
   background: white;
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.shadow};
+  position: relative;
+
+  @media (max-width: 768px) {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
 `;
 
 const TableHead = styled.thead`
   background: ${({ theme }) => theme.tableHeaderBackground};
   color: ${({ theme }) => theme.tableHeaderColor};
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const TableRow = styled.tr`
+  transition: all 0.2s ease;
+  position: relative;
+
   &:nth-child(even) {
     background-color: ${({ theme }) => theme.tableRowEvenBackground};
   }
@@ -325,23 +345,61 @@ const TableRow = styled.tr`
   &:hover {
     background-color: ${({ theme }) => theme.tableRowHoverBackground};
   }
+
+  @media (max-width: 768px) {
+    display: block;
+    margin-bottom: 1rem;
+    background: ${({ theme }) => theme.cardBackground};
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    
+    &:nth-child(even) {
+      background: ${({ theme }) => theme.cardBackground};
+    }
+  }
 `;
+
 
 const TableHeaderCell = styled.th`
-  padding: 1rem;
-  font-weight: 500;
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
   text-align: left;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  background: ${({ theme }) => theme.tableHeaderBackground};
+  color: ${({ theme }) => theme.tableHeaderColor};
+  z-index: 2;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
 `;
-
 const TableCell = styled.td`
-  padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
-`;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  transition: all 0.2s ease;
+  font-size: 0.95em;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: ${({ theme }) => theme.textColor};
+      font-size: 0.85em;
+      opacity: 0.9;
+      min-width: 120px;
+    }
+  }
 `;
 
 const SmallButton = styled.button`
@@ -361,34 +419,89 @@ const SmallButton = styled.button`
     opacity: 0.9;
     transform: translateY(-1px);
   }
+`;const Spin = styled.div`
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+animation: spin 1s linear infinite;
 `;
 
-// Componente Principal
+const StatusPill = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.85em;
+  font-weight: 500;
+  background: ${({ $status }) => {
+    switch ($status) {
+      case 'Aprovado': return '#e6f4ea';
+      case 'Pendente': return '#fff3e6';
+      case 'Rejeitado': return '#fde8e8';
+      default: return '#f0f0f0';
+    }
+  }};
+  color: ${({ $status }) => {
+    switch ($status) {
+      case 'Aprovado': return '#0a5c36';
+      case 'Pendente': return '#8a6500';
+      case 'Rejeitado': return '#c22126';
+      default: return '#666';
+    }
+  }};
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    width: 100%;
+    
+    button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+`;
+
 const Dashboard = () => {
   const [search, setSearch] = useState('');
   const [inscricoes, setInscricoes] = useState([]);
   const [theme, setTheme] = useState('professional');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   useEffect(() => {
     const fetchInscricoes = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/inscricoes');
+        const token = localStorage.getItem('token');
+        
+        const response = await axios.get(`${API_URL}/api/auth/inscricoes`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
         setInscricoes(response.data);
         setError(null);
       } catch (error) {
         console.error('Erro ao buscar inscrições:', error);
-        setError('Erro ao carregar inscrições');
-        setInscricoes([]);
+        setError(error.response?.data?.error || 'Erro ao carregar inscrições');
+        
+        if (error.response?.status === 401) {
+          handleLogout();
+        }
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchInscricoes();
   }, []);
 
@@ -408,15 +521,14 @@ const [error, setError] = useState(null);
 
   const handleSearch = (e) => setSearch(e.target.value);
 
-  const filteredData = Array.isArray(inscricoes)
-  ? inscricoes.filter(
-      (item) =>
-        item.name?.toLowerCase().includes(search?.toLowerCase() || "") ||
-        item.institution?.toLowerCase().includes(search?.toLowerCase() || "")
-    )
-  : [];
-
-
+  const filteredData = inscricoes.filter(item => {
+    const searchTerm = search.toLowerCase();
+    return (
+      item.nomeCompleto?.toLowerCase().includes(searchTerm) ||
+      (item.numeroCMEJacas && item.numeroCMEJacas.includes(searchTerm)) ||
+      (item.email && item.email.toLowerCase().includes(searchTerm))
+    );
+  });
 
   return (
     <ThemeProvider theme={themes[theme]}>
@@ -476,46 +588,64 @@ const [error, setError] = useState(null);
               <SearchIcon size={20} />
               <SearchBox
                 type="text"
-                placeholder="Pesquisar por nome ou instituição..."
+                placeholder="Pesquisar por nome ou IE"
                 value={search}
                 onChange={handleSearch}
               />
             </SearchBoxContainer>
-
-            {inscricoes.length === 0 || '' ? (
-              <EmptyStateMessage>
-                <FiPlus size={24} />
-                Estamos aguardando sua primeira inscrição
-              </EmptyStateMessage>
-            ) : (
+            {
+  loading ? (
+    <EmptyStateMessage>
+      <Spin><FiLoader size={24} /></Spin>
+      Carregando inscrições...
+    </EmptyStateMessage>
+  ) :  inscricoes.length === 0 ? (
+    <EmptyStateMessage>
+      <FiPlus size={24} />
+      Estamos aguardando sua primeira inscrição
+    </EmptyStateMessage>
+  ) : filteredData.length === 0 ? (
+    <EmptyStateMessage>
+      <FiSearch size={24} />
+      Nenhum resultado encontrado
+    </EmptyStateMessage>
+  ) : (
               <TableContainer>
                 <Table>
                   <TableHead>
                     <tr>
                       <TableHeaderCell>#</TableHeaderCell>
                       <TableHeaderCell>Nome Completo</TableHeaderCell>
-                      <TableHeaderCell>Instituição</TableHeaderCell>
+                      <TableHeaderCell>Tipo</TableHeaderCell>
+                      <TableHeaderCell>Status</TableHeaderCell>
+                      <TableHeaderCell>Data</TableHeaderCell>
                       <TableHeaderCell>Ações</TableHeaderCell>
                     </tr>
                   </TableHead>
                   <tbody>
-                    {filteredData.map((item, index) => (
-                      <TableRow key={item.id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.institution}</TableCell>
-                        <TableCell>
-                          <ButtonGroup>
-                            <SmallButton>
-                              <FiEdit size={14} /> Editar
-                            </SmallButton>
-                            <SmallButton>
-                              <FiPrinter size={14} /> Imprimir
-                            </SmallButton>
-                          </ButtonGroup>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                  {filteredData.map((item, index) => (
+  <TableRow key={item.id}>
+    <TableCell data-label="#">{index + 1}</TableCell>
+    <TableCell data-label="Nome Completo">{item.nomeCompleto}</TableCell>
+    <TableCell data-label="Tipo">{item.tipoParticipacao}</TableCell>
+    <TableCell data-label="Status">
+      <StatusPill $status={item.status}>{item.status || 'Pendente'}</StatusPill>
+    </TableCell>
+    <TableCell data-label="Data">
+      {new Date(item.createdAt).toLocaleDateString('pt-BR')}
+    </TableCell>
+    <TableCell data-label="Ações">
+      <ButtonGroup>
+        <SmallButton onClick={() => navigate(`/inscricoes/editar/${item.id}`)}>
+          <FiEdit size={14} /> Editar
+        </SmallButton>
+        <SmallButton onClick={() => window.print()}>
+          <FiPrinter size={14} /> Imprimir
+        </SmallButton>
+      </ButtonGroup>
+    </TableCell>
+  </TableRow>
+))}
                   </tbody>
                 </Table>
               </TableContainer>

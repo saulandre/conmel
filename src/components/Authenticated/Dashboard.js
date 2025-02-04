@@ -49,15 +49,17 @@ const themes = {
 const Container = styled.div`
   min-height: 100vh;
   background: ${({ theme }) => theme.background};
-  padding: 2rem;
+  padding: 1rem;
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow: hidden; // Novo
 
   @media (max-width: 768px) {
-    padding: 1rem 0 0 0;
+    padding: 0;
+   
   }
 `;
 
@@ -106,6 +108,7 @@ const FloatingActions = styled.div`
 const MobileMenuWrapper = styled.div`
   position: relative;
   z-index: 1001;
+  
 `;
 
 const EmptyStateMessage = styled.div`
@@ -131,20 +134,26 @@ const ContentWrapper = styled.div`
 
   @media (max-width: 768px) {
     padding-top: 80px;
+    
   }
 `;
 
 const FormCard = styled.div`
   background: ${({ theme }) => theme.cardBackground};
   border-radius: 0.5rem;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: ${({ theme }) => theme.shadow};
   position: relative;
+  width: 100%;
+  max-width: calc(100vw - 2rem);
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     border-radius: 0;
     box-shadow: none;
     padding: 1rem;
+    max-width: 100vw;
+    width:100vw
   }
 `;
 
@@ -295,33 +304,43 @@ const SearchBox = styled.input`
     background: white;
   }
 `;
-
 const TableContainer = styled.div`
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: 0.5rem;
-  margin-top: 1rem;
-  position: relative;
-
+  margin: 1rem 0;
+  background: ${({ theme }) => theme.cardBackground};
+  
   @media (max-width: 768px) {
-    overflow-x: visible;
-    padding: 0 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    margin: 1rem -1rem;
+    width: calc(100% + 2rem);
+    
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
   }
 `;
-
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   background: white;
-  border-radius: 0.5rem;
+  border-radius: 0.7rem;
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.shadow};
   position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 
   @media (max-width: 768px) {
+    border: none;
     background: transparent;
     box-shadow: none;
-    border-radius: 0;
   }
 `;
 
@@ -330,7 +349,7 @@ const TableHead = styled.thead`
   color: ${({ theme }) => theme.tableHeaderColor};
 
   @media (max-width: 768px) {
-    display: none;
+    display: none;  /* Esconde o cabeçalho da tabela no mobile */
   }
 `;
 
@@ -351,14 +370,13 @@ const TableRow = styled.tr`
     margin-bottom: 1rem;
     background: ${({ theme }) => theme.cardBackground};
     border-radius: 0.5rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
     &:nth-child(even) {
       background: ${({ theme }) => theme.cardBackground};
     }
   }
 `;
-
 
 const TableHeaderCell = styled.th`
   padding: 1.25rem 1.5rem;
@@ -366,41 +384,47 @@ const TableHeaderCell = styled.th`
   text-align: left;
   position: sticky;
   top: 0;
-  backdrop-filter: blur(10px);
   background: ${({ theme }) => theme.tableHeaderBackground};
   color: ${({ theme }) => theme.tableHeaderColor};
   z-index: 2;
-  border-bottom: 2px solid rgba(0,0,0,0.05);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
+
+  &:first-child {
+    border-radius: 0.5rem 0 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0.5rem 0 0;
+  }
 `;
+
 const TableCell = styled.td`
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  position: relative;
-  transition: all 0.2s ease;
-  font-size: 0.95em;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.92em;
+  color: #444;
+  line-height: 1.4;
 
   @media (max-width: 768px) {
+    padding: 0.8rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-
-    &:last-child {
-      border-bottom: none;
-    }
 
     &::before {
       content: attr(data-label);
       font-weight: 600;
       color: ${({ theme }) => theme.textColor};
       font-size: 0.85em;
+      min-width: 100px;
       opacity: 0.9;
-      min-width: 120px;
     }
   }
 `;
+
 
 const SmallButton = styled.button`
   background: ${({ theme }) => theme.buttonBackground};
@@ -457,12 +481,15 @@ const ButtonGroup = styled.div`
   justify-content: flex-end;
 
   @media (max-width: 768px) {
-    justify-content: flex-start;
+    flex-direction: column;
+    gap: 0.3rem;
     width: 100%;
-    
+
     button {
-      flex: 1;
+      width: 100%;
       justify-content: center;
+      padding: 0.4rem;
+      font-size: 0.85em;
     }
   }
 `;
@@ -616,7 +643,7 @@ const Dashboard = () => {
                     <tr>
                       <TableHeaderCell>#</TableHeaderCell>
                       <TableHeaderCell>Nome Completo</TableHeaderCell>
-                      <TableHeaderCell>Tipo</TableHeaderCell>
+                 
                       <TableHeaderCell>Status</TableHeaderCell>
                       <TableHeaderCell>Data</TableHeaderCell>
                       <TableHeaderCell>Ações</TableHeaderCell>
@@ -627,7 +654,7 @@ const Dashboard = () => {
   <TableRow key={item.id}>
     <TableCell data-label="#">{index + 1}</TableCell>
     <TableCell data-label="Nome Completo">{item.nomeCompleto}</TableCell>
-    <TableCell data-label="Tipo">{item.tipoParticipacao}</TableCell>
+   
     <TableCell data-label="Status">
       <StatusPill $status={item.status}>{item.status || 'Pendente'}</StatusPill>
     </TableCell>

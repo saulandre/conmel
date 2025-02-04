@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag  } from "react-icons/fi";
+import { FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag } from "react-icons/fi";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ptBR } from "date-fns/locale";
 
@@ -37,11 +37,6 @@ const FormCard = styled.form`
     padding: 1.5rem;
     border-radius: 1rem;
   }
-`;const ParticipationSection = styled.div`
-margin: 2rem 0;
-padding: 1.5rem;
-background: #f5f5f5;
-border-radius: 1rem;
 `;
 
 const BackLink = styled.a`
@@ -60,7 +55,6 @@ const BackLink = styled.a`
     opacity: 0.8;
   }
 `;
-
 
 const Header = styled.div`
   text-align: center;
@@ -149,6 +143,18 @@ const Select = styled.select`
   color: #22223b;
   font-family: 'Poppins', sans-serif;
   appearance: none;
+  @media (max-width: 768px) {
+  select {
+    width: 100vw;
+    height: 100vh;
+    font-size: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: white;
+  }
+}
 `;
 
 const TextArea = styled.textarea`
@@ -202,11 +208,23 @@ const SubmitButton = styled.button`
 
 const Formulario = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log(token);
+    if (!token) {
+      navigate("/entrar");
+    }
+  }, [navigate]);
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [isMinor, setIsMinor] = useState(false);
   const [wantsShirt, setWantsShirt] = useState(false);
   const [participationType, setParticipationType] = useState('');
   const [committee, setCommittee] = useState('');
+  const [institutions, setInstitutions] = useState([]); // Estado para armazenar a lista de instituições
+  const [selectedInstitution, setSelectedInstitution] = useState(''); // Estado para armazenar a instituição selecionada
+
+  // Função para calcular a idade
   const calculateAge = (date) => {
     const today = new Date();
     const birthDate = new Date(date);
@@ -219,6 +237,20 @@ const Formulario = () => {
     return age;
   };
 
+  // Função para carregar a lista de instituições
+  useEffect(() => {
+    const fetchInstitutions = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/ie'); // Endpoint para buscar instituições
+        setInstitutions(response.data);
+      } catch (error) {
+        console.error('Erro ao carregar instituições:', error);
+      }
+    };
+
+    fetchInstitutions();
+  }, []);
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setIsMinor(calculateAge(date) < 18);
@@ -228,99 +260,102 @@ const Formulario = () => {
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
       <Container>
         <FormWrapper>
-                 <BackLink onClick={() => navigate(-1)}>
-          <FiChevronLeft /> Voltar
-        </BackLink>
+          <BackLink onClick={() => navigate(-1)}>
+            <FiChevronLeft /> Voltar
+          </BackLink>
 
-        <FormCard>
-          <Header>
-            <Title>FORMULÁRIO DE ATUALIZAÇÃO 2025</Title>
-            <p style={{ color: '#666' }}>Todos os campos marcados com * são obrigatórios</p>
-          </Header>
+          <FormCard>
+            <Header>
+              <Title>FORMULÁRIO DE INSCRIÇÃO 2025</Title>
+              <p style={{ color: '#666' }}>Todos os campos marcados com * são obrigatórios</p>
+            </Header>
 
-          <FormGrid>
-            {/* Campos Pessoais */}
-            <InputGroup>
-              <InputLabel>
-                <FiUser /> Nome Completo *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite seu nome completo" required />
-            </InputGroup>
-
-            <InputGroup>
-              <InputLabel>
-                <FiUser /> Nome Social
-              </InputLabel>
-              <InputField type="text" placeholder="Digite seu nome social" />
-            </InputGroup>
-
-            <InputGroup>
-              <InputLabel>
-                <FiCalendar /> Data de Nascimento *
-              </InputLabel>
-              <StyledDatePicker
-                value={selectedDate}
-                onChange={handleDateChange}
-                format="dd/MM/yyyy"
-                required
-              />
-            </InputGroup>
-
-            {isMinor && (
-              <>
-                <InputGroup>
-                  <InputLabel>
-                    <FiUser /> Nome do Responsável *
-                  </InputLabel>
-                  <InputField type="text" placeholder="Nome completo do responsável" required />
-                </InputGroup>
-
-                <InputGroup>
-                  <InputLabel>
-                    <FiFileText /> Documento do Responsável *
-                  </InputLabel>
-                  <InputField type="text" placeholder="CPF do responsável" required />
-                </InputGroup>
-
-                <InputGroup>
-                  <InputLabel>
-                    <FiPhone /> Telefone do Responsável *
-                  </InputLabel>
-                  <InputField type="tel" placeholder="Telefone do responsável" required />
-                </InputGroup>
-              </>
-            )}
-
-            <InputGroup>
-              <InputLabel>
-                <FiUser /> Sexo *
-              </InputLabel>
-              <Select required>
-                <option value="">Selecione</option>
-                <option value="Masculino">Masculino</option>
-                <option value="Feminino">Feminino</option>
-                <option value="Outro">Outro</option>
-              </Select>
-            </InputGroup>
-
-            {/* Contato */}
-            <InputGroup>
-              <InputLabel>
-                <FiPhone /> Telefone *
-              </InputLabel>
-              <InputField type="tel" placeholder="Digite seu telefone" required />
-            </InputGroup>
-
-            <InputGroup>
-              <InputLabel>
-                <FiMail /> E-mail *
-              </InputLabel>
-              <InputField type="email" placeholder="Digite seu e-mail" required />
-            </InputGroup>
-             {/* Participação */}
-             <InputGroup>
+            <FormGrid>
+              {/* Campos Pessoais */}
+              <InputGroup>
                 <InputLabel>
-                  <FiShoppingBag  /> Deseja camisa do evento? *
+                  <FiUser /> Nome Completo *
+                </InputLabel>
+                <InputField type="text" placeholder="Digite seu nome completo" required />
+              </InputGroup>
+
+              <InputGroup>
+                <InputLabel>
+                  <FiUser /> Nome Social
+                </InputLabel>
+                <InputField type="text" placeholder="Digite o nome social" />
+              </InputGroup>
+
+              <InputGroup>
+                <InputLabel>
+                  <FiCalendar /> Data de Nascimento *
+                </InputLabel>
+                <StyledDatePicker
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  format="dd/MM/yyyy"
+                  required
+                />
+              </InputGroup>
+
+              {isMinor && (
+                <>
+                  <InputGroup>
+                    <InputLabel>
+                      <FiUser /> Nome do Responsável *
+                    </InputLabel>
+                    <InputField type="text" placeholder="Nome completo do responsável" required />
+                  </InputGroup>
+
+                  <InputGroup>
+                    <InputLabel>
+                      <FiFileText /> Documento do Responsável *
+                    </InputLabel>
+                    <InputField type="text" placeholder="Documento do responsável" required />
+                  </InputGroup>
+
+                  <InputGroup>
+                    <InputLabel>
+                      <FiPhone /> Telefone do Responsável *
+                    </InputLabel>
+                    <InputField type="tel" placeholder="Telefone do responsável" required />
+                  </InputGroup>
+                </>
+              )}
+
+              <InputGroup>
+                <InputLabel>
+                  <FiUser /> Sexo *
+                </InputLabel>
+                <Select required>
+                  <option value="">Selecione</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Feminino">Feminino</option>
+                  <option value="Outro">Outro</option>
+                </Select>
+              </InputGroup>
+
+              {/* Contato */}
+              <InputGroup>
+                <InputLabel>
+                  <FiPhone /> Telefone *
+                </InputLabel>
+                <InputField type="tel" placeholder="Digite seu telefone" required />
+              </InputGroup>
+
+              <InputGroup>
+                <InputLabel>
+                  <FiMail /> E-mail *
+                </InputLabel>
+                <InputField type="email" placeholder="Digite seu e-mail" required />
+              </InputGroup>
+
+     
+
+              {/* Participação */}
+              <InputGroup>
+                <InputLabel>
+                  <FiShoppingBag /> Deseja camisa do evento? *
                 </InputLabel>
                 <CheckboxContainer>
                   <CheckboxInput 
@@ -328,7 +363,7 @@ const Formulario = () => {
                     checked={wantsShirt}
                     onChange={(e) => setWantsShirt(e.target.checked)}
                   />
-                  <CheckboxLabel>Sim, desejo receber a camisa</CheckboxLabel>
+                  <CheckboxLabel>Sim, desejo comprar a camisa</CheckboxLabel>
                 </CheckboxContainer>
 
                 {wantsShirt && (
@@ -352,7 +387,7 @@ const Formulario = () => {
                   onChange={(e) => setParticipationType(e.target.value)}
                   required
                 >
-                  <option value="">Selecione o tipo</option>
+                  <option value="">Selecione</option>
                   <option value="Confraternista">Confraternista</option>
                   <option value="Trabalhador">Trabalhador</option>
                 </Select>
@@ -374,119 +409,138 @@ const Formulario = () => {
                   </Select>
                 </InputGroup>
               )}
-            {/* Endereço */}
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> CEP *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite seu CEP" required />
-            </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> Estado *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite seu estado" required />
-            </InputGroup>
+              {/* Endereço */}
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> CEP *
+                </InputLabel>
+                <InputField type="text" placeholder="Digite seu CEP" required />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> Cidade *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite sua cidade" required />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Estado *
+                </InputLabel>
+                <InputField type="text" placeholder="Digite seu estado" required />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> Bairro *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite seu bairro" required />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Cidade *
+                </InputLabel>
+                <InputField type="text" placeholder="Digite sua cidade" required />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> Logradouro *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite seu logradouro" required />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Bairro *
+                </InputLabel>
+                <InputField type="text" placeholder="Digite seu bairro" required />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> Número *
-              </InputLabel>
-              <InputField type="text" placeholder="Digite o número" required />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Logradouro *
+                </InputLabel>
+                <InputField type="text" placeholder="Preeenchido automaticamente" required />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMapPin /> Complemento
-              </InputLabel>
-              <InputField type="text" placeholder="Complemento (opcional)" />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Número *
+                </InputLabel>
+                <InputField type="text" placeholder="Digite o número" required />
+              </InputGroup>
 
-            {/* Informações Adicionais */}
-            <InputGroup>
-              <InputLabel>
-                <FiInfo /> Tempo na Instituição
-              </InputLabel>
-              <InputField type="text" placeholder="Ex.: 1 ano, 2 meses..." />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Complemento
+                </InputLabel>
+                <InputField type="text" placeholder="Complemento (opcional)" />
+              </InputGroup>
+         {/* Instituição Espírita */}
+         <InputGroup>
+                <InputLabel>
+                  <FiMapPin /> Instituição Espírita *
+                </InputLabel>
+                <Select
+                  value={selectedInstitution}
+                  onChange={(e) => setSelectedInstitution(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione uma instituição</option>
+                  {institutions.map((inst) => (
+                    <option key={inst.id} value={inst.id}>
+                      {inst.nome}
+                    </option>
+                  ))}
+                </Select>
+              </InputGroup>
+              {/* Informações Adicionais */}
+              <InputGroup>
+                <InputLabel>
+                  <FiInfo /> Tempo na Instituição
+                </InputLabel>
+                <InputField type="text" placeholder="Ex.: 2 anos, 3 anos..." />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiInfo /> Participação Anterior *
-              </InputLabel>
-              <Select required>
-                <option value="">Já participou antes?</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </Select>
-            </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiInfo /> Alergias
-              </InputLabel>
-              <TextArea rows="3" placeholder="Descreva suas alergias" />
-            </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiInfo /> Medicação
-              </InputLabel>
-              <TextArea rows="3" placeholder="Descreva medicações em uso" />
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiInfo /> Participação Anterior *
+                </InputLabel>
+                <Select required>
+                  <option value="">Já participou antes?</option>
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </Select>
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiInfo /> Vegetarianismo *
-              </InputLabel>
-              <Select required>
-                <option value="">Faz dieta vegetariana?</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </Select>
-            </InputGroup>
+              <InputGroup>
+                <InputLabel>
+                  <FiInfo /> Alergias
+                </InputLabel>
+                <TextArea rows="3" placeholder="Descreva suas alergias" />
+              </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiInfo /> Observações
-              </InputLabel>
-              <TextArea rows="3" placeholder="Informações adicionais" />
-            </InputGroup>
-          </FormGrid>
+              <InputGroup>
+                <InputLabel>
+                  <FiInfo /> Medicação
+                </InputLabel>
+                <TextArea rows="3" placeholder="Descreva medicações em uso" />
+              </InputGroup>
 
-          <CheckboxContainer>
-            <CheckboxInput type="checkbox" id="terms" required />
-            <CheckboxLabel htmlFor="terms">
-              Li e aceito todas as normas *
-            </CheckboxLabel>
-          </CheckboxContainer>
+              <InputGroup>
+                <InputLabel>
+                  <FiInfo /> Vegetarianismo *
+                </InputLabel>
+                <Select required>
+                  <option value="">Faz dieta vegetariana?</option>
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </Select>
+              </InputGroup>
 
-          <SubmitButton type="submit">Atualizar inscrição</SubmitButton>
-        </FormCard>
+              <InputGroup>
+                <InputLabel>
+                  <FiInfo /> Observações
+                </InputLabel>
+                <TextArea rows="3" placeholder="Informações adicionais sobre esta inscrição" />
+              </InputGroup>
+            </FormGrid>
+
+            <CheckboxContainer>
+              <CheckboxInput type="checkbox" id="terms" required />
+              <CheckboxLabel htmlFor="terms">
+                Declaro que li o plano geral e aceito o plano geral da XLVI COMEJACA. *
+              </CheckboxLabel>
+            </CheckboxContainer>
+
+            <SubmitButton type="submit">Enviar Inscrição</SubmitButton>
+          </FormCard>
         </FormWrapper>
- 
       </Container>
     </LocalizationProvider>
   );

@@ -36,16 +36,23 @@ function AppContent() {
     const token = localStorage.getItem('token');
     const isVerified = user?.isVerified; // Supondo que o contexto forneça o estado de verificação
 
-    // Redirecionamentos baseados no estado de autenticação
     if (token) {
-      if (['/', '/entrar', '/registrar'].includes(location.pathname)) {
+      // Se o usuário estiver autenticado e o e-mail estiver ausente
+      if (!user?.email) {
+        navigate('/entrar'); // Redireciona para a página de login
+      } else if (['/', '/entrar', '/registrar'].includes(location.pathname)) {
+        // Se o usuário estiver autenticado e a rota for '/', '/entrar' ou '/registrar'
+        // E se o usuário não for verificado, redireciona para '/verificar', caso contrário, vai para '/gestor'
         navigate(isVerified ? '/gestor' : '/verificar');
       }
     } else {
       if (location.pathname.startsWith('/gestor') || location.pathname === '/verificar') {
+        // Se o usuário não estiver autenticado, redireciona para '/entrar'
         navigate('/entrar');
       }
     }
+    
+    
   }, [location.pathname, navigate, user?.isVerified]);
 
   return (

@@ -333,14 +333,21 @@ const Login = () => {
       console.error("❌ Erro ao fazer login:", err);
       if (err.response) {
         console.error("⚠️ Resposta do servidor:", err.response.data);
-        setError(err.response.data.message || 'Erro ao fazer login. Tente novamente.');
+        
+        if (err.response.status === 401) { // Código 401 indica credenciais inválidas
+          setError('Usuário ou senha incorretos.');
+        } else {
+          setError(err.response.data.message || 'E-mail ou senha incorreto!');
+        }
       } else if (err.request) {
         console.error("⚠️ Sem resposta do servidor:", err.request);
-        setError('Usuário ou senha incorretos.');
+        setError('Sem resposta do servidor. Verifique sua conexão.');
       } else {
         console.error("⚠️ Erro ao configurar a requisição:", err.message);
         setError('Erro ao configurar a requisição.');
       }
+
+    
     } finally {
       console.log("🔄 Resetando estado de carregamento...");
       setLoading(false);
@@ -376,6 +383,7 @@ const Login = () => {
               required
             />
           </InputWrapper>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
           <RememberMeContainer>
             <RememberMeLabel>
               <input

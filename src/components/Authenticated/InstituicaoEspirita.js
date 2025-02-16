@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FiSave, FiArrowLeft, FiEdit, FiPlus, FiChevronLeft } from 'react-icons/fi';
+import { FiSave, FiArrowLeft, FiEdit, FiPlus, FiChevronLeft, FiSearch } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 
 const Container = styled.div`
   min-height: 100vh;
@@ -141,7 +140,6 @@ const Table = styled.table`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 768px) {
-  
     width: 100%;
   }
 `;
@@ -197,7 +195,6 @@ const BackLink = styled.a`
   }
 `;
 
-
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
@@ -216,6 +213,7 @@ const SubmitButton = styled.button`
     opacity: 0.9;
   }
 `;
+
 const Input = styled.input`
   width: 100%;
   padding: 0.5rem;
@@ -237,20 +235,78 @@ const Input = styled.input`
   }
 `;
 
+const SearchContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.5rem;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 1rem 1.5rem;
+  padding-left: 3rem;
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+  background: #f9f9f9;
+  color: #22223b;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #4a4e69;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &::placeholder {
+    color: #888;
+  }
+`;
+
+const SearchIcon = styled(FiSearch)`
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.2rem;
+`;
+
+const SuggestionsList = styled.ul`
+  position: absolute;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+`;
+
+const SuggestionItem = styled.li`
+  padding: 1rem;
+  cursor: pointer;
+  color: #22223b;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #f1f3f5;
+  }
+`;
+
 const IePage = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/entrar");
-    }
-  }, [navigate]);
 
-  const [institutions, setInstitutions] = useState([]); 
-  const [selectedInstitution, setSelectedInstitution] = useState(null); 
+  const [institutions, setInstitutions] = useState([]);
+  const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [formData, setFormData] = useState({
+    sigla: '',
+    nome: '',
     CEU: '',
-    NomeIE: '',
     estado: '',
     cidade: '',
     bairro: '',
@@ -258,32 +314,56 @@ const IePage = () => {
     numero: '',
     complemento: '',
     telefone: '',
-    telefoneDIJ: '',
-    dia_evang: '',
-    horario_evang: '',
+    dia: '',
+    horario: '',
     email: '',
   });
-  const [formMode, setFormMode] = useState(''); 
+  const [formMode, setFormMode] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredInstitutions, setFilteredInstitutions] = useState([]);
+
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
   useEffect(() => {
+    if (!API_URL) {
+      console.error("API_URL não definida!");
+      return;
+    }
+
     const fetchInstitutions = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/ie');
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('Token não encontrado!');
+          alert('Você precisa estar autenticado!');
+          return;
+        }
+
+        const response = await axios.get(`${API_URL}/api/auth/listarinstituicoes`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        console.log("Dados recebidos da API:", response.data);
         setInstitutions(response.data);
       } catch (error) {
         console.error('Erro ao carregar instituições:', error);
+        alert('Erro ao carregar lista de instituições');
       }
     };
+
     fetchInstitutions();
-  }, []);
+  }, [API_URL]);
 
   useEffect(() => {
     if (selectedInstitution) {
       setFormData(selectedInstitution);
     } else {
       setFormData({
+        sigla: '',
+        nome: '',
         CEU: '',
-        NomeIE: '',
         estado: '',
         cidade: '',
         bairro: '',
@@ -291,18 +371,28 @@ const IePage = () => {
         numero: '',
         complemento: '',
         telefone: '',
-        telefoneDIJ: '',
-        dia_evang: '',
-        horario_evang: '',
+        dia: '',
+        horario: '',
         email: '',
       });
     }
   }, [selectedInstitution]);
 
-  const handleSelectChange = (e) => {
-    const selectedId = e.target.value;
-    const institution = institutions.find((inst) => inst.id === selectedId);
-    setSelectedInstitution(institution || null);
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = institutions.filter((inst) =>
+        inst.nome.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredInstitutions(filtered);
+    } else {
+      setFilteredInstitutions([]);
+    }
+  }, [searchTerm, institutions]);
+
+  const handleSelectInstitution = (institution) => {
+    setSelectedInstitution(institution);
+    setSearchTerm(institution.nome);
+    setFilteredInstitutions([]);
   };
 
   const handleChange = (e) => {
@@ -315,44 +405,81 @@ const IePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting form. formMode:', formMode, 'selectedInstitution:', selectedInstitution);
     try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
       if (formMode === 'adicionar') {
-        await axios.post('http://localhost:4000/api/ie', formData);
+        console.log('Attempting POST request');
+        await axios.post(`${API_URL}/api/auth/novainstituicao`, formData, config);
         alert('Instituição adicionada com sucesso!');
+         
+    setFormData({
+      sigla: '',
+      nome: '',
+      CEU: '',
+      estado: '',
+      cidade: '',
+      bairro: '',
+      logradouro: '',
+      numero: '',
+      complemento: '',
+      telefone: '',
+      dia: '',
+      horario: '',
+      email: '',
+    });
+
       } else if (formMode === 'alterar' && selectedInstitution) {
-        await axios.put(`http://localhost:4000/api/ie/${selectedInstitution.id}`, formData);
+        console.log('Attempting PUT request with id:', selectedInstitution.id);
+        await axios.put(
+          `${API_URL}/api/auth/editarinstituicao/${selectedInstitution.id}`,
+          formData,
+          config
+        );
         alert('Instituição atualizada com sucesso!');
+      } else {
+        console.log('No valid mode or selected institution');
+        alert('Selecione uma instituição para editar ou alterne para o modo de adição.');
+        return;
       }
-      setFormMode(''); 
-      setSelectedInstitution(null); 
+
+      setFormMode('');
+      setSelectedInstitution(null);
+      // Recarregar a lista de instituições após adição/edição
+      const response = await axios.get(`${API_URL}/api/auth/listarinstituicoes`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setInstitutions(response.data);
     } catch (error) {
       console.error('Erro ao salvar instituição:', error);
       alert('Erro ao salvar instituição.');
     }
   };
 
-  const handleBack = () => {
-    navigate(-1); 
-  };
-
   const handleModeChange = (mode) => {
     setFormMode(mode);
     setSelectedInstitution(null);
+    setSearchTerm('');
   };
 
   return (
     <Container>
       <ContentWrapper>
-         <BackLink onClick={() => navigate(-1)}>
-                  <FiChevronLeft /> Voltar
-                </BackLink>
+        <BackLink onClick={() => navigate(-1)}>
+          <FiChevronLeft /> Voltar
+        </BackLink>
         <FormCard>
           <Header>
-            <Title>Cadastro de Instituição Espírita</Title>
+            <Title>Cadastro de IE</Title>
             <ButtonContainer>
-            {/*   <ActionButton onClick={handleBack}>
-                <FiArrowLeft size={18} /> Voltar
-              </ActionButton> */}
               <ActionButton onClick={() => handleModeChange('adicionar')}>
                 <FiPlus size={18} /> Adicionar
               </ActionButton>
@@ -363,14 +490,27 @@ const IePage = () => {
           </Header>
 
           {formMode === 'alterar' && (
-            <Select onChange={handleSelectChange}>
-              <option value="">Selecione uma instituição</option>
-              {institutions.map((inst) => (
-                <option key={inst.id} value={inst.id}>
-                  {inst.nome}
-                </option>
-              ))}
-            </Select>
+            <SearchContainer>
+              <SearchInput
+                type="text"
+                placeholder="Pesquisar instituição..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <SearchIcon />
+              {filteredInstitutions.length > 0 && (
+                <SuggestionsList>
+                  {filteredInstitutions.map((institution) => (
+                    <SuggestionItem
+                      key={institution.id}
+                      onClick={() => handleSelectInstitution(institution)}
+                    >
+                      {institution.nome}
+                    </SuggestionItem>
+                  ))}
+                </SuggestionsList>
+              )}
+            </SearchContainer>
           )}
 
           <TableContainer>
@@ -382,8 +522,8 @@ const IePage = () => {
                 </tr>
               </TableHead>
               <tbody>
-                {Object.entries(formData).map(([key, value]) => (
-                  key !== "CEU" && key !== "horario_evang" ? (
+                {Object.entries(formData).map(([key, value]) =>
+                  key !== "CEU" && key !== "horario" ? (
                     <TableRow key={key}>
                       <TableCell>{key}</TableCell>
                       <TableCell>
@@ -392,26 +532,32 @@ const IePage = () => {
                           name={key}
                           value={value}
                           onChange={handleChange}
-                          disabled={formMode === 'adicionar' ? false : true}
+                          disabled={
+                            formMode === 'adicionar' 
+                              ? false 
+                              : formMode === 'alterar' 
+                                ? !selectedInstitution 
+                                : true
+                          }
                         />
                       </TableCell>
                     </TableRow>
                   ) : null
-                ))}
+                )}
               </tbody>
             </Table>
           </TableContainer>
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "25px" }}>
-  <SubmitButton type="submit">Salvar</SubmitButton>
-  <SubmitButton 
-    type="button" 
-    onClick={() => navigate(-1)} 
-    style={{ background: "#888" }}
-  >
-    Voltar
-  </SubmitButton>
-</div>
+            <SubmitButton onClick={handleSubmit} type="submit">Salvar</SubmitButton>
+            <SubmitButton
+              type="button"
+              onClick={() => navigate(-1)}
+              style={{ background: "#888" }}
+            >
+              Voltar
+            </SubmitButton>
+          </div>
         </FormCard>
       </ContentWrapper>
     </Container>

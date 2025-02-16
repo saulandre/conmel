@@ -14,82 +14,108 @@ const gradientAnimation = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
-// Container principal
+
+// Container principal atualizado
 const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
-  background-size: 200% 200%;
-  animation: ${gradientAnimation} 10s ease infinite;
-  padding: 20px;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  background-size: 400% 400%;
+  animation: ${gradientAnimation} 15s ease infinite;
+  padding: 2rem;
   box-sizing: border-box;
-  overflow: hidden; /* Impede o scroll */
+  overflow: hidden;
 `;
 
-// Wrapper do formulário
-const AuthWrapper = styled.div`
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  @media (max-width: 600px) {
-    padding: 15px;
-    max-width: 90%; /* Reduz a largura máxima em telas pequenas */
-  }
-`;
-
-// Título
+// Nova tipografia com maior hierarquia
 const Title = styled.h1`
-  font-size: 2rem;
-  color: #22223b;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  margin-bottom: 20px;
-
-  @media (max-width: 600px) {
-    font-size: 1.5rem; /* Reduz o tamanho do título em telas pequenas */
+  font-size: 2.5rem;
+  color: #2a2a2a;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #2a2a2a, #4a4a4a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align:center;
+  @media (max-width: 768px) {
+    font-size: 2rem;
   }
 `;
+
+// Botão com microinterações aprimoradas
+const Button = styled.button`
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #434343 0%, #000000 100%);
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #000000 0%, #434343 100%);
+  }
+`;
+
+
+
+
 
 // Formulário
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  text-align: center;
 `;
 
-// Wrapper dos inputs
+
 const InputWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  border: 1px solid #ddd;
+  gap: 1rem;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
   border-radius: 12px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease;
 
   &:focus-within {
-    border-color: #22223b;
-    box-shadow: 0 0 5px #22223b;
+    border-color: #4a4a4a;
+    box-shadow: 0 0 0 3px rgba(74, 74, 74, 0.1);
   }
 
-  @media (max-width: 600px) {
-    padding: 8px; /* Reduz o padding em telas pequenas */
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    gap: 0.8rem;
   }
 `;
+
+// Layout adaptativo para mobile-first
+const AuthWrapper = styled.div`
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  margin: 1rem;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+`;
+
+
 
 // Inputs
 const Input = styled.input`
@@ -122,33 +148,7 @@ const Icon = styled(FontAwesomeIcon)`
   }
 `;
 
-// Botão de submit
-const Button = styled.button`
-  padding: 12px;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
-  background: linear-gradient(135deg, #22223b, #4a4e69);
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 
-  &:hover {
-    background: linear-gradient(135deg, #4a4e69, #22223b);
-    transform: scale(1.03);
-  }
-
-  &:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 600px) {
-    padding: 10px; /* Reduz o padding em telas pequenas */
-    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
-  }
-`;
 
 // Container do "Manter conectado"
 const RememberMeContainer = styled.div`
@@ -224,7 +224,35 @@ const SignupLink = styled.a`
     font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
 `;
+const AuthLink = styled.a`
+  color: #22223b;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: block;
+  text-align: center;
 
+  &:hover {
+    text-decoration: underline;
+    transform: translateX(2px);
+    color: #0f3460
+  }
+`;
+
+// Adicionar estado de loading com spinner
+const LoadingSpinner = styled.div`
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+`;
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -276,8 +304,10 @@ const Login = () => {
       setLoading(true);
       setError(null);
       console.log("🚀 Enviando requisição para login...");
+      console.log("URL da API:", API_URL);
+      const response = await axios.post(`${API_URL}/api/auth/entrar`, formData);
 
-      const response = await axiosInstance.post(`${API_URL}/api/auth/entrar`, formData, { timeout: 5000 });
+      console.log("Resposta da API:", response.data);
 
       console.log("✅ Resposta recebida:", response);
       const { token, user } = response.data;
@@ -306,7 +336,7 @@ const Login = () => {
         setError(err.response.data.message || 'Erro ao fazer login. Tente novamente.');
       } else if (err.request) {
         console.error("⚠️ Sem resposta do servidor:", err.request);
-        setError('Sem resposta do servidor. Verifique sua conexão.');
+        setError('Usuário ou senha incorretos.');
       } else {
         console.error("⚠️ Erro ao configurar a requisição:", err.message);
         setError('Erro ao configurar a requisição.');
@@ -320,7 +350,7 @@ const Login = () => {
   return (
     <AuthContainer>
       <AuthWrapper>
-        <Title>ENTRAR</Title>
+        <Title>BEM VINDO</Title>
         <Form onSubmit={handleSubmit}>
           <InputWrapper>
             <Icon icon={faEnvelope} />
@@ -357,12 +387,14 @@ const Login = () => {
               Manter conectado
             </RememberMeLabel>
           </RememberMeContainer>
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Entrando...' : 'Entrar'}
-          </Button>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          <ForgotPasswordLink href="/recuperarsenha">Esqueci a senha</ForgotPasswordLink>
-          <SignupLink href="/registrar">Ainda não é cadastrado? Crie sua conta</SignupLink>
+  
+<Button type="submit" disabled={loading}>
+  {loading ? <LoadingSpinner /> : 'Entrar'}
+</Button>
+<div style={{ marginTop: '1.5rem', display: 'grid', gap: '0.75rem' }}>
+            <AuthLink href="/recuperarsenha">Recuperar acesso</AuthLink>
+            <AuthLink href="/registrar">Criar nova conta</AuthLink>
+          </div>
         </Form>
       </AuthWrapper>
     </AuthContainer>

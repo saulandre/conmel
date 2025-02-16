@@ -4,6 +4,7 @@ import { FiSave, FiArrowLeft, FiEdit, FiPlus, FiChevronLeft, FiSearch } from 're
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// Estilos
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(135deg, #22223b, #335c67, #22223b);

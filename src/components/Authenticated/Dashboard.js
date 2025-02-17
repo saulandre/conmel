@@ -502,6 +502,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   useEffect(() => {
     const fetchInscricoes = async () => {
@@ -516,7 +517,10 @@ const Dashboard = () => {
         });
     
         console.log("Resposta da API:", response.data); // Depuração
-    
+        const role =  localStorage.getItem('role');
+        if (role === 'admin') {
+          setIsAdmin(true);
+        }
         // Verifique se a resposta tem a propriedade "data" que é um array
         if (!Array.isArray(response.data.data)) {
           throw new Error('Resposta da API não contém um array válido');
@@ -593,9 +597,11 @@ const Dashboard = () => {
                 <ActionButton onClick={() => navigate('/inscrever')}>
                   <FiPlus size={18} /> Inscrever
                 </ActionButton>
-                <ActionButton onClick={() => navigate('/adicionarie')}>
+                {isAdmin && (
+                <ActionButton onClick={() => navigate('/instituicao')}>
                   <FiUpload size={18} /> IE
                 </ActionButton>
+                   )}
                 <ActionButton>
                   <FiDownload size={18} /> Materiais
                 </ActionButton>
@@ -609,7 +615,7 @@ const Dashboard = () => {
               <MobileMenuItem onClick={() => { navigate('/inscrever'); closeMenu(); }}>
                 <FiPlus size={18} /> Inscrever
               </MobileMenuItem>
-              <MobileMenuItem onClick={() => { navigate('/adicionarie'); closeMenu(); }}>
+              <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
                 <FiUpload size={18} /> IE
               </MobileMenuItem>
               <MobileMenuItem>

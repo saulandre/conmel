@@ -479,7 +479,7 @@ const IePage = () => {
         </BackLink>
         <FormCard>
           <Header>
-            <Title>Cadastro de IE</Title>
+            <Title>Adicionar Instituição Espírita Admin</Title>
             <ButtonContainer>
               <ActionButton onClick={() => handleModeChange('adicionar')}>
                 <FiPlus size={18} /> Adicionar

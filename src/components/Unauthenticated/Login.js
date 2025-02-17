@@ -226,7 +226,7 @@ const SignupLink = styled.a`
 `;
 const AuthLink = styled.a`
   color: #22223b;
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
   display: block;
@@ -319,7 +319,7 @@ const Login = () => {
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('isVerified', user.isVerified);
       localStorage.setItem('userId', user.id);
-
+      localStorage.setItem('role', user.role);
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());

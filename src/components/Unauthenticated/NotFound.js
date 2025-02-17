@@ -119,7 +119,7 @@ const NotFound = () => {
           ou está temporariamente indisponível.
         </Message>
 
-        <BackButton to="/entrar">
+        <BackButton to="/">
           Voltar para a Página Inicial
         </BackButton>
       </ContentWrapper>

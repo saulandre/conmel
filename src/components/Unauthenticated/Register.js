@@ -17,18 +17,22 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background:linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
   box-sizing: border-box;
   overflow: hidden; /* Impede o scroll */
+
+  @media (max-width: 768px) {
+padding: 0;
+  }
 `;
 
 // Wrapper do formulário
 const AuthWrapper = styled.div`
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 5px;
   width: 100%;
   max-width: 400px;
   background-color: rgba(255, 255, 255, 0.95);
@@ -41,9 +45,12 @@ const AuthWrapper = styled.div`
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
   }
 
-  @media (max-width: 600px) {
-    padding: 15px;
-    max-width: 90%; /* Reduz a largura máxima em telas pequenas */
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 0;
+    border-radius: 0;
+    height: 100vh;
   }
 `;
 
@@ -111,18 +118,19 @@ const Input = styled.input`
 const Button = styled.button`
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #22223b, #4a4e69);
+  background: linear-gradient(135deg, #434343 0%, #000000 100%);
   color: white;
   border: none;
   border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
 
   &:hover {
-    background: linear-gradient(135deg, #4a4e69, #22223b);
+    background: linear-gradient(135deg,rgb(15, 15, 20), #22223b);
     transform: translateY(-2px);
   }
 
@@ -317,7 +325,7 @@ const Register = () => {
           </Button>
         </form>
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <StyledLink to="/entrar">Já tem uma conta? Faça login aqui.</StyledLink>
+        <StyledLink to="/">Já tem uma conta? Faça login aqui.</StyledLink>
       </AuthWrapper>
     </AuthContainer>
   );

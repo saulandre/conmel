@@ -17,16 +17,21 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background:  linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
+
+  
+  @media (max-width: 480px) {
+    padding: 0;
+  }
 `;
 
 // Wrapper do formulário
 const AuthWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
+  border-radius: 5px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 40px;
   width: 100%;
@@ -34,7 +39,13 @@ const AuthWrapper = styled.div`
   text-align: center;
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease;
-
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 0;
+    border-radius: 0;
+    height: 100vh;
+  }
   &:hover {
     transform: translateY(-5px);
   }
@@ -51,6 +62,10 @@ const Title = styled.h2`
   align-items: center;
   justify-content: center;
   gap: 15px;
+  
+  @media (max-width: 480px) {
+    font-size: 1.6rem;
+  }
 `;
 
 // Wrapper dos inputs
@@ -58,7 +73,7 @@ const InputWrapper = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
-  border-radius: 12px;
+  border-radius: 5px;
   padding: 12px;
   background-color: #f9f9f9;
   transition: border-color 0.3s ease;
@@ -198,7 +213,7 @@ const ForgotPassword = () => {
           </Button>
         </form>
 
-        <BackLink to="/entrar">
+        <BackLink to="/">
           <FontAwesomeIcon icon={faArrowLeft} />
           Voltar para o Login
         </BackLink>

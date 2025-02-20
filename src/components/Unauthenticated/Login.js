@@ -27,6 +27,10 @@ const AuthContainer = styled.div`
   padding: 2rem;
   box-sizing: border-box;
   overflow: hidden;
+
+  @media (max-width: 480px) {
+    padding: 0;
+  }
 `;
 
 // Nova tipografia com maior hierarquia
@@ -102,17 +106,22 @@ const InputWrapper = styled.div`
 const AuthWrapper = styled.div`
   width: 100%;
   max-width: 480px;
+
   padding: 2.5rem;
   margin: 1rem;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
-  border-radius: 24px;
+  border-radius: 5px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 
   @media (max-width: 768px) {
     padding: 1.5rem;
     border-radius: 16px;
+    margin: 0;
+    border-radius: 0;
+    height: 100vh;
   }
+  
 `;
 
 
@@ -226,7 +235,7 @@ const SignupLink = styled.a`
 `;
 const AuthLink = styled.a`
   color: #22223b;
-  font-size: 1rem;
+  font-size: 0.875rem;
   text-decoration: none;
   transition: all 0.3s ease;
   display: block;
@@ -319,7 +328,7 @@ const Login = () => {
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('isVerified', user.isVerified);
       localStorage.setItem('userId', user.id);
-      localStorage.setItem('role', user.role);
+
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());
@@ -337,7 +346,7 @@ const Login = () => {
         if (err.response.status === 401) { // Código 401 indica credenciais inválidas
           setError('Usuário ou senha incorretos.');
         } else {
-          setError(err.response.data.message || 'E-mail ou senha incorreto!');
+          setError(err.response.data.message || 'E-mail ou senha incorreto! Tente novamente..');
         }
       } else if (err.request) {
         console.error("⚠️ Sem resposta do servidor:", err.request);
@@ -384,18 +393,7 @@ const Login = () => {
             />
           </InputWrapper>
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <RememberMeContainer>
-            <RememberMeLabel>
-              <input
-                type="checkbox"
-                name="rememberMe"
-                checked={formData.rememberMe}
-                onChange={handleChange}
-              />
-              Manter conectado
-            </RememberMeLabel>
-          </RememberMeContainer>
-  
+
 <Button type="submit" disabled={loading}>
   {loading ? <LoadingSpinner /> : 'Entrar'}
 </Button>

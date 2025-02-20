@@ -366,7 +366,7 @@ const Login = () => {
   return (
     <AuthContainer>
       <AuthWrapper>
-        <Title>BEM VINDO</Title>
+        <Title>SISTEMA</Title>
         <Form onSubmit={handleSubmit}>
           <InputWrapper>
             <Icon icon={faEnvelope} />

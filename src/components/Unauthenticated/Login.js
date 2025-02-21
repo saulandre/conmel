@@ -35,7 +35,7 @@ const AuthContainer = styled.div`
 
 // Nova tipografia com maior hierarquia
 const Title = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #2a2a2a;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
@@ -366,7 +366,7 @@ const Login = () => {
   return (
     <AuthContainer>
       <AuthWrapper>
-        <Title>SISTEMA</Title>
+        <Title>COMEJACA</Title>
         <Form onSubmit={handleSubmit}>
           <InputWrapper>
             <Icon icon={faEnvelope} />

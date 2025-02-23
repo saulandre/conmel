@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 
 // Animação de fundo
 const gradientAnimation = keyframes`
@@ -21,7 +21,6 @@ const AuthContainer = styled.div`
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
-
   
   @media (max-width: 480px) {
     padding: 0;
@@ -39,6 +38,7 @@ const AuthWrapper = styled.div`
   text-align: center;
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease;
+
   @media (max-width: 768px) {
     padding: 1.5rem;
     border-radius: 16px;
@@ -46,6 +46,7 @@ const AuthWrapper = styled.div`
     border-radius: 0;
     height: 100vh;
   }
+
   &:hover {
     transform: translateY(-5px);
   }
@@ -152,52 +153,137 @@ const StatusMessage = styled.p`
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
+  const [stage, setStage] = useState(1);  // Controla o fluxo das etapas
   const navigate = useNavigate();
 
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidPassword = (password) => password.length >= 6;
+  const isValidCode = (code) => code.length === 6;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isValidEmail(email)) {
-      setMessage({ type: 'error', content: 'Por favor, insira um e-mail válido.' });
-      return;
-    }
+    if (stage === 1) {
+      // Validação de e-mail
+      if (!isValidEmail(email)) {
+        setMessage({ type: 'error', content: 'Por favor, insira um e-mail válido.' });
+        return;
+      }
 
-    setIsSubmitting(true);
-    setMessage(null);
+      setIsSubmitting(true);
+      setMessage(null);
 
-    // Simulação de requisição à API
-    setTimeout(() => {
-      setIsSubmitting(false);
+      // Simulação de requisição à API
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setMessage({
+          type: 'success',
+          content: 'Se o e-mail for válido, enviaremos instruções para redefinição de senha.'
+        });
+        setStage(2); // Avança para a próxima etapa
+      }, 1500);
+    } else if (stage === 2) {
+      // Validação do código
+      if (!isValidCode(code)) {
+        setMessage({ type: 'error', content: 'Por favor, insira um código válido.' });
+        return;
+      }
+
       setMessage({
         type: 'success',
-        content: 'Se o e-mail for válido, enviaremos instruções para redefinição de senha.'
+        content: 'Código verificado com sucesso. Agora, insira sua nova senha.'
       });
-    }, 1500);
+      setStage(3);  // Avança para a etapa de redefinir senha
+    } else if (stage === 3) {
+      // Validação de senha
+      if (!isValidPassword(newPassword)) {
+        setMessage({ type: 'error', content: 'A senha precisa ter no mínimo 6 caracteres.' });
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        setMessage({ type: 'error', content: 'As senhas não coincidem.' });
+        return;
+      }
+
+      // Simulação de alteração de senha
+      setTimeout(() => {
+        setMessage({
+          type: 'success',
+          content: 'Sua senha foi alterada com sucesso!'
+        });
+        setStage(4); // Finalizou
+      }, 1500);
+    }
   };
 
   return (
     <AuthContainer>
       <AuthWrapper>
         <Title>
-          <FontAwesomeIcon icon={faEnvelope} />
-          RECUPERAR SENHA
+          {stage === 1 && <FontAwesomeIcon icon={faEnvelope} />}
+          {stage === 2 && <FontAwesomeIcon icon={faLock} />}
+          {stage === 3 && <FontAwesomeIcon icon={faLock} />}
+          {stage === 1 ? 'RECUPERAR SENHA' : stage === 2 ? 'INSIRA O CÓDIGO' : 'ALTERAR SENHA'}
         </Title>
 
         <form onSubmit={handleSubmit}>
-          <InputWrapper>
-            <FontAwesomeIcon icon={faEnvelope} color="#666" />
-            <Input
-              type="email"
-              placeholder="Digite seu e-mail cadastrado"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isSubmitting}
-            />
-          </InputWrapper>
+          {stage === 1 && (
+            <>
+              <InputWrapper>
+                <FontAwesomeIcon icon={faEnvelope} color="#666" />
+                <Input
+                  type="email"
+                  placeholder="Digite seu e-mail cadastrado"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </InputWrapper>
+            </>
+          )}
+
+          {stage === 2 && (
+            <>
+              <InputWrapper>
+                <Input
+                  type="text"
+                  placeholder="Digite o código enviado por e-mail"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </InputWrapper>
+            </>
+          )}
+
+          {stage === 3 && (
+            <>
+              <InputWrapper>
+                <Input
+                  type="password"
+                  placeholder="Nova Senha"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </InputWrapper>
+              <InputWrapper>
+                <Input
+                  type="password"
+                  placeholder="Confirme sua Nova Senha"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  disabled={isSubmitting}
+                />
+              </InputWrapper>
+            </>
+          )}
 
           {message && (
             <StatusMessage error={message.type === 'error'}>
@@ -205,11 +291,8 @@ const ForgotPassword = () => {
             </StatusMessage>
           )}
 
-          <Button 
-            type="submit" 
-            disabled={isSubmitting || !email}
-          >
-            {isSubmitting ? 'Enviando...' : 'Enviar Instruções'}
+          <Button type="submit" disabled={isSubmitting || (stage === 1 && !email) || (stage === 2 && !code) || (stage === 3 && (!newPassword || !confirmPassword))}>
+            {isSubmitting ? 'Enviando...' : stage === 1 ? 'Enviar Instruções' : stage === 2 ? 'Verificar Código' : 'Alterar Senha'}
           </Button>
         </form>
 

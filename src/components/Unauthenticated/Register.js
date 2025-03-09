@@ -17,7 +17,7 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background:linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
@@ -270,7 +270,7 @@ const Register = () => {
   return (
     <AuthContainer>
       <AuthWrapper>
-        <Title>CRIAR CONTA</Title>
+        <Title>NOVA CONTA</Title>
         <form onSubmit={handleSubmit}>
           <InputWrapper>
             <Icon><FiUser /></Icon>

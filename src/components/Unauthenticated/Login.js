@@ -31,6 +31,7 @@ const AuthContainer = styled.div`
 
   @media (max-width: 480px) {
     padding: 0;
+    overflow: hidden;
   }
 `;
 
@@ -59,7 +60,7 @@ const Button = styled.button`
   font-size: 1.1rem;
   font-weight: 600;
   background: linear-gradient(135deg, #434343 0%, #000000 100%);
-  margin-top: 1.5rem;
+
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   
@@ -169,29 +170,6 @@ const Icon = styled(FontAwesomeIcon)`
 
 
 
-// Container do "Manter conectado"
-const RememberMeContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  color: #555;
-  font-family: 'Poppins', sans-serif;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    gap: 10px;
-    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
-  }
-`;
-
-// Label do "Manter conectado"
-const RememberMeLabel = styled.label`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
 
 // Mensagem de erro
 const ErrorMessage = styled.p`
@@ -265,7 +243,7 @@ const FloatingButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+  
     width: 100%;
     padding: 1.2rem;
     font-size: 1rem;
@@ -308,7 +286,7 @@ const FloatingButton = styled.button`
   }
 `;
 
-// Modifique o Botão original para esconder no mobile
+
 
 
 // Adicionar estado de loading com spinner
@@ -464,10 +442,10 @@ const Login = () => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
 
 <Button type="submit" disabled={loading}>
-  {loading ? <LoadingSpinner /> : 'Entrar'}
+  {loading ? <LoadingSpinner  /> : 'Entrar'}
 </Button>
 <div style={{ marginTop: '1.5rem', display: 'grid', gap: '0.75rem' }}>
-            <AuthLink href="/recuperarsenha">Esqueci a senha</AuthLink>
+            <AuthLink href="/recuperarsenha"> Esqueci a senha</AuthLink>
             <AuthLinkConta href="/registrar">Nova conta</AuthLinkConta>
           </div>
           <FloatingButtonContainer>
@@ -477,15 +455,18 @@ const Login = () => {
       <LoadingSpinner />
     ) : (
       <>
-        <FontAwesomeIcon icon={faKey} />
+        <FontAwesomeIcon  style={{ color: 'white', marginRight: '8px' }}  icon={faKey} />
         Entrar
       </>
     )}
   </FloatingButton>
 ) : (
 <FloatingButton as="a" href="/recuperarsenha">
-  <FontAwesomeIcon icon={faArrowRight}  style={{ color: 'white' }} />
-  <span style={{ color: 'white' }}>Esqueci a senha</span>
+  <FontAwesomeIcon 
+    icon={faArrowRight}  
+    style={{ color: 'white', marginRight: '8px' }} 
+  />
+  <span style={{ color: 'white' }}> Esqueci a senha</span>
 </FloatingButton>
 )}
         </FloatingButtonContainer>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { faArrowRight, faKey } from '@fortawesome/free-solid-svg-icons';
+
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance'; // Certifique-se de que axiosInstance está configurado corretamente
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import '../../styles/styles.css'
+
 // Animação de fundo
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -21,7 +21,7 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  background: linear-gradient(135deg, #f8edeb, #ffe5d9, #f8edeb);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
   padding: 2rem;
@@ -57,7 +57,7 @@ const Button = styled.button`
   font-size: 1.1rem;
   font-weight: 600;
   background: linear-gradient(135deg, #434343 0%, #000000 100%);
-
+  border-radius: 10px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   
@@ -65,9 +65,6 @@ const Button = styled.button`
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, #000000 0%, #434343 100%);
-  }
-  @media (max-width: 768px) {
-    display: none;
   }
 `;
 
@@ -236,7 +233,6 @@ const SignupLink = styled.a`
     font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
 `;
-
 const AuthLink = styled.a`
   color: #22223b;
   font-size: 0.875rem;
@@ -250,107 +246,7 @@ const AuthLink = styled.a`
     transform: translateX(2px);
     color: #0f3460
   }
-
-  @media (max-width: 768px) {
-    &:first-child { /* Esconde apenas o link de recuperação */}
-      display: none;
-    }
-  
-
-  
 `;
-
-const AuthLinkConta = styled.a`
-  color: #22223b;
-  font-size: 0.875rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  display: block;
-  text-align: center;
-
-  &:hover {
-    text-decoration: underline;
-    transform: translateX(2px);
-    color: #0f3460
-  }
-
-
-  
-`;
-// Adicione estes componentes estilizados
-const FloatingButtonContainer = styled.div`
-   @media (max-width: 768px) {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0; /* Remova o padding lateral */
-    border-top: 1px solid #e0e0e0;
-    background: linear-gradient(transparent, rgba(255, 255, 255, 0.9) 20%);
-  }
-`;
-
-
-const FloatingButton = styled.button`
-  display: none;
-
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 1.2rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 0;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    
-    /* Estilo gradiente moderno */
-    background: ${props => props.primary 
-      ? 'linear-gradient(135deg, #001d3d, #001d3d)'
-      : 'linear-gradient(135deg, #8d99ae, #8d99ae)'};
-    color: ${props => props.primary ? '#fff' : '#2a2a2a'};
-    
-    /* Efeito de hover */
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      background: ${props => props.primary 
-        ? 'linear-gradient(135deg, #4a4a4a, #2a2a2a)'
-        : 'linear-gradient(135deg, #e9ecef, #f8f9fa)'};
-    }
-
-    /* Efeito de clique */
-    &:active {
-      transform: translateY(0);
-    }
-
-    /* Linha decorativa no topo */
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
-    }
-
-    /* Ícone */
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-`;
-
-// Modifique o Botão original para esconder no mobile
-
 
 // Adicionar estado de loading com spinner
 const LoadingSpinner = styled.div`
@@ -378,12 +274,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-  const [areFieldsFilled, setAreFieldsFilled] = useState(false);
-
-  useEffect(() => {
-    const filled = formData.email.length > 0 && formData.password.length > 0;
-    setAreFieldsFilled(filled);
-  }, [formData.email, formData.password]);
 
   // Verificação de login ao carregar o componente
   useEffect(() => {
@@ -509,27 +399,8 @@ const Login = () => {
 </Button>
 <div style={{ marginTop: '1.5rem', display: 'grid', gap: '0.75rem' }}>
             <AuthLink href="/recuperarsenha">Recuperar acesso</AuthLink>
-            <AuthLinkConta href="/registrar">Criar nova conta</AuthLinkConta>
+            <AuthLink href="/registrar">Criar nova conta</AuthLink>
           </div>
-          <FloatingButtonContainer>
-          {areFieldsFilled ? (
-  <FloatingButton primary type="submit" disabled={loading}>
-    {loading ? (
-      <LoadingSpinner />
-    ) : (
-      <>
-        <FontAwesomeIcon icon={faKey} />
-        Entrar
-      </>
-    )}
-  </FloatingButton>
-) : (
-  <FloatingButton as="a" href="/recuperarsenha">
-    <FontAwesomeIcon icon={faArrowRight} />
-    Recuperar Senha
-  </FloatingButton>
-)}
-        </FloatingButtonContainer>
         </Form>
       </AuthWrapper>
     </AuthContainer>

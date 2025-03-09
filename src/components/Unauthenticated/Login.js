@@ -21,7 +21,7 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8edeb, #ffe5d9, #f8edeb);
+  background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
   padding: 2rem;
@@ -35,8 +35,8 @@ const AuthContainer = styled.div`
 
 // Nova tipografia com maior hierarquia
 const Title = styled.h1`
-  font-size: 2rem;
-  color: #2a2a2a;
+  font-size: 2.5rem;
+  color: #000;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   margin-bottom: 2rem;
@@ -46,8 +46,9 @@ const Title = styled.h1`
   background-clip: text;
   color: transparent;
   text-align:center;
+  margin-bottom: 2.5rem;
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
 `;
 
@@ -57,7 +58,7 @@ const Button = styled.button`
   font-size: 1.1rem;
   font-weight: 600;
   background: linear-gradient(135deg, #434343 0%, #000000 100%);
-
+  margin-top: 1.5rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   
@@ -90,13 +91,18 @@ const InputWrapper = styled.div`
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  border: 2px solid #e0e0e0;
+  background: #fff;;
+  border: 1px solid #ccc;
   border-radius: 12px;
   transition: border-color 0.3s ease;
 
   &:focus-within {
     border-color: #4a4a4a;
-    box-shadow: 0 0 0 3px rgba(74, 74, 74, 0.1);
+ 
+  }
+  &:hover {
+
+    border: #46494c 1px solid
   }
 
   @media (max-width: 480px) {
@@ -112,7 +118,7 @@ const AuthWrapper = styled.div`
 
   padding: 2.5rem;
   margin: 1rem;
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 5px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
@@ -196,50 +202,9 @@ const ErrorMessage = styled.p`
     font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
 `;
-
-// Link de "Esqueci a senha"
-const ForgotPasswordLink = styled.a`
-  color: #22223b;
-  font-size: 0.9rem;
-  margin-top: 15px;
-  display: block;
-  text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-  transition: color 0.3s;
-
-  &:hover {
-    text-decoration: underline;
-    color: #335c67;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
-  }
-`;
-
-// Link de "Criar conta"
-const SignupLink = styled.a`
-  color: #22223b;
-  font-size: 0.9rem;
-  margin-top: 10px;
-  display: block;
-  text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-  transition: color 0.3s;
-
-  &:hover {
-    text-decoration: underline;
-    color: #335c67;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
-  }
-`;
-
 const AuthLink = styled.a`
   color: #22223b;
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
   display: block;
@@ -262,7 +227,7 @@ const AuthLink = styled.a`
 
 const AuthLinkConta = styled.a`
   color: #22223b;
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
   display: block;
@@ -286,7 +251,8 @@ const FloatingButtonContainer = styled.div`
     right: 0;
     padding: 0; /* Remova o padding lateral */
     border-top: 1px solid #e0e0e0;
-    background: linear-gradient(transparent, rgba(255, 255, 255, 0.9) 20%);
+
+    background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
   }
 `;
 
@@ -309,20 +275,12 @@ const FloatingButton = styled.button`
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    
+
     /* Estilo gradiente moderno */
-    background: ${props => props.primary 
-      ? 'linear-gradient(135deg, #001d3d, #001d3d)'
-      : 'linear-gradient(135deg, #8d99ae, #8d99ae)'};
-    color: ${props => props.primary ? '#fff' : '#2a2a2a'};
-    
+    background:linear-gradient(135deg, #403d39, #000, #403d39);
     /* Efeito de hover */
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      background: ${props => props.primary 
-        ? 'linear-gradient(135deg, #4a4a4a, #2a2a2a)'
-        : 'linear-gradient(135deg, #e9ecef, #f8f9fa)'};
+   
     }
 
     /* Efeito de clique */
@@ -508,8 +466,8 @@ const Login = () => {
   {loading ? <LoadingSpinner /> : 'Entrar'}
 </Button>
 <div style={{ marginTop: '1.5rem', display: 'grid', gap: '0.75rem' }}>
-            <AuthLink href="/recuperarsenha">Recuperar acesso</AuthLink>
-            <AuthLinkConta href="/registrar">Criar nova conta</AuthLinkConta>
+            <AuthLink href="/recuperarsenha">Esqueci a senha</AuthLink>
+            <AuthLinkConta href="/registrar">Nova conta</AuthLinkConta>
           </div>
           <FloatingButtonContainer>
           {areFieldsFilled ? (
@@ -524,10 +482,10 @@ const Login = () => {
     )}
   </FloatingButton>
 ) : (
-  <FloatingButton as="a" href="/recuperarsenha">
-    <FontAwesomeIcon icon={faArrowRight} />
-    Recuperar Senha
-  </FloatingButton>
+<FloatingButton as="a" href="/recuperarsenha">
+  <FontAwesomeIcon icon={faArrowRight}  style={{ color: 'white' }} />
+  <span style={{ color: 'white' }}>Esqueci a senha</span>
+</FloatingButton>
 )}
         </FloatingButtonContainer>
         </Form>

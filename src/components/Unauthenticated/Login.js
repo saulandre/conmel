@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import '../../styles/styles.css'
+
 // Animação de fundo
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }

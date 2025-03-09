@@ -14,13 +14,12 @@ const gradientAnimation = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
-
 // Container principal atualizado
 const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-height: 100vh;
+  height: 100vh;
   background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;

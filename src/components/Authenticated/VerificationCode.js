@@ -157,7 +157,7 @@ const VerificationCode = () => {
         const token = localStorage.getItem("token");
       
         if (!token) {
-          navigate("/entrar");
+          navigate("/");
         }
       }, [navigate]);
   const [code, setCode] = useState('');
@@ -220,7 +220,7 @@ const handleSubmit = async (e) => {
       localStorage.setItem('token', response.data.token); // Salvando o token
 
       alert('Conta verificada com sucesso!');
-      navigate('/gestor'); // Redireciona para a página /gestor após a ativação
+      navigate('/gestor'); 
     } else {
       setError(response.data.error || 'Erro desconhecido.');
     }
@@ -304,7 +304,7 @@ const handleSubmit = async (e) => {
           </SecondaryButton>
           <LogoutButton onClick={() => {
             localStorage.clear();
-            navigate('/entrar');
+            navigate('/gestor');
           }}>
             Sair
           </LogoutButton>

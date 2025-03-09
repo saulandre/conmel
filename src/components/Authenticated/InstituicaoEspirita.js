@@ -7,7 +7,7 @@ import axios from 'axios';
 // Estilos
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background: linear-gradient(135deg, #22223b, #40434e, #22223b);
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
   display: flex;
@@ -15,7 +15,7 @@ const Container = styled.div`
   align-items: center;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0rem;
   }
 `;
 
@@ -27,7 +27,7 @@ const ContentWrapper = styled.div`
 
 const FormCard = styled.div`
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 1.5rem;
+  border-radius: 5px;
   padding: 2.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -38,7 +38,7 @@ const FormCard = styled.div`
 
   @media (max-width: 768px) {
     padding: 1.5rem;
-    border-radius: 1rem;
+
   }
 `;
 
@@ -52,7 +52,7 @@ const Header = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-    align-items: flex-start;
+ 
   }
 `;
 
@@ -61,9 +61,10 @@ const Title = styled.h1`
   color: #22223b;
   font-weight: 600;
   margin: 0;
-
+text-align: center;
   @media (max-width: 768px) {
     font-size: 1.5rem;
+    text-align: center;
   }
 `;
 
@@ -83,7 +84,7 @@ const ActionButton = styled.button`
   color: white;
   border: none;
   padding: 1rem 1.5rem;
-  border-radius: 0.8rem;
+  border-radius: 5px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
@@ -113,6 +114,7 @@ const Select = styled.select`
   color: #22223b;
   font-family: 'Poppins', sans-serif;
   transition: all 0.3s ease;
+  appearance: none; /* Remove estilo padrão do navegador */
 
   &:focus {
     outline: none;
@@ -123,12 +125,12 @@ const Select = styled.select`
 
 const TableContainer = styled.div`
   overflow-x: auto;
-  border-radius: 1rem;
+  border-radius: 5px;
   margin-top: 1rem;
-
+border:#ccc solid 1px;
   @media (max-width: 768px) {
     overflow-x: unset;
-    margin-top: 1rem;
+    margin-top: 5px;
   }
 `;
 
@@ -136,7 +138,7 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   background: white;
-  border-radius: 1rem;
+  border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
@@ -163,7 +165,8 @@ const TableRow = styled.tr`
 const TableHeaderCell = styled.th`
   padding: 1.2rem 1.5rem;
   font-weight: 600;
-  text-align: left;
+  
+
 
   @media (max-width: 768px) {
     padding: 0.8rem;
@@ -193,6 +196,10 @@ const BackLink = styled.a`
 
   &:hover {
     opacity: 0.8;
+  }
+  @media (max-width: 768px) {
+ padding-top: 1rem;
+
   }
 `;
 
@@ -298,16 +305,17 @@ const SuggestionItem = styled.li`
     background: #f1f3f5;
   }
 `;
-
 const IePage = () => {
   const navigate = useNavigate();
 
+  const [formMode, setFormMode] = useState('');
   const [institutions, setInstitutions] = useState([]);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
   const [formData, setFormData] = useState({
     sigla: '',
     nome: '',
     CEU: '',
+    CNPJ: '',
     estado: '',
     cidade: '',
     bairro: '',
@@ -319,15 +327,13 @@ const IePage = () => {
     horario: '',
     email: '',
   });
-  const [formMode, setFormMode] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredInstitutions, setFilteredInstitutions] = useState([]);
+  const [error, setError] = useState('');
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
   useEffect(() => {
     if (!API_URL) {
-      console.error("API_URL não definida!");
+      console.error('API_URL não definida!');
       return;
     }
 
@@ -340,13 +346,13 @@ const IePage = () => {
           return;
         }
 
-        const response = await axios.get(`${API_URL}/api/auth/listarinstituicoes`, {
+        const response = await axios.get(`${API_URL}/api/auth/instituicoes`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
         });
 
-        console.log("Dados recebidos da API:", response.data);
+        console.log('Dados recebidos da API:', response.data);
         setInstitutions(response.data);
       } catch (error) {
         console.error('Erro ao carregar instituições:', error);
@@ -365,6 +371,7 @@ const IePage = () => {
         sigla: '',
         nome: '',
         CEU: '',
+        CNPJ: '',
         estado: '',
         cidade: '',
         bairro: '',
@@ -379,23 +386,6 @@ const IePage = () => {
     }
   }, [selectedInstitution]);
 
-  useEffect(() => {
-    if (searchTerm) {
-      const filtered = institutions.filter((inst) =>
-        inst.nome.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredInstitutions(filtered);
-    } else {
-      setFilteredInstitutions([]);
-    }
-  }, [searchTerm, institutions]);
-
-  const handleSelectInstitution = (institution) => {
-    setSelectedInstitution(institution);
-    setSearchTerm(institution.nome);
-    setFilteredInstitutions([]);
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -404,9 +394,22 @@ const IePage = () => {
     }));
   };
 
+  const validateForm = () => {
+    // Validação simples para garantir que o CNPJ está preenchido
+    if (!formData.CNPJ || formData.CNPJ.trim() === '') {
+      setError('O CNPJ é obrigatório.');
+      return false;
+    }
+    setError('');
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting form. formMode:', formMode, 'selectedInstitution:', selectedInstitution);
+
+    // Validação do formulário
+    if (!validateForm()) return;
+
     try {
       const token = localStorage.getItem('token');
       const config = {
@@ -416,28 +419,30 @@ const IePage = () => {
       };
 
       if (formMode === 'adicionar') {
-        console.log('Attempting POST request');
+        console.log('Tentando adicionar nova instituição');
         await axios.post(`${API_URL}/api/auth/novainstituicao`, formData, config);
         alert('Instituição adicionada com sucesso!');
-         
-    setFormData({
-      sigla: '',
-      nome: '',
-      CEU: '',
-      estado: '',
-      cidade: '',
-      bairro: '',
-      logradouro: '',
-      numero: '',
-      complemento: '',
-      telefone: '',
-      dia: '',
-      horario: '',
-      email: '',
-    });
+
+        // Limpar o formulário após a adição
+        setFormData({
+          sigla: '',
+          nome: '',
+          CNPJ: '',
+          CEU: '',
+          estado: '',
+          cidade: '',
+          bairro: '',
+          logradouro: '',
+          numero: '',
+          complemento: '',
+          telefone: '',
+          dia: '',
+          horario: '',
+          email: '',
+        });
 
       } else if (formMode === 'alterar' && selectedInstitution) {
-        console.log('Attempting PUT request with id:', selectedInstitution.id);
+        console.log('Tentando alterar instituição com id:', selectedInstitution.id);
         await axios.put(
           `${API_URL}/api/auth/editarinstituicao/${selectedInstitution.id}`,
           formData,
@@ -445,13 +450,14 @@ const IePage = () => {
         );
         alert('Instituição atualizada com sucesso!');
       } else {
-        console.log('No valid mode or selected institution');
+        console.log('Modo inválido ou instituição não selecionada');
         alert('Selecione uma instituição para editar ou alterne para o modo de adição.');
         return;
       }
 
       setFormMode('');
       setSelectedInstitution(null);
+
       // Recarregar a lista de instituições após adição/edição
       const response = await axios.get(`${API_URL}/api/auth/listarinstituicoes`, {
         headers: {
@@ -468,7 +474,7 @@ const IePage = () => {
   const handleModeChange = (mode) => {
     setFormMode(mode);
     setSelectedInstitution(null);
-    setSearchTerm('');
+    setError('');
   };
 
   return (
@@ -479,7 +485,7 @@ const IePage = () => {
         </BackLink>
         <FormCard>
           <Header>
-            <Title>Adicionar Instituição Espírita Admin</Title>
+            <Title>INSTITUIÇÃO ESPÍRITA</Title>
             <ButtonContainer>
               <ActionButton onClick={() => handleModeChange('adicionar')}>
                 <FiPlus size={18} /> Adicionar
@@ -492,25 +498,22 @@ const IePage = () => {
 
           {formMode === 'alterar' && (
             <SearchContainer>
-              <SearchInput
-                type="text"
-                placeholder="Pesquisar instituição..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <SearchIcon />
-              {filteredInstitutions.length > 0 && (
-                <SuggestionsList>
-                  {filteredInstitutions.map((institution) => (
-                    <SuggestionItem
-                      key={institution.id}
-                      onClick={() => handleSelectInstitution(institution)}
-                    >
-                      {institution.nome}
-                    </SuggestionItem>
-                  ))}
-                </SuggestionsList>
-              )}
+              <Select
+                value={selectedInstitution?.id || ''}
+                onChange={(e) => {
+                  const institution = institutions.find(
+                    (inst) => inst.id === parseInt(e.target.value)
+                  );
+                  setSelectedInstitution(institution);
+                }}
+              >
+                <option value="">Selecione uma instituição</option>
+                {institutions.map((institution) => (
+                  <option key={institution.id} value={institution.id}>
+                    {institution.nome}
+                  </option>
+                ))}
+              </Select>
             </SearchContainer>
           )}
 
@@ -524,7 +527,7 @@ const IePage = () => {
               </TableHead>
               <tbody>
                 {Object.entries(formData).map(([key, value]) =>
-                  key !== "CEU" && key !== "horario" ? (
+                  key !== 'CEU' && key !== 'horario' ? (
                     <TableRow key={key}>
                       <TableCell>{key}</TableCell>
                       <TableCell>
@@ -533,13 +536,7 @@ const IePage = () => {
                           name={key}
                           value={value}
                           onChange={handleChange}
-                          disabled={
-                            formMode === 'adicionar' 
-                              ? false 
-                              : formMode === 'alterar' 
-                                ? !selectedInstitution 
-                                : true
-                          }
+                          disabled={formMode === 'alterar' && !selectedInstitution}
                         />
                       </TableCell>
                     </TableRow>
@@ -549,12 +546,16 @@ const IePage = () => {
             </Table>
           </TableContainer>
 
-          <div style={{ display: "flex", gap: "1rem", marginTop: "25px" }}>
-            <SubmitButton onClick={handleSubmit} type="submit">Salvar</SubmitButton>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '25px' }}>
+            <SubmitButton onClick={handleSubmit} type="submit">
+              Salvar
+            </SubmitButton>
             <SubmitButton
               type="button"
               onClick={() => navigate(-1)}
-              style={{ background: "#888" }}
+              style={{ background: '#888' }}
             >
               Voltar
             </SubmitButton>

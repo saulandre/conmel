@@ -20,7 +20,7 @@ const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  max-height: 100vh;
   background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;

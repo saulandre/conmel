@@ -5,12 +5,10 @@ import { createGlobalStyle } from 'styled-components';
  const GlobalStyles = createGlobalStyle`
   /* Definição das cores */
   :root {
-    --primary-purple: #9b59b6;
+  
     --secondary-gold: #f39c12;
-    --soft-blue: #3498db;
-    --background: #fff;
-    --text-color: #333;
-    --border-color: #ccc;
+ 
+   
   }
 
   /* Reset básico */

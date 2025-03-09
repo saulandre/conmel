@@ -1,24 +1,28 @@
-import React, { useEffect } from 'react';
-import { Route, useNavigate, Routes, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import Login from './components/Unauthenticated/Login';
 import Register from './components/Unauthenticated/Register';
 import Verify from './components/Authenticated/VerificationCode';
 import InstituicaoEspirita from './components/Authenticated/InstituicaoEspirita';
+import Atualizacao from './components/Authenticated/update';
 import Perfil from './components/Authenticated/perfil';
 import Dashboard from './components/Authenticated/Dashboard';
 import GlobalStyle from './styles/globalStyles';
 import FormularioInscricao from './components/Authenticated/subscription';
+import Print from './components/Authenticated/Print';
 import ForgotPassword from './components/Unauthenticated/ForgotPassword';
 import NotFound from './components/Unauthenticated/NotFound';
 import ProtectedRoute from './routes/ProtectedRoutes';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
+  
   return (
     <>
       <GlobalStyle />
       <div className="container">
         <AuthProvider>
+
           <AppContent />
         </AuthProvider>
       </div>
@@ -26,44 +30,70 @@ function App() {
   );
 }
 
-// Novo componente para conter a lógica de navegação
 function AppContent() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useAuth(); // Use o contexto de autenticação
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const isVerified = user?.isVerified; // Supondo que o contexto forneça o estado de verificação
-
-    // Redirecionamentos baseados no estado de autenticação
-    if (token) {
-      if (['/', '/entrar', '/registrar'].includes(location.pathname)) {
-        navigate(isVerified ? '/gestor' : '/verificar');
-      }
-    } else {
-      if (location.pathname.startsWith('/gestor') || location.pathname === '/verificar') {
-        navigate('/entrar');
-      }
-    }
-  }, [location.pathname, navigate, user?.isVerified]);
-
   return (
     <Routes>
       {/* Rotas Públicas */}
       <Route path="/" element={<Login />} />
-      <Route path="/entrar" element={<Login />} />
+  
       <Route path="/registrar" element={<Register />} />
       <Route path="/recuperarsenha" element={<ForgotPassword />} />
       <Route path="/verificar" element={<Verify />} />
-      <Route path="/gestor" element={<Dashboard />} />
-        <Route path="/inscrever" element={<FormularioInscricao />} />
-        <Route path="/adicionarie" element={<InstituicaoEspirita />} />
-        <Route path="/perfil" element={<Perfil />} />
+
       {/* Rotas Protegidas */}
-      <Route element={<ProtectedRoute />}>
-     
-      </Route>
+      <Route
+        path="/gestor"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/inscrever"
+        element={
+          <ProtectedRoute>
+            <FormularioInscricao />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/instituicao"
+        element={
+          <ProtectedRoute>
+            <InstituicaoEspirita />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/perfil"
+        element={
+          <ProtectedRoute>
+            <Perfil />
+          </ProtectedRoute>
+        }
+      />
+
+
+
+<Route
+  path="/atualizacao/:id"
+  element={
+    <ProtectedRoute>
+      <Atualizacao />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/print/:id"
+  element={
+    <ProtectedRoute>
+      <Print />
+    </ProtectedRoute>
+  }
+/>
+
 
       {/* Rota 404 */}
       <Route path="*" element={<NotFound />} />

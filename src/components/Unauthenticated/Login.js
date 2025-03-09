@@ -116,7 +116,7 @@ const InputWrapper = styled.div`
 const AuthWrapper = styled.div`
   width: 100%;
   max-width: 480px;
-
+  overflow: hidden;
   padding: 2.5rem;
   margin: 1rem;
   background: rgba(255, 255, 255, 0.95);

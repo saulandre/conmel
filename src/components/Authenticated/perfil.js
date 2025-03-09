@@ -7,7 +7,7 @@ import InputMask from "react-input-mask";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background: linear-gradient(135deg, #22223b, #40434e, #22223b);
   display: flex;
   justify-content: center;
   padding: 2rem;
@@ -15,7 +15,7 @@ const Container = styled.div`
   overflow-y: auto;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0rem;
   }
 `;
 
@@ -26,13 +26,13 @@ const FormWrapper = styled.div`
 
 const FormCard = styled.form`
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 1.5rem;
+  border-radius: 5px;
   padding: 2.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
   @media (max-width: 768px) {
     padding: 1.5rem;
-    border-radius: 1rem;
+    border-radius: 0rem;
   }
 `;
 
@@ -50,6 +50,11 @@ const BackLink = styled.a`
 
   &:hover {
     opacity: 0.8;
+  }
+  @media (max-width: 768px) {
+ 
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   }
 `;
 
@@ -198,7 +203,7 @@ const Profile = () => {
 
             <InputGroup>
               <InputLabel>
-                <FiPhone /> Telefone *
+                <FiPhone /> Telefone
               </InputLabel>
               <InputMask
                 mask="(99) 99999-9999"

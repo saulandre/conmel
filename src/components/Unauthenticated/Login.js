@@ -19,7 +19,8 @@ const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+
   background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
@@ -274,7 +275,7 @@ const FloatingButton = styled.button`
     position: relative;
     overflow: hidden;
     cursor: pointer;
-
+    bottom: 0; 
     /* Estilo gradiente moderno */
     background:linear-gradient(135deg, #403d39, #000, #403d39);
     /* Efeito de hover */

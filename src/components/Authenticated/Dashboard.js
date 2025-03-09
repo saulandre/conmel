@@ -20,8 +20,8 @@ import axios from 'axios';
 // Temas
 const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #22223b, #335c67, #22223b)',
-    cardBackground: 'rgba(255, 255, 255, 0.95)',
+    background: 'linear-gradient(135deg, #22223b, #40434e, #22223b);',
+    cardBackground: '#e7ecef',
     textColor: '#22223b',
     buttonBackground: 'linear-gradient(135deg, #4a4e69, #22223b)',
     tableHeaderBackground: '#4a4e69',
@@ -39,7 +39,7 @@ const themes = {
     tableHeaderBackground: '#f5f5f5',
     tableHeaderColor: '#333',
     tableRowEvenBackground: '#fafafa',
-    tableRowHoverBackground: '#f0f0f0',
+    tableRowHoverBackground: '#C0C0C0   ',
     shadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
     mobileHeaderHeight: '80px'
   },
@@ -78,7 +78,7 @@ const FloatingActions = styled.div`
     border: none;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,7 +140,7 @@ const ContentWrapper = styled.div`
 
 const FormCard = styled.div`
   background: ${({ theme }) => theme.cardBackground};
-  border-radius: 0.5rem;
+  border-radius: 5px;
   padding: 1.5rem;
   box-shadow: ${({ theme }) => theme.shadow};
   position: relative;
@@ -153,7 +153,8 @@ const FormCard = styled.div`
     box-shadow: none;
     padding: 1rem;
     max-width: 100vw;
-    width:100vw
+    width:100vw;
+  
   }
 `;
 
@@ -169,11 +170,11 @@ const Header = styled.div`
   right: 0;
   z-index: 1000;
   box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-
+  border: 1px solid #ced4da;
   @media (min-width: 769px) {
     position: sticky;
     top: 2rem;
-    border-radius: 0.5rem;
+    border-radius: 5px;
     margin: -2rem -2rem 2rem -2rem;
     width: calc(100% + 4rem);
   }
@@ -206,7 +207,7 @@ const MobileMenuButton = styled.button`
   cursor: pointer;
   color: ${({ theme }) => theme.textColor};
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 5px;
 
   @media (max-width: 768px) {
     display: block;
@@ -248,7 +249,7 @@ const ActionButton = styled.button`
   color: white;
   border: none;
   padding: 0.8rem 1.2rem;
-  border-radius: 0.5rem;
+  border-radius: 5px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
@@ -307,12 +308,12 @@ const SearchBox = styled.input`
 const TableContainer = styled.div`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: 0.5rem;
+  border-radius: 5px;
   margin: 1rem 0;
   background: ${({ theme }) => theme.cardBackground};
-  
+  border: 2px solid #ced4da;
   @media (max-width: 768px) {
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid #000;
     margin: 1rem -1rem;
     width: calc(100% + 2rem);
     
@@ -331,11 +332,11 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   background: white;
-  border-radius: 0.7rem;
+  border-radius: 5px;
   overflow: hidden;
   box-shadow: ${({ theme }) => theme.shadow};
   position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(0, 0, 0, 0.05);
 
   @media (max-width: 768px) {
     border: none;
@@ -381,7 +382,7 @@ const TableRow = styled.tr`
 const TableHeaderCell = styled.th`
   padding: 1.25rem 1.5rem;
   font-weight: 600;
-  text-align: left;
+  text-align: center;
   position: sticky;
   top: 0;
   background: ${({ theme }) => theme.tableHeaderBackground};
@@ -431,7 +432,7 @@ const SmallButton = styled.button`
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 5PX;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -453,7 +454,7 @@ animation: spin 1s linear infinite;
 const StatusPill = styled.span`
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 1rem;
+  padding: 5px;
   border-radius: 1rem;
   font-size: 0.85em;
   font-weight: 500;
@@ -555,7 +556,7 @@ const Dashboard = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('isVerified');
-    navigate('/entrar');
+    navigate('/');
   };
 
   const handleSearch = (e) => setSearch(e.target.value);
@@ -570,6 +571,7 @@ const Dashboard = () => {
       );
     })
   : [];
+  
   return (
     <ThemeProvider theme={themes[theme]}>
       <Container>
@@ -585,7 +587,7 @@ const Dashboard = () => {
         <ContentWrapper>
           <FormCard>
             <Header>
-              <Title>Controle de Inscrições</Title>
+              <Title>INSCRIÇÕES 2025</Title>
               
               <MobileMenuWrapper>
                 <MobileMenuButton onClick={toggleMenu}>
@@ -597,11 +599,11 @@ const Dashboard = () => {
                 <ActionButton onClick={() => navigate('/inscrever')}>
                   <FiPlus size={18} /> Inscrever
                 </ActionButton>
-                {isAdmin && (
+               
                 <ActionButton onClick={() => navigate('/instituicao')}>
                   <FiUpload size={18} /> IE
                 </ActionButton>
-                   )}
+                
                 <ActionButton>
                   <FiDownload size={18} /> Materiais
                 </ActionButton>
@@ -657,11 +659,11 @@ const Dashboard = () => {
                   <TableHead>
                     <tr>
                       <TableHeaderCell>#</TableHeaderCell>
-                      <TableHeaderCell>Nome Completo</TableHeaderCell>
+                      <TableHeaderCell>NOME COMPLETO</TableHeaderCell>
                  
-                      <TableHeaderCell>Status</TableHeaderCell>
-                      <TableHeaderCell>Data</TableHeaderCell>
-                      <TableHeaderCell>Ações</TableHeaderCell>
+                      <TableHeaderCell>STATUS</TableHeaderCell>
+                      <TableHeaderCell>DATA</TableHeaderCell>
+                      <TableHeaderCell>AÇÕES</TableHeaderCell>
                     </tr>
                   </TableHead>
                   <tbody>
@@ -678,10 +680,10 @@ const Dashboard = () => {
     </TableCell>
     <TableCell data-label="Ações">
       <ButtonGroup>
-        <SmallButton onClick={() => navigate(`/inscricoes/editar/${item.id}`)}>
+        <SmallButton onClick={() => navigate(`/edit/${item.id}`)}>
           <FiEdit size={14} /> Editar
         </SmallButton>
-        <SmallButton onClick={() => window.print()}>
+        <SmallButton onClick={() => navigate(`/print/${item.id}`)}>
           <FiPrinter size={14} /> Imprimir
         </SmallButton>
       </ButtonGroup>

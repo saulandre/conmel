@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { faArrowRight, faKey } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../api/axiosInstance'; // Certifique-se de que axiosInstance está configurado corretamente
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
-// Animação de fundo
+
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 `;
 
-// Container principal atualizado
 const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -35,7 +33,6 @@ const AuthContainer = styled.div`
   }
 `;
 
-// Nova tipografia com maior hierarquia
 const Title = styled.h1`
   font-size: 2.5rem;
   color: #000;
@@ -54,7 +51,6 @@ const Title = styled.h1`
   }
 `;
 
-// Botão com microinterações aprimoradas
 const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.1rem;
@@ -78,7 +74,6 @@ const Button = styled.button`
 
 
 
-// Formulário
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -113,7 +108,6 @@ const InputWrapper = styled.div`
   }
 `;
 
-// Layout adaptativo para mobile-first
 const AuthWrapper = styled.div`
   width: 100%;
   max-width: 480px;
@@ -137,7 +131,6 @@ const AuthWrapper = styled.div`
 
 
 
-// Inputs
 const Input = styled.input`
   flex: 1;
   padding: 8px;
@@ -153,32 +146,31 @@ const Input = styled.input`
   }
 
   @media (max-width: 600px) {
-    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
+    font-size: 0.9rem; 
   }
 `;
 
-// Ícones
 const Icon = styled(FontAwesomeIcon)`
   color: #22223b;
   font-size: 1.2rem;
   margin-right: 10px;
 
   @media (max-width: 600px) {
-    font-size: 1rem; /* Reduz o tamanho do ícone em telas pequenas */
+    font-size: 1rem; 
   }
 `;
 
 
 
 
-// Mensagem de erro
+
 const ErrorMessage = styled.p`
   color: #d32f2f;
   font-size: 0.9rem;
   font-family: 'Poppins', sans-serif;
 
   @media (max-width: 600px) {
-    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
+    font-size: 0.8rem; 
   }
 `;
 const AuthLink = styled.a`
@@ -196,12 +188,12 @@ const AuthLink = styled.a`
   }
 
   @media (max-width: 768px) {
-    &:first-child { /* Esconde apenas o link de recuperação */}
+    &:first-child {
       display: none;
     }
-  
+  }
 
-  
+
 `;
 
 const AuthLinkConta = styled.a`
@@ -221,7 +213,6 @@ const AuthLinkConta = styled.a`
 
   
 `;
-// Adicione estes componentes estilizados
 const FloatingButtonContainer = styled.div`
    @media (max-width: 768px) {
     position: fixed;
@@ -255,19 +246,15 @@ const FloatingButton = styled.button`
     overflow: hidden;
     cursor: pointer;
     bottom: 0; 
-    /* Estilo gradiente moderno */
     background:linear-gradient(135deg, #403d39, #000, #403d39);
-    /* Efeito de hover */
     &:hover {
    
     }
 
-    /* Efeito de clique */
     &:active {
       transform: translateY(0);
     }
 
-    /* Linha decorativa no topo */
     &::before {
       content: '';
       position: absolute;
@@ -278,7 +265,6 @@ const FloatingButton = styled.button`
       background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
     }
 
-    /* Ícone */
     svg {
       width: 18px;
       height: 18px;
@@ -289,7 +275,6 @@ const FloatingButton = styled.button`
 
 
 
-// Adicionar estado de loading com spinner
 const LoadingSpinner = styled.div`
   @keyframes spin {
     to { transform: rotate(360deg); }
@@ -322,14 +307,13 @@ const Login = () => {
     setAreFieldsFilled(filled);
   }, [formData.email, formData.password]);
 
-  // Verificação de login ao carregar o componente
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       console.log('Usuário já está logado, redirecionando...');
-      navigate('/gestor'); // Redireciona para a página do painel ou gestor
+      navigate('/gestor');
     }
-  }, [navigate]); // A dependência de navigate garante que o redirecionamento só aconteça uma vez
+  }, [navigate]); 
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -390,7 +374,7 @@ const Login = () => {
       if (err.response) {
         console.error("⚠️ Resposta do servidor:", err.response.data);
         
-        if (err.response.status === 401) { // Código 401 indica credenciais inválidas
+        if (err.response.status === 401) {
           setError('Usuário ou senha incorretos.');
         } else {
           setError(err.response.data.message || 'E-mail ou senha incorreto! Tente novamente..');

@@ -20,11 +20,11 @@ import axios from 'axios';
 // Temas
 const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #22223b, #40434e, #22223b);',
+    background: 'linear-gradient(135deg, #f8edeb, #403d39, #403d39)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #4a4e69, #22223b)',
-    tableHeaderBackground: '#4a4e69',
+    buttonBackground: 'linear-gradient(135deg, #403d39, #403d39)',
+    tableHeaderBackground: '#403d39',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',
     tableRowHoverBackground: '#f1f3f5',

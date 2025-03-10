@@ -77,7 +77,7 @@ function AppContent() {
 
 
 <Route
-  path="/atualizacao/:id"
+  path="/edit/:id"
   element={
     <ProtectedRoute>
       <Atualizacao />

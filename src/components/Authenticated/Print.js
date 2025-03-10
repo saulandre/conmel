@@ -418,10 +418,16 @@ const getToken = () => {
         <Section>
           <SectionTitle>Participação</SectionTitle>
           <ResponsiveGrid>
-            <FieldRow>
-              <FieldLabel>Participação</FieldLabel>
-              <FieldValue>{participant.tipoParticipacao}</FieldValue>
-            </FieldRow>
+          <FieldRow>
+  <FieldLabel>Participação</FieldLabel>
+  <FieldValue>
+    {participant.tipoParticipacao === "Confraternista"
+      ? "Confraternista"
+      : participant.tipoParticipacao === "Trabalhador"
+      ? `Comissão: ${participant.comissao}`
+      : "N/A"}
+  </FieldValue>
+</FieldRow>
             <FieldRow>
               <FieldLabel>Camisa</FieldLabel>
               <FieldValue>{participant.camisa ? `Sim (Tamanho: ${participant.tamanhoCamisa})` : "Não"}</FieldValue>

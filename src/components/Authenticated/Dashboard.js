@@ -20,7 +20,7 @@ import axios from 'axios';
 // Temas
 const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #f8edeb, #403d39, #403d39)',
+    background: 'linear-gradient(135deg, #403d39, #403d39, #403d39)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
     buttonBackground: 'linear-gradient(135deg, #403d39, #403d39)',
@@ -223,7 +223,7 @@ const MobileMenu = styled.div`
   padding: 1rem;
   z-index: 1001;
   display: ${({ $isOpen }) => ($isOpen ? 'grid' : 'none')};
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+
   gap: 0.5rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   animation: ${({ $isOpen }) => 
@@ -313,10 +313,11 @@ const TableContainer = styled.div`
   background: ${({ theme }) => theme.cardBackground};
   border: 2px solid #ced4da;
   @media (max-width: 768px) {
-    border: 1px solid #000;
+    border: 2px solid #403d39;
     margin: 1rem -1rem;
     width: calc(100% + 2rem);
-    
+    width: 98%;
+    margin: 0 auto;
     &::-webkit-scrollbar {
       height: 4px;
     }

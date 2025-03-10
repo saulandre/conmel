@@ -12,7 +12,7 @@ import { ArrowLeft } from "react-feather";
 // Estilos (mantenha os mesmos do seu código original)
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8edeb, #ffe5d9, #f8edeb);
+  background: linear-gradient(135deg, #403d39, #f8edeb, #403d39);
   display: flex;
   justify-content: center;
   padding: 2rem;
@@ -177,7 +177,7 @@ const CheckboxLabel = styled.label`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #252422, #22223b);
+  background: linear-gradient(135deg, #403d39, #403d39);
   color: #fff;
   border: none;
   border-radius: 0.8rem;

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FiSave, FiArrowLeft, FiEdit, FiPlus, FiChevronLeft, FiSearch } from 'react-icons/fi';
+import { FiEdit, FiPlus, FiChevronLeft, FiSearch } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Estilos
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #40434e, #22223b);
+  background: linear-gradient(135deg, #403d39, #f8edeb, #403d39);
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
   display: flex;
@@ -148,7 +148,7 @@ const Table = styled.table`
 `;
 
 const TableHead = styled.thead`
-  background: #4a4e69;
+  background: #403d39;
   color: white;
 `;
 
@@ -206,7 +206,7 @@ const BackLink = styled.a`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #4a4e69, #22223b);
+  background: linear-gradient(135deg, #403d39, #403d39);
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -249,28 +249,7 @@ const SearchContainer = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 1rem 1.5rem;
-  padding-left: 3rem;
-  border: 1px solid #ddd;
-  border-radius: 0.8rem;
-  background: #f9f9f9;
-  color: #22223b;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  transition: all 0.3s ease;
 
-  &:focus {
-    outline: none;
-    border-color: #4a4e69;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &::placeholder {
-    color: #888;
-  }
-`;
 
 const SearchIcon = styled(FiSearch)`
   position: absolute;
@@ -487,10 +466,10 @@ const IePage = () => {
           <Header>
             <Title>INSTITUIÇÃO ESPÍRITA</Title>
             <ButtonContainer>
-              <ActionButton onClick={() => handleModeChange('adicionar')}>
-                <FiPlus size={18} /> Adicionar
-              </ActionButton>
-              <ActionButton onClick={() => handleModeChange('alterar')}>
+            <ActionButton style={{ background: "#403d39" }} onClick={() => handleModeChange('adicionar')}>
+  <FiPlus size={18} style={{ marginRight: "8px" }} /> Adicionar
+</ActionButton>
+              <ActionButton style={{ background: "#403d39" }} onClick={() => handleModeChange('alterar')}>
                 <FiEdit size={18} /> Alterar
               </ActionButton>
             </ButtonContainer>

@@ -55,16 +55,16 @@ const AuthWrapper = styled.div`
 `;
 
 // Título
-const Title = styled.h2`
+const Title = styled.h1`
   text-align: center;
   color: #22223b;
-  font-size: 1.8rem;
+  font-size: 2.5rem;
   margin-bottom: 20px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-
+  margin-bottom: 2.5rem;
   @media (max-width: 600px) {
-    font-size: 1.5rem; /* Reduz o tamanho do título em telas pequenas */
+    font-size: 2.3rem /* Reduz o tamanho do título em telas pequenas */
   }
 `;
 
@@ -75,7 +75,7 @@ const InputWrapper = styled.div`
   border: 1px solid #ddd;
   border-radius: 12px;
   padding: 10px;
-  background-color: #f8f9fa;
+  background-color: #fff;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 15px;
 

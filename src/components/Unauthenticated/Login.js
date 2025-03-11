@@ -93,9 +93,13 @@ const InputWrapper = styled.div`
   border-radius: 12px;
   transition: border-color 0.3s ease;
 
-  &:focus-within {
+/*   &:focus-within {
     border-color: #4a4a4a;
  
+  } */
+    &:focus-within {
+    border-color: #4a4e69;
+    box-shadow: 0 0 3px rgba(74, 78, 105, 0.5);
   }
   &:hover {
 
@@ -398,7 +402,7 @@ const Login = () => {
   return (
     <AuthContainer>
       <AuthWrapper>
-        <Title>COMEJACA</Title>
+        <Title> ENTRAR</Title>
         <Form onSubmit={handleSubmit}>
           <InputWrapper>
             <Icon icon={faEnvelope} />

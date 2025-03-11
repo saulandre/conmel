@@ -20,11 +20,11 @@ import axios from 'axios';
 // Temas
 const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #403d39, #403d39, #403d39)',
+    background: 'linear-gradient(135deg, #003049, #003049, #003049)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #403d39, #403d39)',
-    tableHeaderBackground: '#403d39',
+    buttonBackground: 'linear-gradient(135deg, #003049, #003049)',
+    tableHeaderBackground: '#003049',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',
     tableRowHoverBackground: '#f1f3f5',
@@ -89,6 +89,7 @@ const FloatingActions = styled.div`
     &:hover {
       transform: scale(1.1);
       box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+      
     }
   }
 

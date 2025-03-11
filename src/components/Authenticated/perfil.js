@@ -7,7 +7,7 @@ import InputMask from "react-input-mask";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #403d39, #403d39);
+  background: linear-gradient(135deg, #003049, #003049);
   display: flex;
   justify-content: center;
   padding: 2rem;
@@ -120,7 +120,7 @@ const InputField = styled.input`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #403d39, #403d39);
+  background: linear-gradient(135deg, #003049, #003049);
   color: #fff;
   border: none;
   border-radius: 0.8rem;

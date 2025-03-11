@@ -7,7 +7,7 @@ import axios from 'axios';
 // Estilos
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #403d39, #f8edeb, #403d39);
+  background: linear-gradient(135deg, #003049, #003049, #003049);
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
   display: flex;
@@ -80,7 +80,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background: linear-gradient(135deg, #4a4e69, #22223b);
+  background: linear-gradient(135deg, #003049, #003049);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -148,7 +148,7 @@ const Table = styled.table`
 `;
 
 const TableHead = styled.thead`
-  background: #403d39;
+  background: #003049;
   color: white;
 `;
 
@@ -206,7 +206,7 @@ const BackLink = styled.a`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #403d39, #403d39);
+  background: linear-gradient(135deg, #003049, #003049);
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -436,21 +436,21 @@ const IePage = () => {
           <Header>
             <Title>INSTITUIÇÃO ESPÍRITA</Title>
             <ButtonContainer>
-            <ActionButton style={{ background: "#403d39" }} onClick={() => handleModeChange('adicionar')}>
+            <ActionButton style={{ background: "#003049" }} onClick={() => handleModeChange('adicionar')}>
   <FiPlus size={18} style={{ marginRight: "8px" }} /> Adicionar
 </ActionButton>
-              <ActionButton style={{ background: "#403d39" }} onClick={() => handleModeChange('alterar')}>
+              <ActionButton style={{ background: "#003049" }} onClick={() => handleModeChange('alterar')}>
                 <FiEdit size={18} /> Alterar
               </ActionButton>
             </ButtonContainer>
           </Header>
           {modo === "adicionar" && (
-        <p style={{ marginTop: "10px", color: "#403d39" }}>
+        <p style={{ marginTop: "10px", color: "#003049" }}>
           Você está no modo de adicionar instituição espírita.
         </p>
       )}
            {modo === "alterar" && (
-        <p style={{ marginTop: "10px", color: "#403d39" }}>
+        <p style={{ marginTop: "10px", color: "#003049" }}>
           Você está no modo de adicionar instituição espírita.
         </p>
       )}

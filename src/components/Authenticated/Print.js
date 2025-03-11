@@ -322,7 +322,8 @@ const getToken = () => {
         botao.style.display = 'block';
       },
     
-     
+      x: 15,  // Posição horizontal inicial
+   
       width: 180,  // Largura do conteúdo (evitar cortar texto)
       windowWidth: 650  // Largura da janela (ajuste conforme necessário)
     });

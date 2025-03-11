@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import html2canvas from 'html2canvas';
+import html2pdf from "html2pdf.js";
+import { jsPDF } from "jspdf"; 
 
 const Container = styled.div`
   font-family: 'Inter', Arial, sans-serif;
@@ -301,22 +302,35 @@ const getToken = () => {
     }, 3000);
   }, []);
   // Função para baixar em PDF
-  const handleDownloadPDF = async () => {
-    const ficha = document.getElementById("ficha-inscricao");
 
-    try {
-      const canvas = await html2canvas(ficha);
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-      pdf.save("ficha_inscricao.pdf");
-    } catch (error) {
-      console.error("Erro ao gerar PDF:", error);
-    }
+
+
+  const handleDownloadPDF = () => {
+    const ficha = document.getElementById("ficha-inscricao");  // O conteúdo HTML que você quer converter em PDF
+    const botao = document.getElementById("botao-pdf");  // O botão que você quer esconder temporariamente
+
+    // Esconde o botão durante a geração do PDF
+    botao.style.display = 'none';
+    // Criar uma nova instância do jsPDF
+    const doc = new jsPDF('p', 'mm', 'a4');  // Formato A4, orientação retrato
+  
+    // Usando o método html do jsPDF para renderizar o conteúdo HTML diretamente no PDF
+    doc.html(ficha, {
+      callback: function (doc) {
+        doc.save('ficha_inscricao.pdf');  // Salva o arquivo PDF gerado
+        botao.style.display = 'block';
+      },
+    
+     
+      width: 180,  // Largura do conteúdo (evitar cortar texto)
+      windowWidth: 650  // Largura da janela (ajuste conforme necessário)
+    });
   };
+  
+  
+  
+ 
     if (loading) return <p>Carregando...</p>;
     if (!participant) return <p>Erro ao carregar usuário.</p>;
   
@@ -334,7 +348,7 @@ const getToken = () => {
           <Spinner />
           <LoadingText>Carregando documento...</LoadingText>
         </LoaderWrapper>
-      ) : (  <DocumentWrapper>
+      ) : (  <DocumentWrapper id="ficha-inscricao">
         <Header>
           <h1>COMEJACA 2025</h1>
           <h2>Confraternização das Mocidades Espíritas de Jacarepaguá</h2>
@@ -493,7 +507,7 @@ const getToken = () => {
         </Footer>
           <ButtonContainer>
         {isMobile ? (
-          <Button onClick={handleDownloadPDF}>Baixar PDF</Button>
+          <Button id="botao-pdf" onClick={handleDownloadPDF}>Baixar PDF</Button>
         ) : (
           <Button onClick={handlePrint}>Imprimir</Button>
         )}

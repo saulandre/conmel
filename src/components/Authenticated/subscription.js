@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
+import { FiClock, FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ptBR } from "date-fns/locale";
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid'; 
-import { ArrowLeft } from "react-feather";
+
+
+
 // Estilos (mantenha os mesmos do seu código original)
 const Container = styled.div`
   min-height: 100vh;
@@ -41,24 +42,18 @@ const FormCard = styled.form`
     border-radius: 0rem;
   }
 `;
+const StyledInput = styled.input`
 
-const BackLink = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  transition: opacity 0.3s;
-  cursor: pointer;
-  width: fit-content;
-  margin-top: 1rem;
-
-  &:hover {
-    opacity: 0.8;
-  }
+width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.8rem;
+    background: #f9f9f9;
+    color: #22223b;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3sease;
 `;
+
 
 const Header = styled.div`
   text-align: center;
@@ -161,6 +156,7 @@ const CheckboxContainer = styled.div`
   align-items: center;
   gap: 0.5rem;
   margin: 2rem 0;
+  justify-content: flex-start; /* Alinha os itens ao início */
 `;
 
 const CheckboxInput = styled.input`
@@ -169,11 +165,58 @@ const CheckboxInput = styled.input`
   accent-color: #4a4e69;
 `;
 
-const CheckboxLabel = styled.label`
+/* const CheckboxLabel = styled.label`
   font-size: 0.9rem;
   color: #22223b;
+`; */
+// Caixa envolvente para cada checkbox
+const CheckboxWrapper = styled.div`
+  display: inline-block;
+ 
+  padding: 3px;
+  margin: 5px;
+  border-radius: 8px;
+  width: auto;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: #000;
+  }
+
+  input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+  }
 `;
 
+
+// Estilo para os labels dentro da caixa
+const CheckboxLabel = styled.label`
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #003049;
+  }
+
+  input:checked {
+    background-color: #003049;
+    border-color: #003049;
+  }
+`;const CheckboxesContainer = styled.div`
+border: 1px solid #ddd;
+
+border-radius: 5px;
+background-color: #fff;
+
+min-height: 100px;
+flex-wrap: wrap;
+
+`;
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
@@ -337,7 +380,7 @@ const Formulario = () => {
     }));
   };
   
-  
+  const today = new Date(); // data atual
   
 
   const handleDateChange = (date) => {
@@ -502,8 +545,13 @@ const Formulario = () => {
                   value={formData.dataNascimento}
                   onChange={handleDateChange}
                   format="dd/MM/yyyy"
-                  
+                  maxDate={today}
                   required
+                  style={{
+                    border: '1px solid black',  // Borda preta de 1px
+                    padding: '10px',
+                    fontSize: '16px',
+                    borderRadius: '4px',  }}// Borda arredondada, caso queira
                 />
               </InputGroup>
 
@@ -549,7 +597,7 @@ const Formulario = () => {
               )}
 
               <InputGroup>
-                <InputLabel><FiUser /> Sexo *</InputLabel>
+                <InputLabel><FiUser /> Gênero *</InputLabel>
                 <Select
                   name="sexo"
                   value={formData.sexo}
@@ -557,10 +605,11 @@ const Formulario = () => {
                   required
                 >
                   <option value="">Selecione</option>
-                  <option value="Masculino_SIS">Masculino SIS</option>
-                  <option value="Feminino_SIS">Feminino SIS</option>
-                  <option value="Masculino_Trans">Masculino Trans</option>
-                  <option value="Feminino_Trans">Feminino Trans</option>
+                  <option value="Masculino CIS">Masculino CIS</option>
+                  <option value="Feminino CIS">Feminino CIS</option>
+                  <option value="Masculino Trans">Masculino Trans</option>
+                  <option value="Feminino Trans">Feminino Trans</option>
+                  <option value="Não Binário">Não Binário</option>
                 </Select>
               </InputGroup>
 
@@ -644,18 +693,18 @@ const Formulario = () => {
                     
                   >
                     <option value="">Selecione</option>
-                    <option value="Alimentacao">Alimentação</option>
-                    <option value="Atendimento_Fraterno">Atendimento Fraterno</option>
-                    <option value="Coordenacao_Geral">Coordenação Geral</option>
-                    <option value="Divulgacao">Divulgação</option>
-                    <option value="Estudos_Doutrinarios">Estudos Doutrinários</option>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Atendimento Fraterno">Atendimento Fraterno</option>
+                    <option value="Coordenacao Geral">Coordenação Geral</option>
+                    <option value="Divulgação">Divulgação</option>
+                    <option value="Estudos Doutrinários">Estudos Doutrinários</option>
                     <option value="Multimeios">Multimeios</option>
                     <option value="Secretaria">Secretaria</option>
-                    <option value="Servicos_Gerais">Serviços Gerais</option>
+                    <option value="Servicos Gerais">Serviços Gerais</option>
+                    <option value="Recepção">Recepção</option>
                   </Select>
                 </InputGroup>
               )}
-
               {/* Endereço */}
               <InputGroup>
                 <InputLabel><FiMapPin /> CEP *</InputLabel>
@@ -746,6 +795,21 @@ const Formulario = () => {
                   ))}
                 </Select>
               </InputGroup>
+
+              <InputGroup>
+  <InputLabel><FiClock /> Quantos anos você participa da IE? *</InputLabel>
+  <StyledInput
+  type="number"
+  name="tempoParticipacao"
+  value={formData.tempoParticipacao}
+  onChange={handleChange}
+  placeholder="Digite o tempo em anos"
+  min="0"
+  max="100" // Limita o valor máximo a 100
+  required
+/>
+
+</InputGroup>
               <InputGroup>
                 <InputLabel>
                   <FiInfo /> Vegetarianismo *
@@ -762,7 +826,7 @@ const Formulario = () => {
               </InputGroup>
               {/* Informações Adicionais */}
               <InputGroup>
-                <InputLabel><FiInfo /> Alergias</InputLabel>
+                <InputLabel><FiInfo /> Possui alguma alergia?</InputLabel>
                 <TextArea
                   name="alergia"
                   placeholder="Descreva suas alergias."
@@ -782,10 +846,87 @@ const Formulario = () => {
               </InputGroup>
 
               <InputGroup>
+      <InputLabel><FiInfo /> Possui alguma deficiência?</InputLabel>
+      <CheckboxesContainer>
+        <CheckboxWrapper>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="deficienciaAuditiva"
+              checked={formData.deficienciaAuditiva}
+              onChange={handleChange}
+            />
+            Auditiva
+          </CheckboxLabel>
+        </CheckboxWrapper>
+
+        <CheckboxWrapper>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="deficienciaAutismo"
+              checked={formData.deficienciaAutismo}
+              onChange={handleChange}
+            />
+            Autismo
+          </CheckboxLabel>
+        </CheckboxWrapper>
+
+        <CheckboxWrapper>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="deficienciaIntelectual"
+              checked={formData.deficienciaIntelectual}
+              onChange={handleChange}
+            />
+            Intelectual
+          </CheckboxLabel>
+        </CheckboxWrapper>
+
+        <CheckboxWrapper>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="deficienciaParalisiaCerebral"
+              checked={formData.deficienciaParalisiaCerebral}
+              onChange={handleChange}
+            />
+            Paralisia Cerebral
+          </CheckboxLabel>
+        </CheckboxWrapper>
+
+        <CheckboxWrapper>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="deficienciaVisual"
+              checked={formData.deficienciaVisual}
+              onChange={handleChange}
+            />
+            Visual
+          </CheckboxLabel>
+        </CheckboxWrapper>
+
+        <CheckboxWrapper>
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="deficienciaFisica"
+              checked={formData.deficienciaFisica}
+              onChange={handleChange}
+            />
+            Física
+          </CheckboxLabel>
+        </CheckboxWrapper>
+      </CheckboxesContainer>
+    </InputGroup>
+
+              <InputGroup>
                 <InputLabel><FiInfo /> Observações</InputLabel>
                 <TextArea
                   name="outrasInformacoes"
-                  placeholder="Informações adicionais sobre esta inscrição."
+                  placeholder="Há mais alguma informação importante sobre esta inscrição?"
                   value={formData.outrasInformacoes}
                   onChange={handleChange}
                 />

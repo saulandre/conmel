@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
+import html2canvas from 'html2canvas';
 
 const Container = styled.div`
   font-family: 'Inter', Arial, sans-serif;
@@ -448,6 +449,10 @@ const getToken = () => {
             </FieldRow>
             <FieldRow>
               <FieldLabel>Toma medicações:</FieldLabel>
+              <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
+            </FieldRow>
+            <FieldRow>
+              <FieldLabel>Possui deficiência? </FieldLabel>
               <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
             </FieldRow>
             <FieldRow>

@@ -251,42 +251,11 @@ const SearchContainer = styled.div`
 
 
 
-const SearchIcon = styled(FiSearch)`
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 1.2rem;
-`;
 
-const SuggestionsList = styled.ul`
-  position: absolute;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 0.8rem;
-  margin-top: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-`;
 
-const SuggestionItem = styled.li`
-  padding: 1rem;
-  cursor: pointer;
-  color: #22223b;
-  font-family: 'Poppins', sans-serif;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background: #f1f3f5;
-  }
-`;
 const IePage = () => {
   const navigate = useNavigate();
-
+  const [modo, setModo] = useState("");
   const [formMode, setFormMode] = useState('');
   const [institutions, setInstitutions] = useState([]);
   const [selectedInstitution, setSelectedInstitution] = useState(null);
@@ -454,6 +423,7 @@ const IePage = () => {
     setFormMode(mode);
     setSelectedInstitution(null);
     setError('');
+    setModo(modo);
   };
 
   return (
@@ -474,9 +444,20 @@ const IePage = () => {
               </ActionButton>
             </ButtonContainer>
           </Header>
+          {modo === "adicionar" && (
+        <p style={{ marginTop: "10px", color: "#403d39" }}>
+          Você está no modo de adicionar instituição espírita.
+        </p>
+      )}
+           {modo === "alterar" && (
+        <p style={{ marginTop: "10px", color: "#403d39" }}>
+          Você está no modo de adicionar instituição espírita.
+        </p>
+      )}
 
           {formMode === 'alterar' && (
             <SearchContainer>
+            IE cadastradas
               <Select
                 value={selectedInstitution?.id || ''}
                 onChange={(e) => {

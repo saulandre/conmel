@@ -20,8 +20,8 @@ const AuthContainer = styled.div`
   align-items: center;
   min-height: 100vh;
 
-  background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
-  background-size: 400% 400%;
+/*   background: linear-gradient(135deg, #f8edeb, #003049, #f8edeb);
+ */  background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
   padding: 2rem;
   box-sizing: border-box;
@@ -55,15 +55,15 @@ const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #434343 0%, #000000 100%);
-
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #003049 0%, #003049 100%);
+  margin-top: 1rem;
+/*   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(135deg, #000000 0%, #434343 100%);
+    background: linear-gradient(135deg, #e36414 0%, #e36414 100%);
   }
   @media (max-width: 768px) {
     display: none;
@@ -99,7 +99,7 @@ const InputWrapper = styled.div`
   }
   &:hover {
 
-    border: #46494c 1px solid
+    border: #003049 1px solid
   }
 
   @media (max-width: 480px) {
@@ -117,14 +117,15 @@ const AuthWrapper = styled.div`
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 5px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-
+/*   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+ */
   @media (max-width: 768px) {
     padding: 1.5rem;
     border-radius: 16px;
     margin: 0;
     border-radius: 0;
     height: 100vh;
+     transform: translateY(-5px);
   }
   
 `;
@@ -246,7 +247,7 @@ const FloatingButton = styled.button`
     overflow: hidden;
     cursor: pointer;
     bottom: 0; 
-    background:linear-gradient(135deg, #403d39, #000, #403d39);
+    background:linear-gradient(135deg, #003049, #003049, #003049);
     &:hover {
    
     }

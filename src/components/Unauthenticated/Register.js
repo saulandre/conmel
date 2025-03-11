@@ -17,8 +17,8 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
-  background-size: 200% 200%;
+/*   background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
+ */  background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
   box-sizing: border-box;
@@ -35,14 +35,14 @@ const AuthWrapper = styled.div`
   border-radius: 5px;
   width: 100%;
   max-width: 400px;
-  background-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+/*   background-color: rgba(255, 255, 255, 0.95);
+ */  /* box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); */
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+/*     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); */
   }
 
   @media (max-width: 768px) {
@@ -118,22 +118,26 @@ const Input = styled.input`
 const Button = styled.button`
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #434343 0%, #000000 100%);
+
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 5px;
+
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: 'Poppins', sans-serif;
-  font-weight: 500;
 
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #003049 0%, #003049 100%);
+  margin-top: 1.5rem;
   &:hover {
-    background: linear-gradient(135deg,rgb(15, 15, 20), #22223b);
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #f39c12 0%, #f39c12 100%);
   }
-
   &:disabled {
     background: #aaa;
     cursor: not-allowed;

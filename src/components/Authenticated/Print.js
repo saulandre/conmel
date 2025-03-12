@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import html2pdf from "html2pdf.js";
+
 import { jsPDF } from "jspdf"; 
 
 const Container = styled.div`

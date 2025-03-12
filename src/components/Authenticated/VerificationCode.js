@@ -17,7 +17,7 @@ const AuthContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+ // background: linear-gradient(135deg, #22223b, #335c67, #22223b);
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
@@ -27,7 +27,7 @@ const AuthContainer = styled.div`
 const AuthWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+//  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 30px;
   width: 100%;
   max-width: 400px;
@@ -37,7 +37,7 @@ const AuthWrapper = styled.div`
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+  //  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -304,7 +304,7 @@ const handleSubmit = async (e) => {
           </SecondaryButton>
           <LogoutButton onClick={() => {
             localStorage.clear();
-            navigate('/gestor');
+            navigate('/');
           }}>
             Sair
           </LogoutButton>

@@ -939,7 +939,7 @@ const Formulario = () => {
   name="deficienciaOutraDescricao"
   value={formData.deficienciaOutraDescricao}
   onChange={handleChange}
-  placeholder="Especifique a deficiência"
+  placeholder="Informe a deficiência"
 
 />
       </InputGroup>

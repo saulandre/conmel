@@ -157,6 +157,11 @@ const ErrorMessage = styled.p`
   margin-top: 10px;
   font-family: 'Poppins', sans-serif;
 
+  ${({ hasError }) => hasError && `
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 600;
+  `}
   @media (max-width: 600px) {
     font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
   }
@@ -203,8 +208,22 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
+ 
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+
+  const isFormValid = () => {
+    const { name, email, password, confirmPassword } = formData;
+    return (
+      name.trim() !== '' &&
+      isValidEmail(email) &&
+      password.length === 6 &&
+      confirmPassword === password
+    );
+  };
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -212,6 +231,39 @@ const Register = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleChangePassword = (e) => {
+    const { name, value } = e.target;
+    const numericValue = value.replace(/[^0-9]/g, ''); // Remove qualquer caractere não numérico
+
+    if (numericValue.length > 6) {
+      return;
+    }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: numericValue
+    }));
+
+    // Lógica de validação para os dois campos
+    if (name === 'password') {
+      if (numericValue.length !== 6) {
+        setErrorMessage('A senha deve ter exatamente 6 números.');
+      } else {
+        setErrorMessage('');
+      }
+    }
+
+    if (name === 'confirmPassword') {
+      if (numericValue !== formData.password) {
+        setErrorMessage('A confirmação da senha deve ser igual à senha.');
+      } else if (numericValue.length !== 6) {
+        setErrorMessage('A confirmação da senha deve ter exatamente 6 números.');
+      } else {
+        setErrorMessage('');
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -306,25 +358,36 @@ const Register = () => {
               type="password"
               name="password"
               value={formData.password}
-              onChange={handleChange}
+              onChange={handleChangePassword}
               placeholder="Senha"
               required
+              maxLength={6}
               aria-label="Senha"
+                  className={ErrorMessage ? 'error' : ''}
             />
           </InputWrapper>
+
+
+
+
           <InputWrapper>
             <Icon><FiLock /></Icon>
             <Input
               type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
-              onChange={handleChange}
+              onChange={handleChangePassword}
               placeholder="Confirmar senha"
               required
+              maxLength={6}
               aria-label="Confirmar senha"
+              className={confirmPasswordError ? 'error' : ''}
             />
           </InputWrapper>
-          <Button type="submit" disabled={loading}>
+
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+
+          <Button disabled={!isFormValid() || loading} type="submit">
             {loading ? 'Registrando...' : 'Registrar'}
           </Button>
         </form>

@@ -17,7 +17,7 @@ const AuthContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background:  linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+//  background:  linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;
@@ -31,7 +31,7 @@ const AuthContainer = styled.div`
 const AuthWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 5px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+ // box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 40px;
   width: 100%;
   max-width: 450px;

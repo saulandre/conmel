@@ -47,7 +47,7 @@ const StyledInput = styled.input`
 width: 100%;
     padding: 1rem;
     border: 1px solid #ddd;
-    border-radius: 0.8rem;
+
     background: #f9f9f9;
     color: #22223b;
     font-family: 'Poppins', sans-serif;
@@ -695,12 +695,12 @@ const Formulario = () => {
                     <option value="">Selecione</option>
                     <option value="Alimentação">Alimentação</option>
                     <option value="Atendimento Fraterno">Atendimento Fraterno</option>
-                    <option value="Coordenacao Geral">Coordenação Geral</option>
+                    <option value="Coordenação Geral">Coordenação Geral</option>
                     <option value="Divulgação">Divulgação</option>
                     <option value="Estudos Doutrinários">Estudos Doutrinários</option>
                     <option value="Multimeios">Multimeios</option>
                     <option value="Secretaria">Secretaria</option>
-                    <option value="Servicos Gerais">Serviços Gerais</option>
+                    <option value="Serviços Gerais">Serviços Gerais</option>
                     <option value="Recepção">Recepção</option>
                   </Select>
                 </InputGroup>
@@ -797,19 +797,18 @@ const Formulario = () => {
               </InputGroup>
 
               <InputGroup>
-  <InputLabel><FiClock /> Quantos anos você participa da IE? *</InputLabel>
-  <StyledInput
-  type="number"
-  name="tempoParticipacao"
-  value={formData.tempoParticipacao}
-  onChange={handleChange}
-  placeholder="Digite o tempo em anos"
-  min="0"
-  max="100" // Limita o valor máximo a 100
-  required
-/>
-
+  <InputLabel><FiClock /> É sua primeira COMEJACA? *</InputLabel>
+  <CheckboxContainer>
+    <CheckboxInput
+      type="checkbox"
+      name="primeiraComejaca"
+      checked={formData.primeiraComejaca}
+      onChange={handleChange}
+    />
+    <CheckboxLabel>Sim, esta é minha primeira COMEJACA.</CheckboxLabel>
+  </CheckboxContainer>
 </InputGroup>
+
               <InputGroup>
                 <InputLabel>
                   <FiInfo /> Vegetarianismo *
@@ -844,83 +843,110 @@ const Formulario = () => {
                   onChange={handleChange}
                 />
               </InputGroup>
-
               <InputGroup>
-      <InputLabel><FiInfo /> Possui alguma deficiência?</InputLabel>
-      <CheckboxesContainer>
-        <CheckboxWrapper>
-          <CheckboxLabel>
-            <input
-              type="checkbox"
-              name="deficienciaAuditiva"
-              checked={formData.deficienciaAuditiva}
-              onChange={handleChange}
-            />
-            Auditiva
-          </CheckboxLabel>
-        </CheckboxWrapper>
+  <InputLabel><FiInfo /> Possui alguma deficiência?</InputLabel>
+  <CheckboxesContainer>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaAuditiva"
+          checked={formData.deficienciaAuditiva}
+          onChange={handleChange}
+        />
+        Auditiva
+      </CheckboxLabel>
+    </CheckboxWrapper>
 
-        <CheckboxWrapper>
-          <CheckboxLabel>
-            <input
-              type="checkbox"
-              name="deficienciaAutismo"
-              checked={formData.deficienciaAutismo}
-              onChange={handleChange}
-            />
-            Autismo
-          </CheckboxLabel>
-        </CheckboxWrapper>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaAutismo"
+          checked={formData.deficienciaAutismo}
+          onChange={handleChange}
+        />
+        Autismo
+      </CheckboxLabel>
+    </CheckboxWrapper>
 
-        <CheckboxWrapper>
-          <CheckboxLabel>
-            <input
-              type="checkbox"
-              name="deficienciaIntelectual"
-              checked={formData.deficienciaIntelectual}
-              onChange={handleChange}
-            />
-            Intelectual
-          </CheckboxLabel>
-        </CheckboxWrapper>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaIntelectual"
+          checked={formData.deficienciaIntelectual}
+          onChange={handleChange}
+        />
+        Intelectual
+      </CheckboxLabel>
+    </CheckboxWrapper>
 
-        <CheckboxWrapper>
-          <CheckboxLabel>
-            <input
-              type="checkbox"
-              name="deficienciaParalisiaCerebral"
-              checked={formData.deficienciaParalisiaCerebral}
-              onChange={handleChange}
-            />
-            Paralisia Cerebral
-          </CheckboxLabel>
-        </CheckboxWrapper>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaParalisiaCerebral"
+          checked={formData.deficienciaParalisiaCerebral}
+          onChange={handleChange}
+        />
+        Paralisia Cerebral
+      </CheckboxLabel>
+    </CheckboxWrapper>
 
-        <CheckboxWrapper>
-          <CheckboxLabel>
-            <input
-              type="checkbox"
-              name="deficienciaVisual"
-              checked={formData.deficienciaVisual}
-              onChange={handleChange}
-            />
-            Visual
-          </CheckboxLabel>
-        </CheckboxWrapper>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaVisual"
+          checked={formData.deficienciaVisual}
+          onChange={handleChange}
+        />
+        Visual
+      </CheckboxLabel>
+    </CheckboxWrapper>
 
-        <CheckboxWrapper>
-          <CheckboxLabel>
-            <input
-              type="checkbox"
-              name="deficienciaFisica"
-              checked={formData.deficienciaFisica}
-              onChange={handleChange}
-            />
-            Física
-          </CheckboxLabel>
-        </CheckboxWrapper>
-      </CheckboxesContainer>
-    </InputGroup>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaFisica"
+          checked={formData.deficienciaFisica}
+          onChange={handleChange}
+        />
+        Física
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    {/* Opção "Outra" */}
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaOutra"
+          checked={formData.deficienciaOutra}
+          onChange={handleChange}
+        />
+        Outra
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    {/* Input aparece se "Outra" for selecionada */}
+    {formData.deficienciaOutra && (
+      <InputGroup>
+<StyledInput
+  type="text"
+  name="deficienciaOutraDescricao"
+  value={formData.deficienciaOutraDescricao}
+  onChange={handleChange}
+  placeholder="Especifique a deficiência"
+
+/>
+      </InputGroup>
+    )}
+  </CheckboxesContainer>
+</InputGroup>
+
 
               <InputGroup>
                 <InputLabel><FiInfo /> Observações</InputLabel>

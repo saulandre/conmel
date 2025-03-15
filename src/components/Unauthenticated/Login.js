@@ -19,17 +19,13 @@ const AuthContainer = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-
-/*   background: linear-gradient(135deg, #f8edeb, #003049, #f8edeb);
- */  background-size: 400% 400%;
+  background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
   padding: 2rem;
   box-sizing: border-box;
-  overflow: hidden;
-
+  
   @media (max-width: 480px) {
     padding: 0;
-    overflow: hidden;
   }
 `;
 
@@ -112,6 +108,7 @@ const InputWrapper = styled.div`
   }
 `;
 
+
 const AuthWrapper = styled.div`
   width: 100%;
   max-width: 480px;
@@ -121,19 +118,16 @@ const AuthWrapper = styled.div`
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 5px;
-/*   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
- */
 
-height: 100vh;
   @media (max-width: 768px) {
     padding: 1.5rem;
-    border-radius: 16px;
     margin: 0;
     border-radius: 0;
-
-        transform: translateY(-5px);
+    height: 100vh; /* Garante que o conteúdo ocupa toda a tela */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
-  
 `;
 
 
@@ -221,23 +215,18 @@ const AuthLinkConta = styled.a`
   
 `;
 const FloatingButtonContainer = styled.div`
-   @media (max-width: 768px) {
+  @media (max-width: 768px) {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 0; /* Remova o padding lateral */
-    border-top: 1px solid #e0e0e0;
-
+    width: 100vw;
     background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
-  }
-
-  @media (max-width: 768px) {
-    position: fixed;
+    padding: 0;
+    border-top: 1px solid #e0e0e0;
+    z-index: 1000; /* Garante que o botão fique sempre visível */
   }
 `;
-
-
 const FloatingButton = styled.button`
   display: none;
 
@@ -245,7 +234,6 @@ const FloatingButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-  
     width: 100%;
     padding: 1.2rem;
     font-size: 1rem;
@@ -253,19 +241,13 @@ const FloatingButton = styled.button`
     border: none;
     border-radius: 0;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
     cursor: pointer;
-    bottom: 0; 
-    background:linear-gradient(135deg, #003049, #003049, #003049);
-    &:hover {
-   
-    }
-
+    background: linear-gradient(135deg, #003049, #003049, #003049);
+    
     &:active {
       transform: translateY(0);
     }
-
+    
     &::before {
       content: '';
       position: absolute;
@@ -275,7 +257,6 @@ const FloatingButton = styled.button`
       height: 2px;
       background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
     }
-
     svg {
       width: 18px;
       height: 18px;

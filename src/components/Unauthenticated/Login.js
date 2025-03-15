@@ -123,13 +123,15 @@ const AuthWrapper = styled.div`
   border-radius: 5px;
 /*   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
  */
+
+height: 100vh;
   @media (max-width: 768px) {
     padding: 1.5rem;
     border-radius: 16px;
     margin: 0;
     border-radius: 0;
-    height: 100vh;
-     transform: translateY(-5px);
+
+        transform: translateY(-5px);
   }
   
 `;
@@ -228,6 +230,10 @@ const FloatingButtonContainer = styled.div`
     border-top: 1px solid #e0e0e0;
 
     background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
   }
 `;
 

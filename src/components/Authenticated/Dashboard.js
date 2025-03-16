@@ -218,12 +218,15 @@ const MobileMenuButton = styled.button`
 const MobileMenu = styled.div`
   position: fixed;
   top: 60px;
+  margin-bottom: 20px;
   left: 0;
   right: 0;
   background: ${({ theme }) => theme.cardBackground};
   padding: 1rem;
   z-index: 1001;
   display: ${({ $isOpen }) => ($isOpen ? 'grid' : 'none')};
+height: 100%;
+display: block;
 
   gap: 0.5rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -274,6 +277,8 @@ const ActionButton = styled.button`
 const MobileMenuItem = styled(ActionButton)`
   font-size: 0.9rem;
   padding: 0.8rem;
+  margin-bottom: 10px;
+  height: 60px;
 `;
 
 const SearchBoxContainer = styled.div`

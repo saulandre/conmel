@@ -123,12 +123,13 @@ const AuthWrapper = styled.div`
     padding: 1.5rem;
     margin: 0;
     border-radius: 0;
-    /* Remova a altura fixa e o justify-content */
-    height: auto;
-    min-height: 100vh;
-    display: block; // Altere de flex para block
+    height: 100vh; /* Garante que o conteúdo ocupa toda a tela */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
+
 
 
 const Input = styled.input`
@@ -216,15 +217,14 @@ const AuthLinkConta = styled.a`
 const FloatingButtonContainer = styled.div`
   @media (max-width: 768px) {
     position: fixed;
-    bottom: ${props => props.keyboardOffset}px;
+    bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 100vw;
     background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
     padding: 0;
     border-top: 1px solid #e0e0e0;
-    z-index: 1000;
-    transition: bottom 0.3s ease;
+    z-index: 1000; /* Garante que o botão fique sempre visível */
   }
 `;
 const FloatingButton = styled.button`
@@ -293,38 +293,7 @@ const Login = () => {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const [areFieldsFilled, setAreFieldsFilled] = useState(false);
-  const [viewportHeight, setViewportHeight] = useState(window.visualViewport?.height || window.innerHeight);
-  const [keyboardOffset, setKeyboardOffset] = useState(0);
 
-  useEffect(() => {
-    const handleViewportChange = () => {
-      const viewport = window.visualViewport;
-      if (!viewport) return;
-      
-      // Calcula a diferença entre a altura total e a altura visível
-      const offset = window.innerHeight - viewport.height;
-      setKeyboardOffset(offset > 50 ? -offset : 0);
-      
-      // Ajusta o scroll para manter o input visível
-      const activeElement = document.activeElement;
-      if (activeElement && activeElement.tagName === 'INPUT') {
-        window.scrollTo(0, activeElement.offsetTop - 100);
-      }
-    };
-
-    const viewport = window.visualViewport;
-    if (viewport) {
-      viewport.addEventListener('resize', handleViewportChange);
-      viewport.addEventListener('scroll', handleViewportChange);
-    }
-
-    return () => {
-      if (viewport) {
-        viewport.removeEventListener('resize', handleViewportChange);
-        viewport.removeEventListener('scroll', handleViewportChange);
-      }
-    };
-  }, []);
   useEffect(() => {
     const filled = formData.email.length > 0 && formData.password.length > 0;
     setAreFieldsFilled(filled);
@@ -455,8 +424,9 @@ const Login = () => {
             <AuthLink href="/recuperarsenha"> Esqueci a senha</AuthLink>
             <AuthLinkConta href="/registrar">Nova conta</AuthLinkConta>
           </div>
-          <FloatingButtonContainer keyboardOffset={keyboardOffset}>    {areFieldsFilled ? (
-    <FloatingButton primary type="submit" disabled={loading}>
+          <FloatingButtonContainer>
+          {areFieldsFilled ? (
+  <FloatingButton primary type="submit" disabled={loading}>
     {loading ? (
       <LoadingSpinner />
     ) : (

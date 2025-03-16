@@ -214,17 +214,19 @@ const MobileMenuButton = styled.button`
     display: block;
   }
 `;
-
 const MobileMenu = styled.div`
   position: fixed;
   top: 60px;
+  margin-bottom: 20px;
   left: 0;
   right: 0;
   background: ${({ theme }) => theme.cardBackground};
   padding: 1rem;
   z-index: 1001;
-  display: ${({ $isOpen }) => ($isOpen ? 'grid' : 'none')};
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
+ height: 100%;
 
+ height: 100vh; /* Alterado para 100vh */
   gap: 0.5rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   animation: ${({ $isOpen }) => 
@@ -274,6 +276,8 @@ const ActionButton = styled.button`
 const MobileMenuItem = styled(ActionButton)`
   font-size: 0.9rem;
   padding: 0.8rem;
+  margin-bottom: 1px;
+  height: 60px;
 `;
 
 const SearchBoxContainer = styled.div`
@@ -573,13 +577,28 @@ const Dashboard = () => {
       );
     })
   : [];
-  
+
+  const menu = document.querySelector('.mobile-menu');
+  const button = document.querySelector('.menu-button');
+  // Adicione este useEffect no componente Dashboard
+useEffect(() => {
+  const handleClickOutside = (e) => {
+ 
+    
+    if (isMenuOpen && !menu.contains(e.target) && !button.contains(e.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, [isMenuOpen]);
   return (
     <ThemeProvider theme={themes[theme]}>
       <Container>
         <FloatingActions $isMenuOpen={isMenuOpen}>
           <button onClick={toggleTheme} title="Alternar tema">
-            <FiMoon size={20} />
+            <FiMoon size={20} />  
           </button>
           <button onClick={handleLogout} title="Sair">
             <FiLogOut size={20} />
@@ -592,7 +611,7 @@ const Dashboard = () => {
               <Title>INSCRIÇÕES 2025</Title>
               
               <MobileMenuWrapper>
-                <MobileMenuButton onClick={toggleMenu}>
+                <MobileMenuButton onClick={toggleMenu}   className="menu-button">
                   <FiMenu size={24} />
                 </MobileMenuButton>
               </MobileMenuWrapper>
@@ -615,18 +634,20 @@ const Dashboard = () => {
               </ButtonContainer>
             </Header>
 
-            <MobileMenu $isOpen={isMenuOpen}>
+            <MobileMenu $isOpen={isMenuOpen}   className="mobile-menu" >
               <MobileMenuItem onClick={() => { navigate('/inscrever'); closeMenu(); }}>
                 <FiPlus size={18} /> Inscrever
               </MobileMenuItem>
-              <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
-                <FiUpload size={18} /> IE
+              <MobileMenuItem onClick={() => { navigate('/perfil'); closeMenu(); }}>
+                <FiUser size={18} /> Perfil
               </MobileMenuItem>
               <MobileMenuItem>
                 <FiDownload size={18} /> Materiais
               </MobileMenuItem>
-              <MobileMenuItem onClick={() => { navigate('/perfil'); closeMenu(); }}>
-                <FiUser size={18} /> Perfil
+            
+
+              <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
+                <FiUpload size={18} /> Adicionar Institução Espírita
               </MobileMenuItem>
             </MobileMenu>
 

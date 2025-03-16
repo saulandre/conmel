@@ -294,6 +294,20 @@ const Login = () => {
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const [areFieldsFilled, setAreFieldsFilled] = useState(false);
 
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 768;
+      const newHeight = window.innerHeight;
+      
+      // Se a altura diminuir significativamente, o teclado está aberto
+      setIsKeyboardVisible(isMobile && newHeight < window.outerHeight * 0.8);
+    };
+  
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     const filled = formData.email.length > 0 && formData.password.length > 0;
     setAreFieldsFilled(filled);
@@ -424,7 +438,7 @@ const Login = () => {
             <AuthLink href="/recuperarsenha"> Esqueci a senha</AuthLink>
             <AuthLinkConta href="/registrar">Nova conta</AuthLinkConta>
           </div>
-          <FloatingButtonContainer>
+          <FloatingButtonContainer style={{ display: isKeyboardVisible ? "none" : "block" }}>
           {areFieldsFilled ? (
   <FloatingButton primary type="submit" disabled={loading}>
     {loading ? (

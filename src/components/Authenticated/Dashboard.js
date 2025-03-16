@@ -638,13 +638,13 @@ useEffect(() => {
               <MobileMenuItem onClick={() => { navigate('/inscrever'); closeMenu(); }}>
                 <FiPlus size={18} /> Inscrever
               </MobileMenuItem>
-         
-              <MobileMenuItem>
-                <FiDownload size={18} /> Materiais
-              </MobileMenuItem>
               <MobileMenuItem onClick={() => { navigate('/perfil'); closeMenu(); }}>
                 <FiUser size={18} /> Perfil
               </MobileMenuItem>
+              <MobileMenuItem>
+                <FiDownload size={18} /> Materiais
+              </MobileMenuItem>
+            
 
               <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
                 <FiUpload size={18} /> Adicionar Institução Espírita

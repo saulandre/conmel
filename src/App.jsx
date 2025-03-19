@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import {React, useState} from 'react';
+import { Route, Routes,  } from 'react-router-dom';
 import Login from './components/Unauthenticated/Login';
 import Register from './components/Unauthenticated/Register';
 import Verify from './components/Authenticated/VerificationCode';
@@ -15,10 +15,17 @@ import NotFound from './components/Unauthenticated/NotFound';
 import ProtectedRoute from './routes/ProtectedRoutes';
 import { AuthProvider } from './context/AuthContext';
 
+
+
 function App() {
-  
+
+ // Carrega o tema salvo ao iniciar
+
+
+
   return (
     <>
+   
       <GlobalStyle />
       <div className="container">
         <AuthProvider>
@@ -26,6 +33,7 @@ function App() {
           <AppContent />
         </AuthProvider>
       </div>
+ 
     </>
   );
 }

@@ -104,7 +104,6 @@ const AuthWrapper = styled.div`
 `;
 
 
-// Título
 const Title = styled.h1`
   text-align: center;
   color: #22223b;
@@ -118,7 +117,6 @@ const Title = styled.h1`
   }
 `;
 
-// Wrapper dos inputs
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -135,7 +133,7 @@ const InputWrapper = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding: 8px; /* Reduz o padding em telas pequenas */
+    padding: 8px; 
   }
 `;
 
@@ -160,11 +158,11 @@ const Input = styled.input`
   }
 
   @media (max-width: 600px) {
-    font-size: 0.9rem; /* Reduz o tamanho da fonte em telas pequenas */
+    font-size: 0.9rem; 
   }
 `;
 
-// Botão de submit
+
 const Button = styled.button`
   width: 100%;
   padding: 12px;

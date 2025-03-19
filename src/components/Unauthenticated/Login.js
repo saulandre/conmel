@@ -220,10 +220,7 @@ const FloatingButtonContainer = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
-<<<<<<< HEAD
-    
-=======
->>>>>>> 8fafb66b319d1b7da97661dc992e195c14b61e9f
+  
     width: 100vw;
     background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
     padding: 0;
@@ -410,7 +407,8 @@ const Login = () => {
           <InputWrapper>
             <Icon icon={faLock} />
             <Input
- type="tel"
+inputmode="numeric" 
+type='password'
                name="password"
               placeholder="Digite sua senha"
               value={formData.password}

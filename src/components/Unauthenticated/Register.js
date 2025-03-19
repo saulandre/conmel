@@ -11,48 +11,98 @@ const gradientAnimation = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
-// Container principal
 const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   min-height: 100vh;
-/*   background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
- */  background-size: 200% 200%;
-  animation: ${gradientAnimation} 10s ease infinite;
-  padding: 20px;
+  background-size: 400% 400%;
+  animation: ${gradientAnimation} 15s ease infinite;
+  padding: 2rem;
   box-sizing: border-box;
-  overflow: hidden; /* Impede o scroll */
-
-  @media (max-width: 768px) {
-padding: 0;
+  
+  @media (max-width: 480px) {
+    padding: 0;
   }
 `;
 
-// Wrapper do formulário
-const AuthWrapper = styled.div`
-  padding: 20px;
-  border-radius: 5px;
-  width: 100%;
-  max-width: 400px;
-/*   background-color: rgba(255, 255, 255, 0.95);
- */  /* box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); */
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  &:hover {
-    transform: translateY(-5px);
-/*     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); */
+
+const FloatingButtonContainer = styled.div`
+  @media (max-width: 768px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
+    padding: 0;
+    border-top: 1px solid #e0e0e0;
+    z-index: 1000; /* Garante que o botão fique sempre visível */
   }
+`;
+const FloatingButton = styled.button`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: linear-gradient(135deg, #003049, #003049, #003049);
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+    }
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+`;
+
+
+
+
+const AuthWrapper = styled.div`
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  padding: 2.5rem;
+  margin: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 5px;
 
   @media (max-width: 768px) {
     padding: 1.5rem;
-    border-radius: 16px;
     margin: 0;
     border-radius: 0;
-    height: 100vh;
+    height: 100vh; /* Garante que o conteúdo ocupa toda a tela */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
+
 
 // Título
 const Title = styled.h1`

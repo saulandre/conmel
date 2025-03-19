@@ -82,7 +82,7 @@ const Button = styled.button`
   width: 100%;
   padding: 14px;
   font-size: 1rem;
-  background: linear-gradient(135deg, #22223b, #4a4e69);
+  background: linear-gradient(135deg, #003049, #4a4e69);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -168,12 +168,23 @@ const VerificationCode = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Adicionando estado para controlar a submissão
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const token = localStorage.getItem('token');
-
+  const userEmail = localStorage.getItem('userEmail');
+  const userId = localStorage.getItem('userId');  // Corrigido para o nome correto da chave
   
-  const user = JSON.parse(localStorage.getItem('user'));
-const userEmail = user ? user.userEmail : null;
+  console.log("Token:", token);
+  console.log("Email do usuário:", userEmail);
+  console.log("ID do usuário:", userId);
+  
+// Verifica se o token existe
+if (token) {
+  console.log("Token:", token);
+} else {
+  console.log("Nenhum token encontrado no localStorage.");
+}
 
-  const userId = JSON.parse(localStorage.getItem('user'))?.id || '';
+
+
+
 // Modificação do Input onChange para permitir apenas números
 const handleCodeChange = (e) => {
   const inputValue = e.target.value;
@@ -183,9 +194,17 @@ const handleCodeChange = (e) => {
     setCode(inputValue);  // Atualiza o estado com o valor filtrado
   }
 };
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+console.log("token: " + token);
+  if (!token) {
+    navigate("/");  // Caso não haja token, redireciona para a página inicial
+  }
+}, [navigate]);
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+  console.log("ID do usuário:", userId);  // Verificar o ID do usuário
   if (code.length !== 6) {
     setError('Por favor, insira um código válido de 6 dígitos.');
     return;
@@ -220,7 +239,7 @@ const handleSubmit = async (e) => {
       localStorage.setItem('token', response.data.token); // Salvando o token
 
       alert('Conta verificada com sucesso!');
-      navigate('/gestor'); 
+      navigate('/'); 
     } else {
       setError(response.data.error || 'Erro desconhecido.');
     }
@@ -231,8 +250,12 @@ const handleSubmit = async (e) => {
     setIsSubmitting(false); // Finaliza o estado de submissão
   }
 };
-
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  console.log("Usuário no localStorage:", user);  // Verificar o usuário no localStorage
+}, []);
   const handleResendCode = async () => {
+  
     setIsResendDisabled(true);
     setCountdown(60);
 

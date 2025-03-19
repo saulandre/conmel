@@ -24,7 +24,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   text-align: center;
-  margin-bottom: 20px;
+
   padding-bottom: 10px;
   border-bottom: 1px solid #e8e8e8;
 
@@ -49,7 +49,7 @@ const Section = styled.div`
 
 const SectionTitle = styled.h3`
   color: #000;
-  font-size: 13px;
+  font-size: 0.76rem;
   font-weight: 600;
   text-transform: uppercase;
   margin:  10px 0;
@@ -60,13 +60,11 @@ border-bottom:1px solid #e8e8e8;
 
 `;
 
-// Animação do Spinner
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
 
-// Animação de Fade-In
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -74,7 +72,6 @@ const fadeIn = keyframes`
 
 
 
-// Estilização do Spinner
 const Spinner = styled.div`
   width: 50px;
   height: 50px;
@@ -84,7 +81,7 @@ const Spinner = styled.div`
   animation: ${spin} 1s linear infinite;
 `;
 
-// Mensagem de Loading
+
 const LoadingText = styled.p`
   margin-top: 15px;
   font-size: 1rem;
@@ -92,14 +89,12 @@ const LoadingText = styled.p`
   font-weight: 600;
 `;
 
-// Wrapper do Loader
 const LoaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-// Estilização do Documento
 const DocumentWrapper = styled.div`
   background: white;
   padding: 20px;
@@ -136,15 +131,15 @@ const FieldRow = styled.div`
 
 const FieldLabel = styled.span`
   color: #212529;
-  font-size: 0.8rem;
+  font-size: 0.73rem;
   font-weight: 500;
-  min-width: 150px;
+  min-width: 250px;
   padding-right: 2px;
 `;
 
 const FieldValue = styled.span`
   color: #1a1a1a;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 500;
   text-align: left;
   flex-grow: 1;
@@ -153,14 +148,14 @@ const FieldValue = styled.span`
 
 const AuthorizationBox = styled.div`
   background: #f8f9fa;
-  padding: 20px;
-  margin: 40px 0;
-  border-left: 3px solid #d9534f;
+  padding: 10px;
+
+  border-left: 3px solid #000;
   border-radius: 4px;
 
   strong {
     display: block;
-    color: #d9534f;
+    color: #000;
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 10px;
@@ -169,7 +164,7 @@ const AuthorizationBox = styled.div`
   p {
     color: #666;
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.2;
     margin: 0;
   }
 `;
@@ -238,14 +233,12 @@ const fetchUserData = async (id) => {
     }
   };
   <GlobalStyle/>
-  // Função segura para recuperar token
+
 const getToken = () => {
     return localStorage.getItem("token");
   };
   
-  // Função para buscar dados do usuário
  
-  // Função para calcular idade
   const calculateAge = (dateString) => {
     if (!dateString) return "Desconhecido";
     const birthDate = new Date(dateString);
@@ -268,7 +261,6 @@ const getToken = () => {
      const [loading, setLoading] = useState(true);
      const [documentData, setDocumentData] = useState(null);
   useEffect(() => {
-    // Detecta se o usuário está em um dispositivo móvel
     const checkMobile = () => {
       setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     };
@@ -301,31 +293,31 @@ const getToken = () => {
       setLoading(false);
     }, 3000);
   }, []);
-  // Função para baixar em PDF
+
 
 
 
 
   const handleDownloadPDF = () => {
-    const ficha = document.getElementById("ficha-inscricao");  // O conteúdo HTML que você quer converter em PDF
-    const botao = document.getElementById("botao-pdf");  // O botão que você quer esconder temporariamente
+    const ficha = document.getElementById("ficha-inscricao");  
+    const botao = document.getElementById("botao-pdf");  
 
-    // Esconde o botão durante a geração do PDF
+
     botao.style.display = 'none';
-    // Criar uma nova instância do jsPDF
-    const doc = new jsPDF('p', 'mm', 'a4');  // Formato A4, orientação retrato
+
+    const doc = new jsPDF('p', 'mm', 'a4');  
   
-    // Usando o método html do jsPDF para renderizar o conteúdo HTML diretamente no PDF
+  
     doc.html(ficha, {
       callback: function (doc) {
-        doc.save('ficha_inscricao.pdf');  // Salva o arquivo PDF gerado
+        doc.save('ficha_inscricao.pdf');  
         botao.style.display = 'block';
       },
     
-      x: 15,  // Posição horizontal inicial
+      x: 15,  
    
-      width: 180,  // Largura do conteúdo (evitar cortar texto)
-      windowWidth: 650  // Largura da janela (ajuste conforme necessário)
+      width: 180, 
+      windowWidth: 650  
     });
   };
   
@@ -356,7 +348,7 @@ const getToken = () => {
         </Header>
   
         <Section>
-          <SectionTitle>Dados Pessoais</SectionTitle>
+          <SectionTitle>Dados Pessoais do Participante</SectionTitle>
           <ResponsiveGrid>
             <FieldRow>
               <FieldLabel>Nome Completo: </FieldLabel>
@@ -387,7 +379,7 @@ const getToken = () => {
         </Section>
   
         <Section>
-          <SectionTitle>Contato</SectionTitle>
+     
           <ResponsiveGrid>
             <FieldRow>
               <FieldLabel>E-mail: </FieldLabel>
@@ -403,36 +395,46 @@ const getToken = () => {
         </Section>
   
         <Section>
-          <SectionTitle>Endereço</SectionTitle>
+    
           <ResponsiveGrid>
-            <FieldRow>
-              <FieldLabel>CEP:</FieldLabel>
-              <FieldValue>{participant.cep.replace(/(\d{5})(\d{3})/, "$1-$2")}</FieldValue>
-            </FieldRow>
-            <FieldRow>
-              <FieldLabel>Estado: </FieldLabel>
-              <FieldValue>{participant.estado}</FieldValue>
-            </FieldRow>
-            <FieldRow>
-              <FieldLabel>Cidade: </FieldLabel>
-              <FieldValue>{participant.cidade}</FieldValue>
-            </FieldRow>
-            <FieldRow>
-              <FieldLabel>Bairro</FieldLabel>
-              <FieldValue>{participant.bairro}</FieldValue>
-            </FieldRow>
+         
+         
+      
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
             <FieldRow>
               <FieldLabel>Endereço</FieldLabel>
               <FieldValue>
-                {participant.logradouro}, {participant.numero}{" "}
-                {participant.complemento && `- ${participant.complemento}`}
+              <FieldValue>
+              <FieldValue>
+  {participant.logradouro}, {participant.numero}
+  {participant.complemento ? ` - ${participant.complemento}` : ""}
+  {participant.bairro ? `, ${participant.bairro}` : ""}
+  {participant.cidade ? ` - ${participant.cidade}` : ""}
+  {participant.estado ? `/${participant.estado}` : ""}
+  {participant.cep ? ` - ${participant.cep.replace(/(\d{5})(\d{3})/, "$1-$2")}` : ""}
+</FieldValue>
+
+</FieldValue>
+
               </FieldValue>
             </FieldRow>
           </ResponsiveGrid>
         </Section>
   
         <Section>
-          <SectionTitle>Participação</SectionTitle>
+          <SectionTitle>DADOS PARA O EVENTO</SectionTitle>
           <ResponsiveGrid>
           <FieldRow>
   <FieldLabel>Participação</FieldLabel>
@@ -454,26 +456,35 @@ const getToken = () => {
         <Section>
           <SectionTitle>Informações de Saúde</SectionTitle>
           <ResponsiveGrid>
+          <FieldRow>
+              <FieldLabel>Você possui algum tipo de deficiência?</FieldLabel>
+              <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
+            </FieldRow>
             <FieldRow>
-              <FieldLabel>Vegetariano:</FieldLabel>
+              <FieldLabel>Você possui alguma necessidade especifica?</FieldLabel>
+              <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
+            </FieldRow>
+            <FieldRow>
+              <FieldLabel>Deseja registrar alguma informação a <br/>relacionada a sua saúde física, <br/>mental, emocional?</FieldLabel>
+              <FieldValue>{participant.outrasInformacoes || "Nenhuma"}</FieldValue>
+            </FieldRow>
+            <FieldRow>
+              <FieldLabel>Faz uso de alimentação vegetariana?</FieldLabel>
               <FieldValue>{participant.vegetariano}</FieldValue>
             </FieldRow>
             <FieldRow>
-              <FieldLabel>Tem alergias:</FieldLabel>
+              <FieldLabel>Alimentos que você possui restrição:</FieldLabel>
+              <FieldValue>{participant.vegetariano}</FieldValue>
+            </FieldRow>
+            <FieldRow>
+              <FieldLabel>Alergias que você possui:</FieldLabel>
               <FieldValue>{participant.alergia || "Nenhuma"}</FieldValue>
             </FieldRow>
             <FieldRow>
               <FieldLabel>Toma medicações:</FieldLabel>
               <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
             </FieldRow>
-            <FieldRow>
-              <FieldLabel>Possui deficiência? </FieldLabel>
-              <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
-            </FieldRow>
-            <FieldRow>
-              <FieldLabel>Outras Informações</FieldLabel>
-              <FieldValue>{participant.outrasInformacoes || "Nenhuma"}</FieldValue>
-            </FieldRow>
+     
           </ResponsiveGrid>
         </Section>
     <Section>
@@ -487,19 +498,35 @@ const getToken = () => {
          
         
             </FieldRow>
-       
+            <FieldRow>
+              <FieldLabel>Endereço</FieldLabel>
+              <FieldValue>
+              <FieldValue>
+              <FieldValue>
+  {participant.logradouro}, {participant.numero}
+  {participant.complemento ? ` - ${participant.complemento}` : ""}
+  {participant.bairro ? `, ${participant.bairro}` : ""}
+  {participant.cidade ? ` - ${participant.cidade}` : ""}
+  {participant.estado ? `/${participant.estado}` : ""}
+  {participant.cep ? ` - ${participant.cep.replace(/(\d{5})(\d{3})/, "$1-$2")}` : ""}
+</FieldValue>
+
+</FieldValue>
+
+              </FieldValue>
+            </FieldRow>
           </ResponsiveGrid>
         </Section>
-        {isMinor && (
+       {/*  {isMinor && (
           <AuthorizationBox>
             <strong>AUTORIZAÇÃO PARA MENORES</strong>
             <p>
               Eu, {participant.nomeCompletoResponsavel || "[Nome do Responsável]"}, portador(a) do{" "}
-              {participant.documentoResponsavel || "[Documento]"}, autorizo expressamente a participação de{" "}
-              {participant.nomeCompleto} no evento COMEJACA 2025.
+              {participant.documentoResponsavel || "[Documento]"}, autorizo a participação de{" "}
+              {participant.nomeCompleto} no evento COMEJACA 2025 nos dias x e y de Julho de 2025.
             </p>
           </AuthorizationBox>
-        )}
+        )} */}
   
         <Footer>
           Documento gerado eletronicamente em {new Date().toLocaleDateString()}

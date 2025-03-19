@@ -5,7 +5,7 @@ import { FiUser, FiMail, FiPhone, FiLock, FiChevronLeft } from "react-icons/fi";
 import InputMask from "react-input-mask";
 import { useEffect } from "react";
 import { FiLogOut, FiMoon, FiMenu, FiPlus, FiUpload, FiDownload, FiMobileMenu } from "react-icons/fi";
-
+import HeaderMain from "./Header";
 // Estilos
 const Container = styled.div`
   min-height: 100vh;
@@ -17,7 +17,6 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   overflow: hidden; // Novo
-
   @media (max-width: 768px) {
     padding: 0;
    
@@ -34,7 +33,8 @@ const Container = styled.div`
 const FormWrapper = styled.div`
   width: 100%;
   max-width: 1200px;
-  
+  border-radius: 5px;
+
 `;
 
 const ActionButton = styled.button`
@@ -64,6 +64,7 @@ const ActionButton = styled.button`
 `;
 const FormCard = styled.div`
   background: ${({ theme }) => theme.cardBackground};
+
 
   padding: 1rem;
 
@@ -187,7 +188,7 @@ const InputField = styled.input`
   transition: all 0.3s ease;
   width: 100%; /* Faz com que o input ocupe todo o espaço disponível do container */
   max-width: 400px; /* Define um limite máximo para a largura */
-  min-width: 200px; /* Define um limite mínimo para a largura */
+  min-width: 200px; 
   &:focus {
     outline: none;
     border-color: #4a4e69;
@@ -408,68 +409,9 @@ const Profile = () => {
  
 
   <ThemeProvider theme={themes[theme]}>
+         <HeaderMain/>
       <Container>
-        <FloatingActions $isMenuOpen={isMenuOpen}>
-          <button onClick={toggleTheme} title="Alternar tema">
-            <FiMoon size={20} />  
-          </button>
-          <button onClick={handleLogout} title="Sair">
-            <FiLogOut size={20} />
-          </button>
-        </FloatingActions>
-
-        <ContentWrapper>
-          <FormCard>
-            <Header>
-              <TitleDuo>INSCRIÇÕES 2025</TitleDuo>
-              
-              <MobileMenuWrapper>
-                <MobileMenuButton onClick={toggleMenu}   className="menu-button">
-                  <FiMenu size={24} />
-                </MobileMenuButton>
-              </MobileMenuWrapper>
-
-              <ButtonContainer>
-              <ActionButton onClick={() => navigate('/gestor')}>
-                  <FiPlus size={18} /> Home
-                </ActionButton>
-               
-
-                <ActionButton onClick={() => navigate('/inscrever')}>
-                  <FiPlus size={18} /> Inscrever
-                </ActionButton>
-               
-                <ActionButton onClick={() => navigate('/instituicao')}>
-                  <FiUpload size={18} /> IE
-                </ActionButton>
-                
-                <ActionButton>
-                  <FiDownload size={18} /> Materiais
-                </ActionButton>
-                <ActionButton onClick={() => navigate('/perfil')}>
-                  <FiUser size={18} /> Perfil
-                </ActionButton>
-              </ButtonContainer>
-            </Header>
-
-            <MobileMenu $isOpen={isMenuOpen}   className="mobile-menu" >
-              <MobileMenuItem onClick={() => { navigate('/inscrever'); closeMenu(); }}>
-                <FiPlus size={18} /> Inscrever
-              </MobileMenuItem>
-              <MobileMenuItem onClick={() => { navigate('/perfil'); closeMenu(); }}>
-                <FiUser size={18} /> Perfil
-              </MobileMenuItem>
-              <MobileMenuItem>
-                <FiDownload size={18} /> Materiais
-              </MobileMenuItem>
-            
-
-              <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
-                <FiUpload size={18} /> Adicionar Institução Espírita
-              </MobileMenuItem>
-            </MobileMenu>
-</FormCard>
-</ContentWrapper>
+  
         
 
 

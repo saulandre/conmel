@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
+import  styled, { ThemeProvider } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FiClock, FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ptBR } from "date-fns/locale";
 import axios from 'axios';
+import HeaderMain from './Header'
 
 
-
-// Estilos (mantenha os mesmos do seu código original)
 const Container = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(135deg, #003049, #003049, #003049);
-  display: flex;
+  background: ${({ theme }) => theme.background};
+    display: flex;
   justify-content: center;
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
@@ -156,7 +154,7 @@ const CheckboxContainer = styled.div`
   align-items: center;
   gap: 0.5rem;
   margin: 2rem 0;
-  justify-content: flex-start; /* Alinha os itens ao início */
+  justify-content: flex-start; 
 `;
 
 const CheckboxInput = styled.input`
@@ -169,7 +167,6 @@ const CheckboxInput = styled.input`
   font-size: 0.9rem;
   color: #22223b;
 `; */
-// Caixa envolvente para cada checkbox
 const CheckboxWrapper = styled.div`
   display: inline-block;
  
@@ -189,9 +186,33 @@ const CheckboxWrapper = styled.div`
     cursor: pointer;
   }
 `;
+export const themes = {
+  professional: {
+    background: 'linear-gradient(135deg, #003049, #003049, #003049)',
+    cardBackground: '#e7ecef',
+    textColor: '#22223b',
+    buttonBackground: 'linear-gradient(135deg, #003049, #003049)',
+    tableHeaderBackground: '#003049',
+    tableHeaderColor: 'white',
+    tableRowEvenBackground: '#f8f9fa',
+    tableRowHoverBackground: '#f1f3f5',
+    shadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    mobileHeaderHeight: '80px'
+  },
+  minimalista: {
+    background: '#f5f5f5',
+    cardBackground: 'white',
+    textColor: '#333',
+    buttonBackground: '#333',
+    tableHeaderBackground: '#f5f5f5',
+    tableHeaderColor: '#333',
+    tableRowEvenBackground: '#fafafa',
+    tableRowHoverBackground: '#e0e0e0',
+    shadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+    mobileHeaderHeight: '80px'
+  },
+};
 
-
-// Estilo para os labels dentro da caixa
 const CheckboxLabel = styled.label`
   font-size: 14px;
   color: #555;
@@ -220,7 +241,7 @@ flex-wrap: wrap;
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #003049, #003049);
+  background: ${({ theme }) => theme.background};
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -293,6 +314,7 @@ const Formulario = () => {
   const [errors, setErrors] = useState([]);
   const [institutions, setInstitutions] = useState([]);
   const [isMinor, setIsMinor] = useState(false);
+  const [theme, setTheme] = useState(themes.professional);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -338,27 +360,23 @@ const Formulario = () => {
   
     let formattedValue = value;
   
-    // Remover caracteres não numéricos apenas se o campo for CPF, RG ou telefone
     if (name === "documentoResponsavel" || name === "telefone" || name === "telefoneResponsavel") {
-      // Limita caracteres não numéricos
+
       formattedValue = value.replace(/\D/g, "");
     }
   
-    // Se o campo for telefone ou telefoneResponsavel, formatar
+  
     if (name === "telefone" || name === "telefoneResponsavel") {
-      formattedValue = formatPhone(value); // Certifique-se de que formatPhone esteja corretamente implementada
+      formattedValue = formatPhone(value); 
     }
   
-    // Formatar CPF ou RG para documentoResponsavel
     if (name === "documentoResponsavel") {
       if (formattedValue.length === 11) {
-        // Aplicar máscara de CPF (XXX.XXX.XXX-XX)
         formattedValue = formattedValue.replace(
           /(\d{3})(\d{3})(\d{3})(\d{2})/,
           "$1.$2.$3-$4"
         );
       } else if (formattedValue.length >= 9 && formattedValue.length <= 10) {
-        // Aplicar máscara de RG (XX.XXX.XXX-XX)
         formattedValue = formattedValue.replace(
           /(\d{2})(\d{3})(\d{3})(\d{2})?/,
           (match, p1, p2, p3, p4) => {
@@ -367,20 +385,20 @@ const Formulario = () => {
         );
       }
   
-      // Limitar o tamanho do documento (não deve passar de 14 caracteres formatados)
+     
       if (formattedValue.replace(/\D/g, "").length > 11) {
-        formattedValue = formattedValue.substring(0, 14); // Máximo de caracteres visíveis (CPF ou RG)
+        formattedValue = formattedValue.substring(0, 14); 
       }
     }
   
-    // Atualizar o estado com o valor formatado
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : formattedValue,
     }));
   };
   
-  const today = new Date(); // data atual
+  const today = new Date();
   
 
   const handleDateChange = (date) => {
@@ -407,7 +425,7 @@ const Formulario = () => {
       const token = localStorage.getItem("token");
       console.log("Token JWT encontrado:", token);
 
-    // Validação da data de nascimento
+
     const dataNascimento = new Date(formData.dataNascimento);
     if (isNaN(dataNascimento.getTime())) {
       console.error("Data de nascimento inválida:", formData.dataNascimento);
@@ -493,9 +511,12 @@ const Formulario = () => {
     }
   };
 
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
-      <Container>
+         <HeaderMain />
+    <ThemeProvider theme={theme}>      <Container>
+     
         <FormWrapper>
    
 
@@ -988,6 +1009,7 @@ const Formulario = () => {
           </FormCard>
         </FormWrapper>
       </Container>
+      </ThemeProvider>
     </LocalizationProvider>
   );
 };

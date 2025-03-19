@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FiEdit, FiPlus, FiChevronLeft, FiSearch } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { UNSAFE_shouldHydrateRouteLoader, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import HeaderMain from './Header';
 
 // Estilos
 const Container = styled.div`
@@ -13,7 +14,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   @media (max-width: 768px) {
     padding: 0rem;
   }
@@ -27,8 +27,8 @@ const ContentWrapper = styled.div`
 
 const FormCard = styled.div`
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 5px;
-  padding: 2.5rem;
+/*   border-radius: 5px;
+ */  padding: 2.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   width: 100%;
   overflow: hidden;
@@ -427,11 +427,12 @@ const IePage = () => {
   };
 
   return (
+<>
+    <HeaderMain />
     <Container>
+
       <ContentWrapper>
-        <BackLink onClick={() => navigate(-1)}>
-          <FiChevronLeft /> Voltar
-        </BackLink>
+    
         <FormCard>
           <Header>
             <Title>INSTITUIÇÃO ESPÍRITA</Title>
@@ -523,6 +524,7 @@ const IePage = () => {
         </FormCard>
       </ContentWrapper>
     </Container>
+    </>
   );
 };
 

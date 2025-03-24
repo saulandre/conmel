@@ -320,7 +320,7 @@ const Formulario = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("Token não encontrado, redirecionando para /entrar");
-      navigate("/entrar");
+      navigate("/gestor");
       return;
     }
 

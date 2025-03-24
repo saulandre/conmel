@@ -239,7 +239,7 @@ const handleSubmit = async (e) => {
       localStorage.setItem('token', response.data.token); // Salvando o token
 
       alert('Conta verificada com sucesso!');
-      navigate('/'); 
+      navigate('/gestor '); 
     } else {
       setError(response.data.error || 'Erro desconhecido.');
     }

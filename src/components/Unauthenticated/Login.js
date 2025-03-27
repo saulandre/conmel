@@ -338,6 +338,7 @@ const Login = () => {
       setError(null);
       console.log("🚀 Enviando requisição para login...");
       console.log("URL da API:", API_URL);
+      localStorage.clear();
       const response = await axios.post(`${API_URL}/api/auth/entrar`, formData);
 
       console.log("Resposta da API:", response.data);

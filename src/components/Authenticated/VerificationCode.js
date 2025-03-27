@@ -160,6 +160,7 @@ const VerificationCode = () => {
           navigate("/");
         }
       }, [navigate]);
+     
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -169,12 +170,23 @@ const VerificationCode = () => {
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const token = localStorage.getItem('token');
   const userEmail = localStorage.getItem('userEmail');
-  const userId = localStorage.getItem('userId');  // Corrigido para o nome correto da chave
+
+   // Corrigido para o nome correto da chave
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const userId = storedUser?.id;  
+  console.log("E-mail salvo:", storedUser?.userEmail);
   
   console.log("Token:", token);
-  console.log("Email do usuário:", userEmail);
   console.log("ID do usuário:", userId);
-  
+
+
+
+if (storedUser) {
+  console.log("ID salvo no localStorage:", storedUser.id);
+} else {
+  console.log("Nenhum usuário encontrado no localStorage.");
+}
+
 // Verifica se o token existe
 if (token) {
   console.log("Token:", token);
@@ -236,11 +248,16 @@ const handleSubmit = async (e) => {
       // Salva as informações do usuário e o token no localStorage
       const { id, name, email } = response.data.user;
       localStorage.setItem('user', JSON.stringify({ id, name, email }));
-      localStorage.setItem('token', response.data.token); // Salvando o token
-
+  
       alert('Conta verificada com sucesso!');
-      navigate('/gestor'); 
-    } else {
+      localStorage.setItem('isVerified', 'true');
+            if (window.location.hostname === 'localhost') {
+        // Se estiver em localhost, redireciona para o ambiente local
+        window.location.replace('http://localhost:3000/gestor');
+      } else {
+        // Caso contrário, redireciona para o ambiente de produção
+        window.location.replace('https://www.comejaca.org.br/gestor');
+      }
       setError(response.data.error || 'Erro desconhecido.');
     }
   } catch (err) {
@@ -304,7 +321,7 @@ useEffect(() => {
       <AuthWrapper>
         <Title>PRÓXIMO PASSO</Title>
         <Paragraph>
-          Enviamos um código para o e-mail <strong>{userEmail}</strong>.
+          Enviamos um código para o e-mail <strong>{storedUser?.userEmail}</strong>.
         </Paragraph>
         <form onSubmit={handleSubmit}>
           <Input

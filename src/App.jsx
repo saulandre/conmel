@@ -52,9 +52,7 @@ function AppContent() {
       <Route
         path="/gestor"
         element={
-          <ProtectedRoute>
             <Dashboard />
-          </ProtectedRoute>
         }
       />
       <Route

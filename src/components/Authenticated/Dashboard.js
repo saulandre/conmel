@@ -516,7 +516,7 @@ const Dashboard = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-    
+        console.log(token)
         const response = await axios.get(`${API_URL}/api/auth/obterinscricoes`, {
           headers: {
             Authorization: `Bearer ${token}`

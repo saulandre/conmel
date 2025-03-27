@@ -315,6 +315,7 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
+    localStorage.clear();
     e.preventDefault();
   
     if (formData.password !== formData.confirmPassword) {

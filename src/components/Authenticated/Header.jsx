@@ -267,6 +267,9 @@ const HeaderMain = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('isVerified');
+    
+    localStorage.removeItem('email');
+   
     navigate('/');
   };
 

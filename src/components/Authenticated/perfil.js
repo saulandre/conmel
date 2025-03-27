@@ -385,26 +385,9 @@ const Profile = () => {
     // Lógica para salvar os dados alterados
     console.log("Dados salvos");
   };
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('isVerified');
-    navigate('/');
-  };
+  
+  localStorage.setItem('isVerified', 'true');
 
-  const toggleTheme = () => {
-    setTheme((prev) => {
-      const newTheme = prev === "professional" ? "minimalista" : "professional";
-      localStorage.setItem("theme", newTheme);
-      return newTheme;
-    });
-  };
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "professional";
-    setTheme(savedTheme);
-  }, []);
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
   return (
  
 

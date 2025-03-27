@@ -456,8 +456,8 @@ const Formulario = () => {
       console.log("Resposta do backend:", response.data);
 
       if (response.data.success) {
-        console.log("Inscrição salva com sucesso, redirecionando para /confirmacao");
-        navigate('/confirmacao', { state: response.data });
+        console.log("Inscrição salva com sucesso, redirecionando...");
+        navigate('/gestor');
       }
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);

@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import  styled, { ThemeProvider } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { FiClock, FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
+import { FiClock, FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone , FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ptBR } from "date-fns/locale";
 import axios from 'axios';
 import HeaderMain from './Header'
-
+import { FaWhatsapp } from "react-icons/fa";
 
 const Container = styled.div`
   background: ${({ theme }) => theme.background};
@@ -279,8 +279,7 @@ const Formulario = () => {
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-  
+ const [formData, setFormData] = useState({
     nomeCompleto: '',
     dataNascimento: '',
     sexo: '',
@@ -300,15 +299,15 @@ const Formulario = () => {
     logradouro: '',
     numero: '',
     complemento: '',
-
     medicacao: '',
     alergia: '',
     outrasInformacoes: '',
     IE: '',
     vegetariano: '',
     nomeSocial: '',
-
+    outroGenero: ''
   });
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -355,7 +354,10 @@ const Formulario = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
     console.log(`Campo alterado: ${name} = ${type === 'checkbox' ? checked : value}`);
   
     let formattedValue = value;
@@ -626,16 +628,28 @@ const Formulario = () => {
                   required
                 >
                   <option value="">Selecione</option>
-                  <option value="Masculino CIS">Masculino CIS</option>
-                  <option value="Feminino CIS">Feminino CIS</option>
-                  <option value="Masculino Trans">Masculino Trans</option>
-                  <option value="Feminino Trans">Feminino Trans</option>
-                  <option value="Não Binário">Não Binário</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Feminino">Feminino</option>
+                  <option value="prefironaoresponder">Prefiro não responder</option>
+                  <option value="outro">Outro</option>
+              
                 </Select>
               </InputGroup>
-
+     {formData.sexo === "outro" && (
+        <InputGroup>
+          <InputLabel>Especifique:</InputLabel>
+          <InputField
+            type="text"
+            name="outroGenero"
+            value={formData.outroGenero}
+            placeholder="Digite seu gênero"
+            onChange={handleChange}
+            required
+          />
+        </InputGroup>
+      )}
               <InputGroup>
-                <InputLabel><FiPhone /> Telefone *</InputLabel>
+                <InputLabel><FaWhatsapp /> Telefone (Whats App) *</InputLabel>
                 <InputField
          name="telefone"
          value={formData.telefone}
@@ -973,7 +987,9 @@ const Formulario = () => {
                 <InputLabel><FiInfo /> Observações</InputLabel>
                 <TextArea
                   name="outrasInformacoes"
-                  placeholder="Há mais alguma informação importante sobre esta inscrição?"
+                  placeholder="Deseja registrar alguma informação a
+relacionada a sua saúde física,
+mental, emocional?"
                   value={formData.outrasInformacoes}
                   onChange={handleChange}
                 />

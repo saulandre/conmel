@@ -377,6 +377,7 @@ const IePage = () => {
           nome: '',
           CNPJ: '',
           CEU: '',
+          
           estado: '',
           cidade: '',
           bairro: '',

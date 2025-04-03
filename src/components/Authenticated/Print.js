@@ -370,10 +370,13 @@ const getToken = () => {
               </FieldValue>
             </FieldRow>
   
-            <FieldRow>
-              <FieldLabel>Sexo: </FieldLabel>
-              <FieldValue>{participant.sexo}</FieldValue>
-            </FieldRow>
+          <FieldRow>
+  <FieldLabel>Gênero: </FieldLabel>
+  <FieldValue>
+    {participant.sexo === "outro" ? participant.outroGenero : participant.sexo}
+  </FieldValue>
+</FieldRow>
+
 
           </ResponsiveGrid>
         </Section>

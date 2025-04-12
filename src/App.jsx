@@ -48,7 +48,7 @@ function App() {
 
       <div className="container">
         <SessaoInfo />
-        <HeaderMain />
+      {/*   <HeaderMain /> */}
 
         <AuthProvider>
           <AppContent />

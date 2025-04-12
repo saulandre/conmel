@@ -2,7 +2,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ServerStatus = () => {
+import styled from 'styled-components';
+
+const ServerStatusBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #0d1b2a;
+  color: #fff;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 14px;
+  z-index: 9999;
+
+  @media print {
+    display: none !important;
+  }
+`;
+
+
+const ServerStatus = ({className })  => {
   const [online, setOnline] = useState(null);
 
   useEffect(() => {
@@ -24,20 +43,10 @@ const ServerStatus = () => {
   }, []);
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: 0,
-      width: '100%',
-      backgroundColor: online === null ? '#ccc' : online ? '#0d1b2a' : '#0d1b2a',
-      color: '#fff',
-      textAlign: 'center',
-      padding: '6px 0',
-      fontSize: '14px',
-      zIndex: 9999,
-    }}>
-      {online === null ? 'Verificando status do servidor...' :
-       online ? '✅ Servidor online' : '❌ Servidor offline'}
-    </div>
+<ServerStatusBar>
+  {online === null ? 'Verificando status do servidor...' :
+   online ? '✅ Servidor online' : '❌ Servidor offline'}
+</ServerStatusBar>
   );
 };
 

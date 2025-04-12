@@ -603,7 +603,7 @@ useEffect(() => {
      <SmallButton onClick={() => navigate(`/edit/${item.id}`)}>
        <FiEdit size={14} /> Editar
      </SmallButton>
-     <SmallButton onClick={() => navigate(`/print/${item.id}`)}>
+     <SmallButton onClick={() => navigate(`/imprimir/${item.id}`)}>
        <FiPrinter size={14} /> Imprimir
      </SmallButton>
      {item.status !== 'Pago' && (

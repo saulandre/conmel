@@ -23,10 +23,23 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  text-align: center;
-
+  display: flex;
+  justify-content: flex-start; /* Centraliza o conteúdo */
+  align-items: center; /* Alinha os itens verticalmente */
   padding-bottom: 10px;
   border-bottom: 1px solid #e8e8e8;
+
+  img {
+    width: 60px;   /* ou 32px, depende do que você achar visualmente melhor */
+    height: auto;
+    object-fit: contain; /* Faz a imagem manter a proporção */
+    margin-right: 20px; /* Espaço entre a imagem e o texto */
+  }
+
+  div {
+    text-align: center; /* Centraliza o texto */
+    flex-grow: 1; /* Garante que o texto ocupe o restante do espaço */
+  }
 
   h1 {
     color: #1a1a1a;
@@ -42,6 +55,8 @@ const Header = styled.div`
     margin: 0;
   }
 `;
+
+
 
 const Section = styled.div`
   margin-bottom: 0;
@@ -342,11 +357,13 @@ const getToken = () => {
           <LoadingText>Carregando documento...</LoadingText>
         </LoaderWrapper>
       ) : (  <DocumentWrapper id="ficha-inscricao">
-        <Header>
+   <Header>
+        <img src="/favicon.png" alt="Logo COMEJACA" />
+        <div>
           <h1>COMEJACA 2025</h1>
           <h2>Confraternização das Mocidades Espíritas de Jacarepaguá</h2>
-        </Header>
-  
+        </div>
+      </Header>
         <Section>
           <SectionTitle>Dados Pessoais do Participante</SectionTitle>
           <ResponsiveGrid>
@@ -459,67 +476,117 @@ const getToken = () => {
         <Section>
           <SectionTitle>Informações de Saúde</SectionTitle>
           <ResponsiveGrid>
-          <FieldRow>
+  {/*         <FieldRow>
               <FieldLabel>Você possui algum tipo de deficiência?</FieldLabel>
               <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
-            </FieldRow>
-            <FieldRow>
-              <FieldLabel>Você possui alguma necessidade especifica?</FieldLabel>
-              <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
-            </FieldRow>
-            <FieldRow>
+            </FieldRow> */}
+    
+ {/*            <FieldRow>
               <FieldLabel>Deseja registrar alguma informação a <br/>relacionada a sua saúde física, <br/>mental, emocional?</FieldLabel>
               <FieldValue>{participant.outrasInformacoes || "Nenhuma"}</FieldValue>
-            </FieldRow>
+            </FieldRow> */}
             <FieldRow>
               <FieldLabel>Faz uso de alimentação vegetariana?</FieldLabel>
               <FieldValue>{participant.vegetariano}</FieldValue>
             </FieldRow>
-            <FieldRow>
+{/*             <FieldRow>
               <FieldLabel>Alimentos que você possui restrição:</FieldLabel>
               <FieldValue>{participant.vegetariano}</FieldValue>
-            </FieldRow>
+            </FieldRow> */}
             <FieldRow>
-              <FieldLabel>Alergias que você possui:</FieldLabel>
+              <FieldLabel>Alergias ou alimentos que possui restrição:</FieldLabel>
               <FieldValue>{participant.alergia || "Nenhuma"}</FieldValue>
             </FieldRow>
             <FieldRow>
-              <FieldLabel>Toma medicações:</FieldLabel>
+              <FieldLabel>Faz uso de medicações?</FieldLabel>
               <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
             </FieldRow>
      
           </ResponsiveGrid>
         </Section>
-    <Section>
-          <SectionTitle>Instituição Espírita</SectionTitle>
-          <ResponsiveGrid>
-            <FieldRow>
-              <FieldLabel>Nome</FieldLabel>
-         
-              
-              <FieldValue>{participant.IE}</FieldValue>
-         
-        
+        <Section>
+  <SectionTitle>NECESSIDADES ESPECIAIS</SectionTitle>
+  <ResponsiveGrid>
+    {participant.deficienciaAuditiva === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Auditiva:</FieldLabel>
+        <FieldValue>Sim</FieldValue>
+      </FieldRow>
+    )}
+    {participant.deficienciaAutismo === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Autismo:</FieldLabel>
+        <FieldValue>Sim</FieldValue>
+      </FieldRow>
+    )}
+    {participant.deficienciaIntelectual === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Intelectual:</FieldLabel>
+        <FieldValue>Sim</FieldValue>
+      </FieldRow>
+    )}
+    {participant.deficienciaParalisiaCerebral === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Paralisia Cerebral:</FieldLabel>
+        <FieldValue>Sim</FieldValue>
+      </FieldRow>
+    )}
+    {participant.deficienciaVisual === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Visual:</FieldLabel>
+        <FieldValue>Sim</FieldValue>
+      </FieldRow>
+    )}
+    {participant.deficienciaFisica === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Física:</FieldLabel>
+        <FieldValue>Sim</FieldValue>
+      </FieldRow>
+    )}
+    {participant.deficienciaOutra === true && (
+      <FieldRow>
+        <FieldLabel>Deficiência Outra:</FieldLabel>
+        <FieldValue>{participant.deficienciaOutraDescricao}</FieldValue>
+      </FieldRow>
+    )}
+  </ResponsiveGrid>
+  <FieldRow>
+              <FieldLabel>Você possui alguma necessidade especifica?</FieldLabel>
+              <FieldValue>{participant.medicacao || "Nenhuma"}</FieldValue>
             </FieldRow>
-            <FieldRow>
-              <FieldLabel>Endereço</FieldLabel>
-              <FieldValue>
-              <FieldValue>
-              <FieldValue>
-  {participant.logradouro}, {participant.numero}
-  {participant.complemento ? ` - ${participant.complemento}` : ""}
-  {participant.bairro ? `, ${participant.bairro}` : ""}
-  {participant.cidade ? ` - ${participant.cidade}` : ""}
-  {participant.estado ? `/${participant.estado}` : ""}
-  {participant.cep ? ` - ${participant.cep.replace(/(\d{5})(\d{3})/, "$1-$2")}` : ""}
-</FieldValue>
+</Section>
+<Section>
+  <SectionTitle>Instituição Espírita</SectionTitle>
+  <ResponsiveGrid>
+    <FieldRow>
+      <FieldLabel>Nome</FieldLabel>
+      <FieldValue>{participant.IE}</FieldValue>
+    </FieldRow>
 
-</FieldValue>
+    <FieldRow>
+      <FieldLabel>Endereço</FieldLabel>
+      <FieldValue>
+        {participant.logradouro}, {participant.numero}
+        {participant.complemento ? ` - ${participant.complemento}` : ""}
+        {participant.bairro ? `, ${participant.bairro}` : ""}
+        {participant.cidade ? ` - ${participant.cidade}` : ""}
+        {participant.estado ? `/${participant.estado}` : ""}
+        {participant.cep ? ` - ${participant.cep.replace(/(\d{5})(\d{3})/, "$1-$2")}` : ""}
+      </FieldValue>
+    </FieldRow>
 
-              </FieldValue>
-            </FieldRow>
-          </ResponsiveGrid>
-        </Section>
+    {/* Linha para assinatura */}
+    <FieldRow>
+      <FieldLabel>Autorização coordenador DIJ</FieldLabel>
+      <FieldValue>
+        <div style={{ borderTop: "1px solid #fff", width: "100%", height: "15px" }}></div>
+        <span style={{ fontSize: "12px", color: "#666" }}>Assinatura/data: _________________________________</span><br></br>
+      </FieldValue>
+    </FieldRow>
+  </ResponsiveGrid>
+</Section>
+
+
        {/*  {isMinor && (
           <AuthorizationBox>
             <strong>AUTORIZAÇÃO PARA MENORES</strong>

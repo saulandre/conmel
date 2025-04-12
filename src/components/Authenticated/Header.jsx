@@ -250,7 +250,7 @@ const FloatingActions = styled.div`
   }
 `;
 
-const HeaderMain = () => {
+const HeaderMain = ({className }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [theme, setTheme] = useState(themes.professional);
@@ -293,7 +293,7 @@ const HeaderMain = () => {
     <ThemeProvider theme={theme}>
       
       <Container>
-        <Header>
+        <Header className={className}>
           <Wrapper><ImagemResponsiva src="/favicon.png" alt="Banner do evento" />
           <Title>INSCRIÇÕES 2025</Title>
     </Wrapper>          <Nav>
@@ -379,7 +379,7 @@ const HeaderMain = () => {
 
         <FloatingActions>
   
-          <button onClick={handleLogout} aria-label="Sair">
+          <button  className={className} onClick={handleLogout} aria-label="Sair">
             <FiLogOut size={24} />
           </button>
         </FloatingActions>

@@ -9,7 +9,7 @@ import Perfil from './components/Authenticated/perfil';
 import Dashboard from './components/Authenticated/Dashboard';
 import GlobalStyle from './styles/globalStyles';
 import FormularioInscricao from './components/Authenticated/subscription';
-import Print from './components/Authenticated/Print';
+import FichaInscricao from './components/Authenticated/Print';
 import ForgotPassword from './components/Unauthenticated/ForgotPassword';
 import NotFound from './components/Unauthenticated/NotFound';
 import ProtectedRoute from './routes/ProtectedRoutes';
@@ -20,6 +20,8 @@ import HeaderMain from './components/Authenticated/Header';
 import ChangePassword from './components/Unauthenticated/ChangePassword';
 import {toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './styles/globalStyles.css'; 
+
 
 function App() {
   return (
@@ -48,13 +50,14 @@ function App() {
 
       <div className="container">
     {/*     <SessaoInfo /> */}
-        <HeaderMain />
+        <HeaderMain  className="no-print-header"/>
 
         <AuthProvider>
           <AppContent />
         </AuthProvider>
 
-        <ServerStatus />
+        <ServerStatus lassName="no-print-footer" />
+
       </div>
     </>
   );
@@ -78,7 +81,7 @@ function AppContent() {
       <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
       <Route path="/painel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/inscrever" element={<ProtectedRoute><FormularioInscricao /></ProtectedRoute>} />
-      <Route path="/imprimir" element={<ProtectedRoute><Print /></ProtectedRoute>} />
+      <Route path="/imprimir/:id" element={<ProtectedRoute><FichaInscricao /></ProtectedRoute>} />
     </Routes>
   );
 }

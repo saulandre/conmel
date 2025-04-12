@@ -1,0 +1,14 @@
+
+
+@media print {
+    /* Oculta o cabeçalho */
+    .no-print-header {
+      display: none !important;
+    }
+    /* Oculta o rodapé */
+    .no-print-footer {
+      display: none !important;
+    }
+  
+
+  }

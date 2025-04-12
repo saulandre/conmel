@@ -21,6 +21,9 @@ import ChangePassword from './components/Unauthenticated/ChangePassword';
 import {toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/globalStyles.css'; 
+import PendingPage from './components/Authenticated/PendingPage';
+import FailurePage from './components/Authenticated/FailurePage';
+import SuccessPage from './components/Authenticated/SuccessPage';
 
 
 function App() {
@@ -81,6 +84,9 @@ function AppContent() {
       <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
       <Route path="/painel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/inscrever" element={<ProtectedRoute><FormularioInscricao /></ProtectedRoute>} />
+      <Route path="/falha" element={<ProtectedRoute><FailurePage /></ProtectedRoute>} />
+      <Route path="/sucesso" element={<ProtectedRoute><SuccessPage /></ProtectedRoute>} />
+      <Route path="/pendente" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
       <Route path="/imprimir/:id" element={<ProtectedRoute><FichaInscricao /></ProtectedRoute>} />
     </Routes>
   );

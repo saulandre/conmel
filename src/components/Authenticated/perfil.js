@@ -89,27 +89,6 @@ const FormCard = styled.div`
 
 
 
-const Header = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 1rem 2rem;
-background: ${({ theme }) => theme.cardBackground};
-position: fixed;
-top: 0;
-left: 0;
-right: 0;
-z-index: 1000;
-box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-border: 1px solid #ced4da;
-@media (min-width: 769px) {
-
-  top: 2rem;
-  border-radius: 5px;
-  margin: -2rem -2rem 2rem -2rem;
-  width: calc(100% + 4rem);
-}
-`;
 
 
 const HeaderDuo = styled.div`

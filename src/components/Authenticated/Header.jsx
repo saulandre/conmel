@@ -265,15 +265,15 @@ const HeaderMain = ({className }) => {
 
   const [isAdmin, setIsAdmin] = useState(false);
 
+
   useEffect(() => {
-    const storedRole = localStorage.getItem('role'); // Pega dentro do useEffect
-
-    console.log('Role do usuário:', storedRole);
-
+    const storedRole = localStorage.getItem('role');
+  
     if (storedRole === 'admin') {
       setIsAdmin(true);
     }
   }, []);
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -314,15 +314,21 @@ const HeaderMain = ({className }) => {
             </Button>
           )}
 
-          {pathname !== '/instituicao' && isAdmin && (
+          {pathname !== '/perfil' && (
+            <Button onClick={() => navigate('/perfil')}>
+              <FiUser size={20} /> Perfil
+            </Button>
+          )}
+
+          
+{pathname !== '/instituicao' && isAdmin && (
             <Button onClick={() => navigate('/instituicao')}>
               <FiUpload size={20} /> IE
             </Button>
           )}
-
-          {pathname !== '/perfil' && (
-            <Button onClick={() => navigate('/perfil')}>
-              <FiUser size={20} /> Perfil
+         {pathname !== '/status' && isAdmin && (
+            <Button onClick={() => navigate('/pagamentos')}>
+              <FiUpload size={20} /> Pagamentos
             </Button>
           )}
         </>
@@ -358,16 +364,25 @@ const HeaderMain = ({className }) => {
           </Button>
              )}
            
-           {pathname !== '/instituicao' && isAdmin && (
-        <Button onClick={() => navigate('/instituicao')}>
-          <FiUpload size={20} /> IE
-        </Button>
-      )}
+
   {pathname !== '/perfil' && (
           <Button onClick={() => { navigate('/perfil'); setIsMenuOpen(false) }}>
             <FiUser size={20} /> Perfil
           </Button>
+
+          
                )}
+
+{pathname !== '/instituicao' && isAdmin && (
+            <Button onClick={() => navigate('/instituicao')}>
+              <FiUpload size={20} /> IE
+            </Button>
+          )}
+         {pathname !== '/status' && isAdmin && (
+            <Button onClick={() => navigate('/pagamentos')}>
+              <FiUpload size={20} /> Pagamentos
+            </Button>
+          )}
                        </>
       )}
          <Button>

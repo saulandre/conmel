@@ -24,7 +24,7 @@ import './styles/globalStyles.css';
 import PendingPage from './components/Authenticated/PendingPage';
 import FailurePage from './components/Authenticated/FailurePage';
 import SuccessPage from './components/Authenticated/SuccessPage';
-
+import ListaParticipantes from './components/Authenticated/Status.js';
 
 function App() {
   return (
@@ -88,6 +88,7 @@ function AppContent() {
       <Route path="/sucesso" element={<ProtectedRoute><SuccessPage /></ProtectedRoute>} />
       <Route path="/pendente" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
       <Route path="/imprimir/:id" element={<ProtectedRoute><FichaInscricao /></ProtectedRoute>} />
+      <Route path="/pagamentos" element={<ProtectedRoute><ListaParticipantes /></ProtectedRoute>} />
     </Routes>
   );
 }

@@ -362,7 +362,7 @@ const Dashboard = () => {
   const [loadingItemId, setLoadingItemId] = useState(null);
  const [isAdmin, setIsAdmin] = useState(false);
  const storedUser = JSON.parse(localStorage.getItem('user'));
- console.log(localStorage.getItem('user'));
+
 
 
  useEffect(() => {

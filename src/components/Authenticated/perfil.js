@@ -485,7 +485,7 @@ const Profile = () => {
           </FormGrid>
 
           {/* Checkboxes */}
-          <CheckboxGroup>
+  {/*         <CheckboxGroup>
             <CheckboxLabel>
               <input 
                 type="checkbox" 
@@ -503,7 +503,7 @@ const Profile = () => {
               />
               Aceito receber divulgações do movimento espírita jovem e artistico na região do Rio de Janeiro.
             </CheckboxLabel>
-          </CheckboxGroup>
+          </CheckboxGroup> */}
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "25px" }}>
   <SubmitButton type="submit">Salvar</SubmitButton>

@@ -42,11 +42,13 @@ export const AuthProvider = ({ children }) => {
   // useEffect para verificar o token assim que o componente for montado
   useEffect(() => {
     const token = getToken(); // Recupera o token do localStorage
+    const API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:4000'
+    : 'https://api.seusite.com';
 
     if (token) {
       // Se houver um token, envia uma requisição para verificar sua validade
-      axios
-        .post('http://localhost:4000/auth/verificar', { token })
+      axios.post(`${API_URL}/auth/verificar`, { token })
         .then((response) => {
           if (response.data.success) {
             // Se o token for válido, define os dados do usuário

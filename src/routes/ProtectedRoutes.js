@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (location.pathname === '/verificar') {
-    return <Navigate to="/gestor" replace />;
+    return <Navigate to="/painel" replace />;
   }
 
   return children;

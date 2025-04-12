@@ -17,7 +17,7 @@ const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 90vh;
+  height: 95vh;
 
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
@@ -270,13 +270,11 @@ const Register = () => {
     });
   };
   
+  
   const handleSubmit = async (e) => {
-    e.preventDefault();
     localStorage.clear();
-    setError(null);
-    setErrors([]);
-    
-    // Validação local
+    e.preventDefault();
+  
     if (formData.password !== formData.confirmPassword) {
       setError('As senhas não coincidem.');
       return;
@@ -289,52 +287,52 @@ const Register = () => {
   
     try {
       setLoading(true);
+      setError(null);
       const response = await axios.post(`${API_URL}/api/auth/registrar`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
+        toast.success("Sucesso. Verifique seu email.", {
+              position: "bottom-center",
+              autoClose: 4000,
+            });
+      
   
-      toast.success("Sucesso. Verifique seu email.", {
-        position: "bottom-center",
-        autoClose: 4000,
-      });
-  
-      // Verifica se a resposta contém token e usuário
-      if (response.data.token && response.data.user) {
+      if (response.data.token) {
         localStorage.setItem('token', response.data.token);
   
-        const { id, name, email } = response.data.user;
+        // Aqui estamos pegando o id da resposta da API e salvando no localStorage
+        const { id, name, email } = response.data.user; // Supondo que o id, name e email estão na resposta
   
         localStorage.setItem(
           'user',
           JSON.stringify({
             name: name,
-            userEmail: email,
-            id: id,
+            userEmail: email, // Salvando o e-mail como 'userEmail'
+            id: id, // Salvando o id
           })
         );
   
         localStorage.setItem('isVerified', 'false');
   
         setError('Código de verificação enviado. Por favor, verifique seu e-mail.');
-        navigate('/verificar-email');
+        navigate('/verificar');
       }
-    } catch (err) {
-      setLoading(false);
   
-      if (err.response && err.response.data && Array.isArray(err.response.data.errors)) {
-        setErrors(err.response.data.errors); // Lista de erros de validação do backend
-      } else if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message); // Mensagem genérica do backend
-      } else {
-        setError('Erro inesperado. Tente novamente mais tarde.');
-      }
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      });
+    } catch (err) {
+      setError(err.response?.data?.error || err.message || 'Erro ao registrar usuário');
+      console.error('Erro de registro:', err);
     } finally {
       setLoading(false);
     }
   };
-  
   
   return (
     <AuthContainer>
@@ -405,9 +403,9 @@ const Register = () => {
           {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
           {isPasswordFocused && (
   <PasswordStrengthIndicator password={formData.password} />
-)}          <Button disabled={!isFormValid() || loading} type="submit">
-            {loading ? 'Registrando...' : 'Registrar'}
-          </Button>
+)}         <Button disabled={!isFormValid() || loading} type="submit">
+{!isFormValid() ? 'Preencha tudo corretamente' : loading ? 'Registrando...' : 'Registrar'}
+</Button>
         </Form>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <StyledLink to="/">Já tem uma conta? Faça login aqui.</StyledLink>

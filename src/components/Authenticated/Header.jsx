@@ -259,7 +259,7 @@ const HeaderMain = () => {
   const esconderBotao = location.pathname === '/' || location.pathname === '/registrar';
   const estaNaInscricao = pathname === '/inscrever';
   const estaNoPerfil = pathname === '/perfil';
-  const estaNaHomeOuGestor = pathname === '/' || pathname === '/gestor';
+  const estaNaHomeOuGestor = pathname === '/' || pathname === '/painel';
   const estaNaInstituicao = pathname === '/instituicao';
   const estaNaVerificar = pathname === '/verificar';
 
@@ -303,7 +303,7 @@ const HeaderMain = () => {
       {!estaNaHomeOuRegistrar && (
         <>
           {pathname !== '/painel' && (
-            <Button onClick={() => navigate('/gestor')}>
+            <Button onClick={() => navigate('/painel')}>
               <FiPlus size={20} /> Home
             </Button>
           )}

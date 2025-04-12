@@ -277,7 +277,7 @@ const Formulario = () => {
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const navigate = useNavigate();
 
- const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     nomeCompleto: '',
     dataNascimento: '',
     sexo: '',
@@ -303,8 +303,21 @@ const Formulario = () => {
     IE: '',
     vegetariano: '',
     nomeSocial: '',
-    outroGenero: ''
+    outroGenero: '',
+    otherInstitution: '',
+    primeiraComejaca: false,
+  
+    // ✅ Campos de Deficiência
+    deficienciaAuditiva: false,
+    deficienciaAutismo: false,
+    deficienciaIntelectual: false,
+    deficienciaParalisiaCerebral: false,
+    deficienciaVisual: false,
+    deficienciaFisica: false,
+    deficienciaOutra: false,
+    deficienciaOutraDescricao: '',
   });
+  
 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -317,7 +330,7 @@ const Formulario = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("Token não encontrado, redirecionando para /entrar");
-      navigate("/gestor");
+      navigate("/painel");
       return;
     }
 
@@ -442,6 +455,8 @@ const Formulario = () => {
         telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, ''),
         cep: formData.cep.replace(/\D/g, ''),
         id: formData.id,
+        otherInstitution: formData.otherInstitution,
+        primeiraComejaca: formData.primeiraComejaca
       };
 
       console.log("Payload preparado para envio:", payload);
@@ -457,12 +472,19 @@ const Formulario = () => {
 
       if (response.data.success) {
         console.log("Inscrição salva com sucesso, redirecionando...");
-        navigate('/gestor');
+        navigate('/painel');
       }
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
       console.log("Detalhes do erro:", error.response?.data);
-      setErrors(error.response?.data.details || [{ message: 'Erro ao salvar inscrição' }]);
+      const detalhes = error.response?.data.details;
+
+ 
+      if (Array.isArray(detalhes)) {
+        setErrors(detalhes);
+      } else {
+        setErrors([{ message: detalhes || 'Erro ao salvar inscrição' }]);
+      }
     } finally {
       console.log("Finalizando processo de envio");
       setIsSubmitting(false);
@@ -825,10 +847,25 @@ const Formulario = () => {
                   <option value="">Selecione</option>
                   {institutions.map(inst => (
                     <option key={inst.id} value={inst.nome}>{inst.nome}</option>
+                    
                   ))}
+                      <option value="outro">Outro</option>
                 </Select>
               </InputGroup>
 
+              {formData.IE === 'outro' && (
+        <InputGroup>
+          <InputLabel>Nome da Instituição</InputLabel>
+          <InputField
+            type="text"
+            name="otherInstitution"
+            value={formData.otherInstitution}
+            onChange={handleChange}
+            placeholder="Digite o nome da instituição"
+            required
+          />
+        </InputGroup>
+      )}
               <InputGroup>
   <InputLabel><FiClock /> É sua primeira COMEJACA? *</InputLabel>
   <CheckboxContainer>

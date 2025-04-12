@@ -311,7 +311,7 @@ const Login = () => {
     const token = localStorage.getItem('token');
     if (token) {
       console.log('Usuário já está logado, redirecionando...');
-      navigate('/gestor');
+      navigate('/painel');
     }
   }, [navigate]); 
 
@@ -356,7 +356,7 @@ const Login = () => {
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());
   
-      const redirectPath = user.isVerified ? '/gestor' : '/verificar';
+      const redirectPath = user.isVerified ? '/painel' : '/verificar';
       navigate(redirectPath);
     } catch (err) {
       console.error("❌ Erro no login automático:", err);

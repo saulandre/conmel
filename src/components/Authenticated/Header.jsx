@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import styled, { ThemeProvider } from 'styled-components';
-import { FiUser, FiLogOut, FiMoon, FiMenu, FiPlus, FiUpload } from "react-icons/fi";
+import { FiUser, FiLogOut, FiMoon,FiDownload, FiMenu, FiPlus, FiUpload } from "react-icons/fi";
 
 // Temas otimizados
 export const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #003049, #003049, #003049)',
+    background: 'linear-gradient(135deg, #0d1b2a, #0d1b2a, #0d1b2a)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #003049, #003049)',
+    buttonBackground: 'linear-gradient(135deg, #0d1b2a, #0d1b2a)',
     tableHeaderBackground: '#003049',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',
     tableRowHoverBackground: '#f1f3f5',
     shadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-    mobileHeaderHeight: '80px'
+    mobileHeaderHeight: '160px'
   },
   minimalista: {
     background: '#f5f5f5',
@@ -41,7 +41,19 @@ const Container = styled.div`
   position: relative;
   overflow-x: hidden;
 `;
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
+
+`;
+const ImagemResponsiva = styled.img`
+width: 40px;   /* ou 32px, depende do que você achar visualmente melhor */
+height: auto;
+@media (max-width: 768px) {
+    display: none;
+  }`;
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
@@ -169,25 +181,13 @@ const Button = styled.button`
     width: 100%;
     justify-content: center;
     padding: 1rem;
+    > *:first-child {
+  gap: 20px;
+  }
   }
 `;
 
-const MainContent = styled.main`
-  flex: 1;
-  padding: 3rem 1rem;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
-  @media (max-width: 768px) {
-    padding: 2rem 1rem;
-    margin-top: ${({ theme }) => theme.mobileHeaderHeight};
-  }
-`;
 
 const FloatingActions = styled.div`
   position: fixed;
@@ -240,7 +240,7 @@ const FloatingActions = styled.div`
   }
 
   @media (max-width: 768px) {
-    bottom: 1.25rem;
+    bottom:5.5rem;
     right: 1.25rem;
     
     button {
@@ -254,7 +254,13 @@ const HeaderMain = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [theme, setTheme] = useState(themes.professional);
-
+  const location = useLocation();
+  const pathname = location.pathname;
+  const esconderBotao = location.pathname === '/' || location.pathname === '/registrar';
+  const estaNaInscricao = pathname === '/inscrever';
+  const estaNoPerfil = pathname === '/perfil';
+  const estaNaHomeOuGestor = pathname === '/' || pathname === '/gestor';
+  const estaNaInstituicao = pathname === '/instituicao';
   const toggleTheme = () => {
     setTheme(prev => {
       const newTheme = prev === themes.professional ? themes.minimalista : themes.professional;
@@ -263,11 +269,22 @@ const HeaderMain = () => {
     });
   };
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem('role'); // Pega dentro do useEffect
+
+    console.log('Role do usuário:', storedRole);
+
+    if (storedRole === 'admin') {
+      setIsAdmin(true);
+    }
+  }, []);
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('isVerified');
-    
+    localStorage.removeItem('nome');
     localStorage.removeItem('email');
    
     navigate('/');
@@ -277,27 +294,50 @@ const HeaderMain = () => {
     const savedTheme = localStorage.getItem("theme") || "professional";
     setTheme(savedTheme === "professional" ? themes.professional : themes.minimalista);
   }, []);
-
+  const estaNaHomeOuRegistrar = pathname === '/' || pathname === '/registrar' || pathname === '/recuperarsenha';
   return (
     <ThemeProvider theme={theme}>
+      
       <Container>
         <Header>
+          <Wrapper><ImagemResponsiva src="/favicon.png" alt="Banner do evento" />
           <Title>INSCRIÇÕES 2025</Title>
-          
-          <Nav>
+    </Wrapper>          <Nav>
+
+
+      {/* Os demais botões são exibidos apenas se não estiver em '/' ou '/registrar' */}
+      {!estaNaHomeOuRegistrar && (
+        <>
+          {pathname !== '/gestor' && (
             <Button onClick={() => navigate('/gestor')}>
               <FiPlus size={20} /> Home
             </Button>
+          )}
+
+          {pathname !== '/inscrever' && (
             <Button onClick={() => navigate('/inscrever')}>
               <FiPlus size={20} /> Inscrever
             </Button>
+          )}
+
+          {pathname !== '/instituicao' && isAdmin && (
             <Button onClick={() => navigate('/instituicao')}>
               <FiUpload size={20} /> IE
             </Button>
+          )}
+
+          {pathname !== '/perfil' && (
             <Button onClick={() => navigate('/perfil')}>
               <FiUser size={20} /> Perfil
             </Button>
-          </Nav>
+          )}
+        </>
+      )}
+ 
+            <Button>
+        <FiDownload size={18} /> Materiais
+      </Button>
+    </Nav>
 
           <MobileMenuButton 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -308,26 +348,43 @@ const HeaderMain = () => {
         </Header>
 
         <MobileMenu $isOpen={isMenuOpen}>
+
+        {!estaNaHomeOuRegistrar && (
+        <>
+          {pathname !== '/gestor' && (
+    
           <Button onClick={() => { navigate('/gestor'); setIsMenuOpen(false) }}>
             <FiPlus size={20} /> Home
           </Button>
+            )}
+  {pathname !== '/inscrever' && (
+
           <Button onClick={() => { navigate('/inscrever'); setIsMenuOpen(false) }}>
             <FiPlus size={20} /> Inscrever
           </Button>
-          <Button onClick={() => { navigate('/instituicao'); setIsMenuOpen(false) }}>
-            <FiUpload size={20} /> IE
-          </Button>
+             )}
+           
+           {pathname !== '/instituicao' && isAdmin && (
+        <Button onClick={() => navigate('/instituicao')}>
+          <FiUpload size={20} /> IE
+        </Button>
+      )}
+  {pathname !== '/perfil' && (
           <Button onClick={() => { navigate('/perfil'); setIsMenuOpen(false) }}>
             <FiUser size={20} /> Perfil
           </Button>
+               )}
+                       </>
+      )}
+         <Button>
+                            <FiDownload size={18} /> Materiais
+                          </Button>
         </MobileMenu>
 
       
 
         <FloatingActions>
-          <button onClick={toggleTheme} aria-label="Alternar tema">
-            <FiMoon size={24} />
-          </button>
+  
           <button onClick={handleLogout} aria-label="Sair">
             <FiLogOut size={24} />
           </button>

@@ -4,11 +4,12 @@ import { FiEdit, FiPlus, FiChevronLeft, FiSearch } from 'react-icons/fi';
 import { UNSAFE_shouldHydrateRouteLoader, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import HeaderMain from './Header';
+import { FiHome } from 'react-icons/fi';
 
 // Estilos
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #003049, #003049, #003049);
+  background: linear-gradient(135deg, #e7ecef, #e7ecef, #e7ecef);
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
   display: flex;
@@ -18,7 +19,21 @@ const Container = styled.div`
     padding: 0rem;
   }
 `;
+const StyledSelect = styled.select`
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
 
+  &:focus {
+    outline: none;
+    border-color: #7c3aed; 
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
+  }
+`;
 const ContentWrapper = styled.div`
   width: 100%;
   max-width: 1200px;
@@ -26,10 +41,8 @@ const ContentWrapper = styled.div`
 `;
 
 const FormCard = styled.div`
-  background: rgba(255, 255, 255, 0.95);
-/*   border-radius: 5px;
- */  padding: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background:#e7ecef;
+ padding: 2.5rem;
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -80,7 +93,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background: linear-gradient(135deg, #003049, #003049);
+  background: linear-gradient(135deg, #0d1b2a, #0d1b2a);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -102,26 +115,19 @@ const ActionButton = styled.button`
     flex: 1;
     justify-content: center;
     padding: 0.8rem;
+
   }
 `;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 0.8rem;
-  background: #f9f9f9;
-  color: #22223b;
-  font-family: 'Poppins', sans-serif;
-  transition: all 0.3s ease;
-  appearance: none; /* Remove estilo padrão do navegador */
-
-  &:focus {
-    outline: none;
-    border-color: #4a4e69;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  }
+const Label = styled.label`
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #4a4a4a;
 `;
+
+
 
 const TableContainer = styled.div`
   overflow-x: auto;
@@ -148,7 +154,7 @@ const Table = styled.table`
 `;
 
 const TableHead = styled.thead`
-  background: #003049;
+  background: #0d1b2a;
   color: white;
 `;
 
@@ -182,31 +188,12 @@ const TableCell = styled.td`
   }
 `;
 
-const BackLink = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  transition: opacity 0.3s;
-  cursor: pointer;
-  width: fit-content;
 
-  &:hover {
-    opacity: 0.8;
-  }
-  @media (max-width: 768px) {
- padding-top: 1rem;
-
-  }
-`;
 
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #003049, #003049);
+  background: linear-gradient(135deg, #0d1b2a, #0d1b2a);
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -429,7 +416,6 @@ const IePage = () => {
 
   return (
 <>
-    <HeaderMain />
     <Container>
 
       <ContentWrapper>
@@ -438,47 +424,48 @@ const IePage = () => {
           <Header>
             <Title>INSTITUIÇÃO ESPÍRITA</Title>
             <ButtonContainer>
-            <ActionButton style={{ background: "#003049" }} onClick={() => handleModeChange('adicionar')}>
+            <ActionButton style={{ background: "#0d1b2a" }} onClick={() => handleModeChange('adicionar')}>
   <FiPlus size={18} style={{ marginRight: "8px" }} /> Adicionar
 </ActionButton>
-              <ActionButton style={{ background: "#003049" }} onClick={() => handleModeChange('alterar')}>
+              <ActionButton style={{ background: "#0d1b2a" }} onClick={() => handleModeChange('alterar')}>
                 <FiEdit size={18} /> Alterar
               </ActionButton>
             </ButtonContainer>
           </Header>
           {modo === "adicionar" && (
-        <p style={{ marginTop: "10px", color: "#003049" }}>
+        <p style={{ marginTop: "10px", color: "#0d1b2a" }}>
           Você está no modo de adicionar instituição espírita.
         </p>
       )}
            {modo === "alterar" && (
-        <p style={{ marginTop: "10px", color: "#003049" }}>
+        <p style={{ marginTop: "10px", color: "#0d1b2a" }}>
           Você está no modo de adicionar instituição espírita.
         </p>
       )}
-
-          {formMode === 'alterar' && (
-            <SearchContainer>
-            IE cadastradas
-              <Select
-                value={selectedInstitution?.id || ''}
-                onChange={(e) => {
-                  const institution = institutions.find(
-                    (inst) => inst.id === parseInt(e.target.value)
-                  );
-                  setSelectedInstitution(institution);
-                }}
-              >
-                <option value="">Selecione uma instituição</option>
-                {institutions.map((institution) => (
-                  <option key={institution.id} value={institution.id}>
-                    {institution.nome}
-                  </option>
-                ))}
-              </Select>
-            </SearchContainer>
-          )}
-
+{formMode === 'alterar' && (
+  <SearchContainer>
+    <Label>
+      <FiHome size={18} />
+      Banco de Instituições Espíritas
+    </Label>
+    <StyledSelect
+      value={selectedInstitution?.id || ''}
+      onChange={(e) => {
+        const institution = institutions.find(
+          (inst) => inst.id === parseInt(e.target.value)
+        );
+        setSelectedInstitution(institution);
+      }}
+    >
+      <option value="">Selecione uma instituição</option>
+      {institutions.map((inst) => (
+        <option key={inst.id} value={inst.id}>
+          {inst.nome}
+        </option>
+      ))}
+    </StyledSelect>
+  </SearchContainer>
+)}
           <TableContainer>
             <Table>
               <TableHead>
@@ -510,7 +497,7 @@ const IePage = () => {
 
           {error && <ErrorMessage>{error}</ErrorMessage>}
 
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '25px' }}>
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '25px', marginBottom: '100px' }}>
             <SubmitButton onClick={handleSubmit} type="submit">
               Salvar
             </SubmitButton>

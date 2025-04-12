@@ -3,7 +3,9 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { FiUser, FiMail, FiLock } from 'react-icons/fi';
+import { toast } from "react-toastify";
 
+import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
 // Animação de fundo
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -13,15 +15,14 @@ const gradientAnimation = keyframes`
 
 const AuthContainer = styled.div`
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  height: 85vh;
+
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
-  padding: 2rem;
   box-sizing: border-box;
-  
+  background: #e7ecef;
   @media (max-width: 480px) {
     padding: 0;
   }
@@ -29,55 +30,7 @@ const AuthContainer = styled.div`
 
 
 
-const FloatingButtonContainer = styled.div`
-  @media (max-width: 768px) {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100vw;
-    background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
-    padding: 0;
-    border-top: 1px solid #e0e0e0;
-    z-index: 1000; /* Garante que o botão fique sempre visível */
-  }
-`;
-const FloatingButton = styled.button`
-  display: none;
 
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 1.2rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 0;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    background: linear-gradient(135deg, #003049, #003049, #003049);
-    
-    &:active {
-      transform: translateY(0);
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
-    }
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-`;
 
 
 
@@ -88,7 +41,7 @@ const AuthWrapper = styled.div`
   overflow: hidden;
   padding: 2.5rem;
   margin: 1rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: #e7ecef;
   backdrop-filter: blur(20px);
   border-radius: 5px;
 
@@ -96,8 +49,7 @@ const AuthWrapper = styled.div`
     padding: 1.5rem;
     margin: 0;
     border-radius: 0;
-    height: 100vh; /* Garante que o conteúdo ocupa toda a tela */
-    display: flex;
+  
     flex-direction: column;
     justify-content: center;
   }
@@ -116,52 +68,60 @@ const Title = styled.h1`
     font-size: 2.3rem /* Reduz o tamanho do título em telas pequenas */
   }
 `;
-
 const InputWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  border: 1px solid #ddd;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fff;;
+  border: 1px solid #ccc;
   border-radius: 12px;
-  padding: 10px;
-  background-color: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 15px;
+  transition: border-color 0.3s ease;
 
-  &:focus-within {
+/*   &:focus-within {
+    border-color: #4a4a4a;
+ 
+  } */
+    &:focus-within {
     border-color: #4a4e69;
-    box-shadow: 0 0 8px rgba(74, 78, 105, 0.5);
+    box-shadow: 0 0 3px rgba(74, 78, 105, 0.5);
+  }
+  &:hover {
+
+    border: #0d1b2a 1px solid
   }
 
-  @media (max-width: 600px) {
-    padding: 8px; 
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    gap: 0.8rem;
   }
 `;
 
-// Inputs
 const Input = styled.input`
-  width: 100%;
-  padding: 10px 12px;
-  border: none;
-  border-radius: 12px;
+  flex: 1;
+  padding: 8px;
   font-size: 1rem;
-  box-sizing: border-box;
-  background-color: transparent;
-  font-family: 'Poppins', sans-serif;
+  border: none;
+  outline: none;
+  background: transparent;
   color: #333;
+  font-family: 'Poppins', sans-serif;
 
   &::placeholder {
-    color: #999;
-  }
-
-  &:focus {
-    outline: none;
+    color: #aaa;
   }
 
   @media (max-width: 600px) {
     font-size: 0.9rem; 
   }
 `;
-
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: center;
+`;
 
 const Button = styled.button`
   width: 100%;
@@ -170,7 +130,7 @@ const Button = styled.button`
   color: white;
   border: none;
   border-radius: 5px;
-
+height: 49px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -179,7 +139,7 @@ const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #003049 0%, #003049 100%);
+  background: linear-gradient(135deg, #22223b 0%, #22223b 100%);
   margin-top: 1.5rem;
   &:hover {
     transform: translateY(-2px);
@@ -215,7 +175,6 @@ const ErrorMessage = styled.p`
   }
 `;
 
-// Link estilizado
 const StyledLink = styled(Link)`
   color: #22223b;
   text-decoration: none;
@@ -232,7 +191,8 @@ const StyledLink = styled(Link)`
   }
 
   @media (max-width: 600px) {
-    font-size: 0.8rem; /* Reduz o tamanho da fonte em telas pequenas */
+    font-size: 0.8rem; 
+    margin-bottom: 120px;
   }
 `;
 
@@ -257,6 +217,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
  
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
@@ -281,33 +242,33 @@ const Register = () => {
     }));
   };
 
+  
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
-    const numericValue = value.replace(/[^0-9]/g, ''); // Remove qualquer caractere não numérico
 
-    if (numericValue.length > 6) {
-      return;
+    if (value.length > 8) {
+            return;
     }
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: numericValue
+      [name]: value
     }));
 
     // Lógica de validação para os dois campos
     if (name === 'password') {
-      if (numericValue.length !== 6) {
-        setErrorMessage('A senha deve ter exatamente 6 números.');
+      if (value.length !== 8) {
+        setErrorMessage('A senha deve ter exatamente 8 caracteres.');
       } else {
         setErrorMessage('');
       }
     }
 
     if (name === 'confirmPassword') {
-      if (numericValue !== formData.password) {
+      if (value !== formData.password) {
         setErrorMessage('A confirmação da senha deve ser igual à senha.');
-      } else if (numericValue.length !== 6) {
-        setErrorMessage('A confirmação da senha deve ter exatamente 6 números.');
+      } else if (value.length !== 6) {
+        setErrorMessage('A confirmação da senha deve ter exatamente 8 caracteres.');
       } else {
         setErrorMessage('');
       }
@@ -336,6 +297,11 @@ const Register = () => {
         email: formData.email,
         password: formData.password,
       });
+        toast.success("Sucesso. Verifique seu email.", {
+              position: "bottom-center",
+              autoClose: 4000,
+            });
+      
   
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
@@ -376,7 +342,7 @@ const Register = () => {
     <AuthContainer>
       <AuthWrapper>
         <Title>NOVA CONTA</Title>
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <InputWrapper>
             <Icon><FiUser /></Icon>
             <Input
@@ -410,9 +376,11 @@ const Register = () => {
               onChange={handleChangePassword}
               placeholder="Senha"
               required
-              maxLength={6}
+              maxLength={8}
               aria-label="Senha"
                   className={ErrorMessage ? 'error' : ''}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={() => setIsPasswordFocused(false)}
             />
           </InputWrapper>
 
@@ -428,18 +396,21 @@ const Register = () => {
               onChange={handleChangePassword}
               placeholder="Confirmar senha"
               required
-              maxLength={6}
+              maxLength={8}
               aria-label="Confirmar senha"
               className={confirmPasswordError ? 'error' : ''}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
             />
           </InputWrapper>
 
           {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-
-          <Button disabled={!isFormValid() || loading} type="submit">
+          {isPasswordFocused && (
+  <PasswordStrengthIndicator password={formData.password} />
+)}          <Button disabled={!isFormValid() || loading} type="submit">
             {loading ? 'Registrando...' : 'Registrar'}
           </Button>
-        </form>
+        </Form>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <StyledLink to="/">Já tem uma conta? Faça login aqui.</StyledLink>
       </AuthWrapper>

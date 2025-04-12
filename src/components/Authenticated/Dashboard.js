@@ -17,14 +17,26 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// Temas
+const LoadingSpinner = styled.div`
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  width: 10px;
+  height: 14px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+`;
 const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #003049, #003049, #003049)',
+    background: 'linear-gradient(135deg, #0d1b2a, #0d1b2a, #0d1b2a)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #003049, #003049)',
-    tableHeaderBackground: '#003049',
+    buttonBackground: 'linear-gradient(135deg, #0d1b2a, #0d1b2a)',
+    tableHeaderBackground: '#0d1b2a',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',
     tableRowHoverBackground: '#f1f3f5',
@@ -39,7 +51,7 @@ const themes = {
     tableHeaderBackground: '#f5f5f5',
     tableHeaderColor: '#333',
     tableRowEvenBackground: '#fafafa',
-    tableRowHoverBackground: '#C0C0C0   ',
+    tableRowHoverBackground: '#edede9   ',
     shadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
     mobileHeaderHeight: '80px'
   },
@@ -55,62 +67,16 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-  overflow: hidden; // Novo
+  overflow: hidden; 
 
   @media (max-width: 768px) {
     padding: 0;
+    background: #e7ecef;
    
   }
 `;
 
-const FloatingActions = styled.div`
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  gap: 0.5rem;
-  z-index: 999;
-  transition: all 0.3s ease;
-
-  button {
-    background: ${({ theme }) => theme.cardBackground};
-    color: ${({ theme }) => theme.textColor};
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: all 0.2s;
-
-    &:hover {
-      transform: scale(1.1);
-      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-      
-    }
-  }
-
-  @media (max-width: 768px) {
-    top: ${({ $isMenuOpen }) => $isMenuOpen ? 'auto' : '80px'};
-    bottom: ${({ $isMenuOpen }) => $isMenuOpen ? '20px' : 'auto'};
-    right: 15px;
-    flex-direction: row;
-    
-    button {
-      width: 36px;
-      height: 36px;
-    }
-  }
-`;
-
-const MobileMenuWrapper = styled.div`
-  position: relative;
-  z-index: 1001;
-  
-`;
+ 
 
 const EmptyStateMessage = styled.div`
   text-align: center;
@@ -134,7 +100,7 @@ const ContentWrapper = styled.div`
   margin-top: ${({ theme }) => theme.mobileHeaderHeight};
 
   @media (max-width: 768px) {
-    padding-top: 80px;
+
     
   }
 `;
@@ -155,130 +121,15 @@ const FormCard = styled.div`
     padding: 1rem;
     max-width: 100vw;
     width:100vw;
-  
+  margin-bottom: 100px;
   }
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: ${({ theme }) => theme.cardBackground};
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-  border: 1px solid #ced4da;
-  @media (min-width: 769px) {
-    position: sticky;
-    top: 2rem;
-    border-radius: 5px;
-    margin: -2rem -2rem 2rem -2rem;
-    width: calc(100% + 4rem);
-  }
-`;
 
-const Title = styled.h1`
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.textColor};
-  font-weight: 600;
-  margin: 0;
 
-  @media (min-width: 769px) {
-    font-size: 2rem;
-  }
-`;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 1rem;
 
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
 
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.textColor};
-  padding: 0.5rem;
-  border-radius: 5px;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-const MobileMenu = styled.div`
-  position: fixed;
-  top: 60px;
-  margin-bottom: 20px;
-  left: 0;
-  right: 0;
-  background: ${({ theme }) => theme.cardBackground};
-  padding: 1rem;
-  z-index: 1001;
-  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
- height: 100%;
-
- height: 100vh; /* Alterado para 100vh */
-  gap: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  animation: ${({ $isOpen }) => 
-    $isOpen ? 'slideDown 0.3s ease' : 'slideUp 0.2s ease'};
-
-  @keyframes slideDown {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-20px); opacity: 0; }
-  }
-
-  @media (min-width: 769px) {
-    display: none;
-  }
-`;
-
-const ActionButton = styled.button`
-  background: ${({ theme }) => theme.buttonBackground};
-  color: white;
-  border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s;
-  justify-content: center;
-
-  &:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    padding: 0.8rem;
-  }
-`;
-
-const MobileMenuItem = styled(ActionButton)`
-  font-size: 0.9rem;
-  padding: 0.8rem;
-  margin-bottom: 1px;
-  height: 60px;
-`;
 
 const SearchBoxContainer = styled.div`
   position: relative;
@@ -318,7 +169,7 @@ const TableContainer = styled.div`
   background: ${({ theme }) => theme.cardBackground};
   border: 2px solid #ced4da;
   @media (max-width: 768px) {
-    border: 2px solid #403d39;
+   border: none;
     margin: 1rem -1rem;
     width: calc(100% + 2rem);
     width: 98%;
@@ -377,11 +228,9 @@ const TableRow = styled.tr`
     margin-bottom: 1rem;
     background: ${({ theme }) => theme.cardBackground};
     border-radius: 0.5rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-
-    &:nth-child(even) {
-      background: ${({ theme }) => theme.cardBackground};
-    }
+    border: 1px solid #0d1b2a;
+    box-shadow: 8px 4px 8px rgba(0, 0, 0, 0.1);
+  
   }
 `;
 
@@ -509,8 +358,53 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const [loadingItemId, setLoadingItemId] = useState(null);
+ const [isAdmin, setIsAdmin] = useState(false);
+ const storedUser = JSON.parse(localStorage.getItem('user'));
+ console.log(localStorage.getItem('user'));
+
+
+ useEffect(() => {
+
+
+  if (storedUser) {
+    console.log('Role do usuário:', storedUser.role); // 👈 Aqui está o console.log
+  }
+
+  if (storedUser?.role === 'admin') {
+    setIsAdmin(true);
+  }
+}, []);
+const handlePagamento = async (item) => {
+  setLoadingItemId(item);
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.get(`${API_URL}/api/auth/pagamento/${item}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const data = response.data;
+
+    if (data && data.init_point) {
+      window.open(data.init_point, '_blank');
+    } else {
+      alert('Não foi possível gerar o link de pagamento.');
+    }
+
+  } catch (error) {
+    console.error('Erro ao gerar link de pagamento:', error);
+    alert('Erro ao processar pagamento.');
+  } finally {
+    setLoadingItemId(null); // encerra o loading
+  }
+};
+
+
+  
   useEffect(() => {
     const fetchInscricoes = async () => {
       try {
@@ -596,18 +490,18 @@ useEffect(() => {
   return (
     <ThemeProvider theme={themes[theme]}>
       <Container>
-        <FloatingActions $isMenuOpen={isMenuOpen}>
+       {/*  <FloatingActions $isMenuOpen={isMenuOpen}>
           <button onClick={toggleTheme} title="Alternar tema">
             <FiMoon size={20} />  
           </button>
           <button onClick={handleLogout} title="Sair">
             <FiLogOut size={20} />
           </button>
-        </FloatingActions>
+        </FloatingActions> */}
 
         <ContentWrapper>
           <FormCard>
-            <Header>
+          {/*   <Header>
               <Title>INSCRIÇÕES 2025</Title>
               
               <MobileMenuWrapper>
@@ -620,11 +514,11 @@ useEffect(() => {
                 <ActionButton onClick={() => navigate('/inscrever')}>
                   <FiPlus size={18} /> Inscrever
                 </ActionButton>
-               
+                {isAdmin && (
                 <ActionButton onClick={() => navigate('/instituicao')}>
                   <FiUpload size={18} /> IE
                 </ActionButton>
-                
+                     )}
                 <ActionButton>
                   <FiDownload size={18} /> Materiais
                 </ActionButton>
@@ -644,12 +538,15 @@ useEffect(() => {
               <MobileMenuItem>
                 <FiDownload size={18} /> Materiais
               </MobileMenuItem>
-            
+                   {isAdmin && (
+                
+             
 
               <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
-                <FiUpload size={18} /> Adicionar Institução Espírita
+                <FiUpload size={18} /> IE
               </MobileMenuItem>
-            </MobileMenu>
+                   )}
+            </MobileMenu> */}
 
             <SearchBoxContainer>
               <SearchIcon size={20} />
@@ -691,27 +588,47 @@ useEffect(() => {
                   </TableHead>
                   <tbody>
                   {filteredData.map((item, index) => (
-  <TableRow key={item.id}>
-    <TableCell data-label="#">{index + 1}</TableCell>
-    <TableCell data-label="Nome Completo">{item.nomeCompleto}</TableCell>
-   
-    <TableCell data-label="Status">
-      <StatusPill $status={item.status}>{item.status || 'Pendente'}</StatusPill>
-    </TableCell>
-    <TableCell data-label="Data">
-      {new Date(item.createdAt).toLocaleDateString('pt-BR')}
-    </TableCell>
-    <TableCell data-label="Ações">
-      <ButtonGroup>
-        <SmallButton onClick={() => navigate(`/edit/${item.id}`)}>
-          <FiEdit size={14} /> Editar
-        </SmallButton>
-        <SmallButton onClick={() => navigate(`/print/${item.id}`)}>
-          <FiPrinter size={14} /> Imprimir
-        </SmallButton>
-      </ButtonGroup>
-    </TableCell>
-  </TableRow>
+ <TableRow key={item.id}>
+ <TableCell data-label="#">{index + 1}</TableCell>
+ <TableCell data-label="Nome Completo">{item.nomeCompleto}</TableCell>
+
+ <TableCell data-label="Status">
+   <StatusPill $status={item.status}>{item.status || 'Pendente'}</StatusPill>
+ </TableCell>
+ <TableCell data-label="Data">
+   {new Date(item.createdAt).toLocaleDateString('pt-BR')}
+ </TableCell>
+ <TableCell data-label="Ações">
+   <ButtonGroup>
+     <SmallButton onClick={() => navigate(`/edit/${item.id}`)}>
+       <FiEdit size={14} /> Editar
+     </SmallButton>
+     <SmallButton onClick={() => navigate(`/print/${item.id}`)}>
+       <FiPrinter size={14} /> Imprimir
+     </SmallButton>
+     {item.status !== 'Pago' && (
+  <SmallButton
+    onClick={() => handlePagamento(item.id)}
+    disabled={loadingItemId === item.id}
+  >
+    {loadingItemId === item.id ? (
+      <span className="flex items-center gap-2">
+        <span className="animate-spin h-4 w-4 border-2 border-t-transparent border-white rounded-full" />
+        Carregando 
+        <LoadingSpinner />
+      </span>
+    ) : (
+      <>
+        💳 Pagar
+      </>
+    )}
+  </SmallButton>
+)}
+
+   </ButtonGroup>
+ </TableCell>
+</TableRow>
+
 ))}
                   </tbody>
                 </Table>

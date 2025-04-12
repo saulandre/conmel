@@ -212,6 +212,10 @@ const SubmitButton = styled.button`
   &:hover {
     transform: translateY(-2px);
     opacity: 0.9;
+
+  }  @media (max-width: 768px) {
+  margin-bottom: 110px;
+    
   }
 `;
 const MobileMenu = styled.div`
@@ -267,11 +271,11 @@ const ContentWrapper = styled.div`
 
 const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #003049, #003049, #003049)',
+    background: 'linear-gradient(135deg, #e7ecef, #e7ecef, #e7ecef)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #003049, #003049)',
-    tableHeaderBackground: '#003049',
+    buttonBackground: 'linear-gradient(135deg, #0d1b2a, #0d1b2a)',
+    tableHeaderBackground: '#0d1b2a',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',
     tableRowHoverBackground: '#f1f3f5',
@@ -392,7 +396,6 @@ const Profile = () => {
  
 
   <ThemeProvider theme={themes[theme]}>
-         <HeaderMain/>
       <Container>
   
         

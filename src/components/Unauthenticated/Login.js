@@ -18,14 +18,18 @@ const AuthContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
   background-size: 400% 400%;
+  height: 85vh;
   animation: ${gradientAnimation} 15s ease infinite;
   padding: 2rem;
   box-sizing: border-box;
-  
+  background: #e7ecef;
   @media (max-width: 480px) {
     padding: 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0rem 27px; 
   }
 `;
 
@@ -51,7 +55,7 @@ const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #003049 0%, #003049 100%);
+  background: linear-gradient(135deg, #0d1b2a 0%, #0d1b2a 100%);
   margin-top: 1rem;
 /*   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -62,7 +66,9 @@ const Button = styled.button`
     background: linear-gradient(135deg, #e36414 0%, #e36414 100%);
   }
   @media (max-width: 768px) {
-    display: none;
+    position: fixed;
+    zIndex: 9999;
+    bottom: 0;
   }
 `;
 
@@ -75,6 +81,7 @@ const Form = styled.form`
   flex-direction: column;
   gap: 15px;
   text-align: center;
+  
 `;
 
 
@@ -99,7 +106,7 @@ const InputWrapper = styled.div`
   }
   &:hover {
 
-    border: #003049 1px solid
+    border: #0d1b2a 1px solid
   }
 
   @media (max-width: 480px) {
@@ -115,7 +122,7 @@ const AuthWrapper = styled.div`
   overflow: hidden;
   padding: 2.5rem;
   margin: 1rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: #e7ecef;
   backdrop-filter: blur(20px);
   border-radius: 5px;
 
@@ -124,7 +131,7 @@ const AuthWrapper = styled.div`
     margin: 0;
     border-radius: 0;
     height: 100vh; /* Garante que o conteúdo ocupa toda a tela */
-    display: flex;
+
     flex-direction: column;
     justify-content: center;
   }
@@ -152,7 +159,7 @@ const Input = styled.input`
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-  color: #22223b;
+  color: #0d1b2a;
   font-size: 1.2rem;
   margin-right: 10px;
 
@@ -175,7 +182,7 @@ const ErrorMessage = styled.p`
   }
 `;
 const AuthLink = styled.a`
-  color: #22223b;
+  color: #0d1b2a;
   font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -316,77 +323,57 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("🔵 Iniciando fluxo de login...");
-
-    if (!formData.email || !formData.password) {
-      console.warn("⚠️ Campos vazios no formulário.");
-      setError('Todos os campos são obrigatórios.');
-      return;
+  useEffect(() => {
+    const emailPreenchido = formData.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+    const senhaPreenchida = formData.password && formData.password.length >= 8;
+  
+    if (emailPreenchido && senhaPreenchida) {
+      handleSubmit();
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      console.warn("⚠️ E-mail inválido inserido:", formData.email);
-      setError('Por favor, insira um e-mail válido.');
-      return;
-    }
-
+  }, [formData.email, formData.password]);
+  
+  const handleSubmit = async () => {
+    console.log("🔵 Tentando login automático...");
+  
     try {
       setLoading(true);
       setError(null);
-      console.log("🚀 Enviando requisição para login...");
-      console.log("URL da API:", API_URL);
+      console.log("🚀 Enviando requisição automática para login...");
       localStorage.clear();
+  
       const response = await axios.post(`${API_URL}/api/auth/entrar`, formData);
-
-      console.log("Resposta da API:", response.data);
-
-      console.log("✅ Resposta recebida:", response);
+  
       const { token, user } = response.data;
-
-      console.log("🔑 Token recebido:", token);
-      console.log("👤 Usuário autenticado:", user);
-
+  
       localStorage.setItem('token', token);
       localStorage.setItem('userEmail', formData.email);
       localStorage.setItem('isVerified', user.isVerified);
       localStorage.setItem('userId', user.id);
-
+      localStorage.setItem('role', user.role);
+      localStorage.setItem('nome', user.name);
+      localStorage.setItem('email', user.email);
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + (formData.rememberMe ? 30 : 7));
       localStorage.setItem('tokenExpiration', expirationDate.toISOString());
-
-      console.log("📅 Token válido até:", expirationDate.toISOString());
-
+  
       const redirectPath = user.isVerified ? '/gestor' : '/verificar';
-      console.log(`🔄 Redirecionando para: ${redirectPath}`);
       navigate(redirectPath);
     } catch (err) {
-      console.error("❌ Erro ao fazer login:", err);
+      console.error("❌ Erro no login automático:", err);
       if (err.response) {
-        console.error("⚠️ Resposta do servidor:", err.response.data);
-        
         if (err.response.status === 401) {
           setError('Usuário ou senha incorretos.');
         } else {
-          setError(err.response.data.message || 'E-mail ou senha incorreto! Tente novamente..');
+          setError(err.response.data.message || 'Erro inesperado. Tente novamente.');
         }
-      } else if (err.request) {
-        console.error("⚠️ Sem resposta do servidor:", err.request);
-        setError('Sem resposta do servidor. Verifique sua conexão.');
       } else {
-        console.error("⚠️ Erro ao configurar a requisição:", err.message);
-        setError('Erro ao configurar a requisição.');
+        setError('Erro de rede ou servidor.');
       }
-
-    
     } finally {
-      console.log("🔄 Resetando estado de carregamento...");
       setLoading(false);
     }
   };
+  
 
   return (
     <AuthContainer>
@@ -408,7 +395,6 @@ const Login = () => {
           <InputWrapper>
             <Icon icon={faLock} />
             <Input
-inputmode="numeric" 
 type='password'
                name="password"
               placeholder="Digite sua senha"
@@ -416,7 +402,7 @@ type='password'
               onChange={handleChange}
               autoComplete="current-password"
               required
-               pattern="[0-9]*"
+       
             />
           </InputWrapper>
           {error && <ErrorMessage>{error}</ErrorMessage>}

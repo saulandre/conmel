@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import  styled, { ThemeProvider } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -30,10 +30,9 @@ const FormWrapper = styled.div`
 `;
 
 const FormCard = styled.form`
-  background: rgba(255, 255, 255, 0.95);
+  background:#e7ecef;
   border-radius: 5px;
   padding: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
   @media (max-width: 768px) {
     padding: 1.5rem;
@@ -188,10 +187,10 @@ const CheckboxWrapper = styled.div`
 `;
 export const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #003049, #003049, #003049)',
+    background: 'linear-gradient(135deg, #e7ecef, #e7ecef, #e7ecef)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #003049, #003049)',
+    buttonBackground: 'linear-gradient(135deg, #22223b, #22223b)',
     tableHeaderBackground: '#003049',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',
@@ -221,12 +220,12 @@ const CheckboxLabel = styled.label`
   transition: color 0.2s ease;
 
   &:hover {
-    color: #003049;
+    color: #0d1b2a;
   }
 
   input:checked {
-    background-color: #003049;
-    border-color: #003049;
+    background-color: #0d1b2a;
+    border-color: #0d1b2a;
   }
 `;const CheckboxesContainer = styled.div`
 border: 1px solid #ddd;
@@ -241,7 +240,7 @@ flex-wrap: wrap;
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: ${({ theme }) => theme.background};
+  background: #0d1b2a;
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -254,7 +253,6 @@ const SubmitButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-
   &:hover {
     transform: translateY(-2px);
     opacity: 0.9;
@@ -516,7 +514,7 @@ const Formulario = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
-         <HeaderMain />
+         
     <ThemeProvider theme={theme}>      <Container>
      
         <FormWrapper>
@@ -854,8 +852,10 @@ const Formulario = () => {
                   onChange={handleChange}
                   required>
                   <option value="">Faz dieta vegetariana?</option>
-                  <option value="Sim">Sim</option>
                   <option value="Não">Não</option>
+                  <option value="Vegetariano">vegetariano</option>
+                  <option value="Vegano">Vegano</option>
+                 
                 </Select>
               </InputGroup>
               {/* Informações Adicionais */}

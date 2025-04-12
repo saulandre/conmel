@@ -8,7 +8,7 @@ const ServerStatus = () => {
   useEffect(() => {
     const checkServer = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/health'); // ajuste se usar outra porta
+        const response = await axios.get('http://comejaca.org.br/api/health'); // ajuste se usar outra porta
         if (response.status === 200) {
           setOnline(true);
         }

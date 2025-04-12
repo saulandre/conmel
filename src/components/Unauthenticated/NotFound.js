@@ -17,7 +17,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #22223b, #335c67, #22223b);
+  background: linear-gradient(135deg, #e7ecef, #e7ecef, #e7ecef);
   background-size: 200% 200%;
   animation: ${gradientAnimation} 10s ease infinite;
   padding: 20px;

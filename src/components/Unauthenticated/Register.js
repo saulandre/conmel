@@ -229,7 +229,7 @@ const Register = () => {
     return (
       name.trim() !== '' &&
       isValidEmail(email) &&
-      password.length === 6 &&
+      password.length === 8 &&
       confirmPassword === password
     );
   };
@@ -241,40 +241,36 @@ const Register = () => {
       [name]: value,
     }));
   };
-
-  
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
-
-    if (value.length > 8) {
-            return;
-    }
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-
-    // Lógica de validação para os dois campos
-    if (name === 'password') {
-      if (value.length !== 8) {
-        setErrorMessage('A senha deve ter exatamente 8 caracteres.');
-      } else {
-        setErrorMessage('');
+  
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
+  
+      // Validações
+      if (name === 'password') {
+        if (value.length !== 8) {
+          setErrorMessage('A senha deve ter exatamente 8 caracteres.');
+        } else {
+          setErrorMessage('');
+        }
       }
-    }
-
-    if (name === 'confirmPassword') {
-      if (value !== formData.password) {
-        setErrorMessage('A confirmação da senha deve ser igual à senha.');
-      } else if (value.length !== 6) {
-        setErrorMessage('A confirmação da senha deve ter exatamente 8 caracteres.');
-      } else {
-        setErrorMessage('');
+  
+      if (name === 'confirmPassword') {
+        if (value !== updatedData.password) {
+          setErrorMessage('A confirmação da senha deve ser igual à senha.');
+        } else if (value.length !== 8) {
+          setErrorMessage('A confirmação da senha deve ter exatamente 8 caracteres.');
+        } else {
+          setErrorMessage('');
+        }
       }
-    }
+  
+      return updatedData;
+    });
   };
-
+  
+  
   const handleSubmit = async (e) => {
     localStorage.clear();
     e.preventDefault();

@@ -47,8 +47,8 @@ function App() {
       />
 
       <div className="container">
-        <SessaoInfo />
-      {/*   <HeaderMain /> */}
+    {/*     <SessaoInfo /> */}
+        <HeaderMain />
 
         <AuthProvider>
           <AppContent />
@@ -72,12 +72,12 @@ function AppContent() {
       <Route path="*" element={<NotFound />} />
 
       {/* Rotas Privadas */}
-      <Route path="/verificacao" element={<ProtectedRoute><Verify /></ProtectedRoute>} />
+      <Route path="/verificar" element={<Verify />} />
       <Route path="/instituicao" element={<ProtectedRoute><InstituicaoEspirita /></ProtectedRoute>} />
       <Route path="/atualizacao" element={<ProtectedRoute><Atualizacao /></ProtectedRoute>} />
       <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
       <Route path="/painel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/inscricao" element={<ProtectedRoute><FormularioInscricao /></ProtectedRoute>} />
+      <Route path="/inscrever" element={<ProtectedRoute><FormularioInscricao /></ProtectedRoute>} />
       <Route path="/imprimir" element={<ProtectedRoute><Print /></ProtectedRoute>} />
     </Routes>
   );

@@ -19,7 +19,7 @@ const AuthContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-size: 400% 400%;
-  height: 85vh;
+  height: 90vh;
   animation: ${gradientAnimation} 15s ease infinite;
   padding: 2rem;
   box-sizing: border-box;

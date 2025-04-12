@@ -17,7 +17,7 @@ const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 85vh;
+  height: 90vh;
 
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
@@ -270,11 +270,13 @@ const Register = () => {
     });
   };
   
-  
   const handleSubmit = async (e) => {
-    localStorage.clear();
     e.preventDefault();
-  
+    localStorage.clear();
+    setError(null);
+    setErrors([]);
+    
+    // Validação local
     if (formData.password !== formData.confirmPassword) {
       setError('As senhas não coincidem.');
       return;
@@ -287,52 +289,52 @@ const Register = () => {
   
     try {
       setLoading(true);
-      setError(null);
       const response = await axios.post(`${API_URL}/api/auth/registrar`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
-        toast.success("Sucesso. Verifique seu email.", {
-              position: "bottom-center",
-              autoClose: 4000,
-            });
-      
   
-      if (response.data.token) {
+      toast.success("Sucesso. Verifique seu email.", {
+        position: "bottom-center",
+        autoClose: 4000,
+      });
+  
+      // Verifica se a resposta contém token e usuário
+      if (response.data.token && response.data.user) {
         localStorage.setItem('token', response.data.token);
   
-        // Aqui estamos pegando o id da resposta da API e salvando no localStorage
-        const { id, name, email } = response.data.user; // Supondo que o id, name e email estão na resposta
+        const { id, name, email } = response.data.user;
   
         localStorage.setItem(
           'user',
           JSON.stringify({
             name: name,
-            userEmail: email, // Salvando o e-mail como 'userEmail'
-            id: id, // Salvando o id
+            userEmail: email,
+            id: id,
           })
         );
   
         localStorage.setItem('isVerified', 'false');
   
         setError('Código de verificação enviado. Por favor, verifique seu e-mail.');
-        navigate('/verificar');
+        navigate('/verificar-email');
       }
-  
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
     } catch (err) {
-      setError(err.response?.data?.error || err.message || 'Erro ao registrar usuário');
-      console.error('Erro de registro:', err);
+      setLoading(false);
+  
+      if (err.response && err.response.data && Array.isArray(err.response.data.errors)) {
+        setErrors(err.response.data.errors); // Lista de erros de validação do backend
+      } else if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message); // Mensagem genérica do backend
+      } else {
+        setError('Erro inesperado. Tente novamente mais tarde.');
+      }
     } finally {
       setLoading(false);
     }
   };
+  
   
   return (
     <AuthContainer>

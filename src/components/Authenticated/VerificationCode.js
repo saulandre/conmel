@@ -15,6 +15,7 @@ const AuthContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: #e7ecef;
   justify-content: center;
   min-height: 100vh;
  // background: linear-gradient(135deg, #22223b, #335c67, #22223b);
@@ -25,7 +26,7 @@ const AuthContainer = styled.div`
 
 // Wrapper do formulário
 const AuthWrapper = styled.div`
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color:#e7ecef;
   border-radius: 20px;
 //  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 30px;
@@ -253,10 +254,10 @@ const handleSubmit = async (e) => {
       localStorage.setItem('isVerified', 'true');
             if (window.location.hostname === 'localhost') {
         // Se estiver em localhost, redireciona para o ambiente local
-        window.location.replace('http://localhost:3000/gestor');
+        window.location.replace('http://localhost:3000/painel');
       } else {
         // Caso contrário, redireciona para o ambiente de produção
-        window.location.replace('https://www.comejaca.org.br/gestor');
+        window.location.replace('https://www.comejaca.org.br/painel');
       }
       setError(response.data.error || 'Erro desconhecido.');
     }

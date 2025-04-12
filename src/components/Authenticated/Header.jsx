@@ -261,13 +261,7 @@ const HeaderMain = () => {
   const estaNoPerfil = pathname === '/perfil';
   const estaNaHomeOuGestor = pathname === '/' || pathname === '/gestor';
   const estaNaInstituicao = pathname === '/instituicao';
-  const toggleTheme = () => {
-    setTheme(prev => {
-      const newTheme = prev === themes.professional ? themes.minimalista : themes.professional;
-      localStorage.setItem("theme", newTheme === themes.professional ? "professional" : "minimalista");
-      return newTheme;
-    });
-  };
+  const estaNaVerificar = pathname === '/verificar';
 
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -294,7 +288,7 @@ const HeaderMain = () => {
     const savedTheme = localStorage.getItem("theme") || "professional";
     setTheme(savedTheme === "professional" ? themes.professional : themes.minimalista);
   }, []);
-  const estaNaHomeOuRegistrar = pathname === '/' || pathname === '/registrar' || pathname === '/recuperarsenha';
+  const estaNaHomeOuRegistrar = pathname === '/' || pathname === '/registrar' || pathname === '/recuperarsenha' || pathname === '/verificar';
   return (
     <ThemeProvider theme={theme}>
       
@@ -308,7 +302,7 @@ const HeaderMain = () => {
       {/* Os demais botões são exibidos apenas se não estiver em '/' ou '/registrar' */}
       {!estaNaHomeOuRegistrar && (
         <>
-          {pathname !== '/gestor' && (
+          {pathname !== '/painel' && (
             <Button onClick={() => navigate('/gestor')}>
               <FiPlus size={20} /> Home
             </Button>
@@ -351,9 +345,9 @@ const HeaderMain = () => {
 
         {!estaNaHomeOuRegistrar && (
         <>
-          {pathname !== '/gestor' && (
+          {pathname !== '/painel' && (
     
-          <Button onClick={() => { navigate('/gestor'); setIsMenuOpen(false) }}>
+          <Button onClick={() => { navigate('/painel'); setIsMenuOpen(false) }}>
             <FiPlus size={20} /> Home
           </Button>
             )}

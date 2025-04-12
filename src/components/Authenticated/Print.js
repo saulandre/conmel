@@ -562,7 +562,7 @@ const getToken = () => {
       <FieldLabel>Nome</FieldLabel>
       <FieldValue>{participant.IE}</FieldValue>
     </FieldRow>
-
+{/* 
     <FieldRow>
       <FieldLabel>Endereço</FieldLabel>
       <FieldValue>
@@ -573,7 +573,7 @@ const getToken = () => {
         {participant.estado ? `/${participant.estado}` : ""}
         {participant.cep ? ` - ${participant.cep.replace(/(\d{5})(\d{3})/, "$1-$2")}` : ""}
       </FieldValue>
-    </FieldRow>
+    </FieldRow> */}
 
     {/* Linha para assinatura */}
     <FieldRow>

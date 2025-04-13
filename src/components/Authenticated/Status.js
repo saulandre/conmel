@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const ListaParticipantes = () => {
   const [participantes, setParticipantes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filtroIE, setFiltroIE] = useState('');
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
   useEffect(() => {
     const fetchParticipantes = async () => {
@@ -27,7 +28,50 @@ const ListaParticipantes = () => {
 
     fetchParticipantes();
   }, []);
+  const handleStatusChange = async (participanteId, novoStatus) => {
+    try {
+      const response = await axios.put(`${API_URL}/api/auth/pagamentos/${participanteId}/status`, {
+        statusPagamento: novoStatus,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+  
+      setParticipantes((prev) =>
+        prev.map((p) =>
+          p.id === participanteId ? { ...p, statusPagamento: novoStatus } : p
+        )
+      );
+    } catch (error) {
+      console.error('Erro ao atualizar status:', error);
+      alert('Erro ao atualizar o status do pagamento.');
+    }
+  };
+  const participantesFiltrados = participantes.filter((p) =>
+    p.IE.toLowerCase().includes(filtroIE.toLowerCase())
+  );
 
+  const getStatusCounts = () => {
+    let pago = 0;
+    let pendente = 0;
+    let N_A = 0;
+
+    participantes.forEach((p) => {
+      if (p.statusPagamento === 'pago') {
+        pago++;
+      } else if (p.statusPagamento === 'pendente') {
+        pendente++;
+      } else {
+        N_A++;
+      }
+    });
+
+    return { pago, pendente, N_A };
+  };
+  const { pago, pendente, N_A } = getStatusCounts();
+
+  
   return (
     <Container>
       <ContentWrapper>
@@ -35,10 +79,27 @@ const ListaParticipantes = () => {
           <Header>
             <Title>HISTORICO DE PAGAMENTOS</Title>
           </Header>
-
+          <FilterWrapper>
+            <label>Filtrar por Instituição Espírita:</label>
+            <input
+              type="text"
+              placeholder="Digite o nome da instituição..."
+              value={filtroIE}
+              onChange={(e) => setFiltroIE(e.target.value)} // Atualiza o filtro
+            />
+          </FilterWrapper>
           {loading ? (
             <p>Carregando participantes...</p>
           ) : (
+
+            <>
+            <StatusCounts>
+            <p>Total de Inscritos: {participantes.length}</p>
+            <p>Total Pagos: {pago}</p>
+            <p>Total Pendentes: {pendente}</p>
+            <p>Total N/A: {N_A}</p>
+          </StatusCounts>
+            
             <TableContainer>
               <Table>
                 <TableHead>
@@ -50,29 +111,43 @@ const ListaParticipantes = () => {
                   </TableRow>
                 </TableHead>
                 <tbody>
-                  {participantes.map((p, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{p.nomeCompleto}</TableCell>
-                      <TableCell>{p.IE}</TableCell>
-                      <TableCell>{p.statusPagamento}</TableCell>
-                      <TableCell>
-                        {p.linkPagamento ? (
-                          <a href={p.linkPagamento} target="_blank" rel="noopener noreferrer">
-                            Acessar
-                          </a>
-                        ) : (
-                          'N/A'
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </tbody>
+  {participantesFiltrados.map((p, index) => (
+    <TableRow key={index}>
+      <TableCell>{p.nomeCompleto}</TableCell>
+      <TableCell>{p.IE}</TableCell>
+      <TableCell>
+        <select
+          value={p.statusPagamento || 'N/A'}
+          onChange={(e) => handleStatusChange(p.id, e.target.value)}
+        >
+          <option value="pendente">Pendente</option>
+          <option value="pago">Pago</option>
+          <option value="N/A">N/A</option>
+        </select>
+      </TableCell>
+      <TableCell>
+        {p.linkPagamento ? (
+          <a href={p.linkPagamento} target="_blank" rel="noopener noreferrer">
+            Acessar
+          </a>
+        ) : (
+          'N/A'
+        )}
+      </TableCell>
+    </TableRow>
+  ))}
+</tbody>
+
               </Table>
             </TableContainer>
+          
+            </>
           )}
+
         </FormCard>
       </ContentWrapper>
     </Container>
+    
   );
 };
 
@@ -196,5 +271,31 @@ const TableCell = styled.td`
 
   @media (max-width: 768px) {
     padding: 0.8rem;
+  }
+`;
+
+const FilterWrapper = styled.div`
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  input {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+`;
+
+const StatusCounts = styled.div`
+  margin-bottom: 1rem;
+  p {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 500;
   }
 `;

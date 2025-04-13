@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
+import { useNavigate, useLocation } from "react-router-dom";
+import  styled, { ThemeProvider } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone, FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
+import { FiClock, FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone , FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ptBR } from "date-fns/locale";
 import axios from 'axios';
-import { ArrowLeft } from "react-feather";
-// Estilos (mantenha os mesmos do seu código original)
+import HeaderMain from './Header'
+import { FaWhatsapp } from "react-icons/fa";
+
 const Container = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(135deg, #003049, #003049, #003049);
-  display: flex;
+  background: ${({ theme }) => theme.background};
+    display: flex;
   justify-content: center;
   padding: 2rem;
   font-family: 'Poppins', sans-serif;
@@ -30,34 +30,27 @@ const FormWrapper = styled.div`
 `;
 
 const FormCard = styled.form`
-  background: rgba(255, 255, 255, 0.95);
+  background:#e7ecef;
   border-radius: 5px;
   padding: 2.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
   @media (max-width: 768px) {
     padding: 1.5rem;
     border-radius: 0rem;
   }
 `;
+const StyledInput = styled.input`
 
-const BackLink = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  transition: opacity 0.3s;
-  cursor: pointer;
-  width: fit-content;
-  margin-top: 1rem;
+width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
 
-  &:hover {
-    opacity: 0.8;
-  }
+    background: #f9f9f9;
+    color: #22223b;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3sease;
 `;
+
 
 const Header = styled.div`
   text-align: center;
@@ -122,20 +115,13 @@ const StyledDatePicker = styled(DatePicker)`
   width: 100%;
   
   .MuiInputBase-root {
-    padding: 1rem;
+
     color: #22223b;
     background: #f9f9f9;
     border-radius: 0.8rem;
+   
     border: 1px solid #ddd;
-    
-    &:hover {
-      border-color: #4a4e69;
-    }
-    
-    &:focus-within {
-      border-color: #4a4e69;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    }
+    font-family: 'Poppins', sans-serif;
   }
 `;
 
@@ -167,6 +153,7 @@ const CheckboxContainer = styled.div`
   align-items: center;
   gap: 0.5rem;
   margin: 2rem 0;
+  justify-content: flex-start; 
 `;
 
 const CheckboxInput = styled.input`
@@ -175,15 +162,85 @@ const CheckboxInput = styled.input`
   accent-color: #4a4e69;
 `;
 
-const CheckboxLabel = styled.label`
+/* const CheckboxLabel = styled.label`
   font-size: 0.9rem;
   color: #22223b;
-`;
+`; */
+const CheckboxWrapper = styled.div`
+  display: inline-block;
+ 
+  padding: 3px;
+  margin: 5px;
+  border-radius: 8px;
+  width: auto;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
 
+  &:hover {
+    border-color: #000;
+  }
+
+  input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+`;
+export const themes = {
+  professional: {
+    background: 'linear-gradient(135deg, #e7ecef, #e7ecef, #e7ecef)',
+    cardBackground: '#e7ecef',
+    textColor: '#22223b',
+    buttonBackground: 'linear-gradient(135deg, #22223b, #22223b)',
+    tableHeaderBackground: '#003049',
+    tableHeaderColor: 'white',
+    tableRowEvenBackground: '#f8f9fa',
+    tableRowHoverBackground: '#f1f3f5',
+    shadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    mobileHeaderHeight: '80px'
+  },
+  minimalista: {
+    background: '#f5f5f5',
+    cardBackground: 'white',
+    textColor: '#333',
+    buttonBackground: '#333',
+    tableHeaderBackground: '#f5f5f5',
+    tableHeaderColor: '#333',
+    tableRowEvenBackground: '#fafafa',
+    tableRowHoverBackground: '#e0e0e0',
+    shadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+    mobileHeaderHeight: '80px'
+  },
+};
+
+const CheckboxLabel = styled.label`
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #0d1b2a;
+  }
+
+  input:checked {
+    background-color: #0d1b2a;
+    border-color: #0d1b2a;
+  }
+`;const CheckboxesContainer = styled.div`
+border: 1px solid #ddd;
+
+border-radius: 5px;
+background-color: #fff;
+
+min-height: 100px;
+flex-wrap: wrap;
+
+`;
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #003049, #003049);
+  background: #0d1b2a;
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -196,7 +253,6 @@ const SubmitButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-
   &:hover {
     transform: translateY(-2px);
     opacity: 0.9;
@@ -216,7 +272,7 @@ const SubmitButton = styled.button`
     to { transform: rotate(360deg); }
   }
 `;
-const Atualizacao = () => {
+const Formulario = () => {
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const navigate = useNavigate();
@@ -241,26 +297,40 @@ const Atualizacao = () => {
     logradouro: '',
     numero: '',
     complemento: '',
-
     medicacao: '',
     alergia: '',
     outrasInformacoes: '',
     IE: '',
     vegetariano: '',
     nomeSocial: '',
-
+    outroGenero: '',
+    otherInstitution: '',
+    primeiraComejaca: false,
+  
+    // ✅ Campos de Deficiência
+    deficienciaAuditiva: false,
+    deficienciaAutismo: false,
+    deficienciaIntelectual: false,
+    deficienciaParalisiaCerebral: false,
+    deficienciaVisual: false,
+    deficienciaFisica: false,
+    deficienciaOutra: false,
+    deficienciaOutraDescricao: '',
   });
+  
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
   const [institutions, setInstitutions] = useState([]);
   const [isMinor, setIsMinor] = useState(false);
+  const [theme, setTheme] = useState(themes.professional);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.log("Token não encontrado, redirecionando para /entrar");
-      navigate("/entrar");
+      navigate("/painel");
       return;
     }
 
@@ -295,32 +365,31 @@ const Atualizacao = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
     console.log(`Campo alterado: ${name} = ${type === 'checkbox' ? checked : value}`);
   
     let formattedValue = value;
   
-    // Remover caracteres não numéricos apenas se o campo for CPF, RG ou telefone
     if (name === "documentoResponsavel" || name === "telefone" || name === "telefoneResponsavel") {
-      // Limita caracteres não numéricos
+
       formattedValue = value.replace(/\D/g, "");
     }
   
-    // Se o campo for telefone ou telefoneResponsavel, formatar
+  
     if (name === "telefone" || name === "telefoneResponsavel") {
-      formattedValue = formatPhone(value); // Certifique-se de que formatPhone esteja corretamente implementada
+      formattedValue = formatPhone(value); 
     }
   
-    // Formatar CPF ou RG para documentoResponsavel
     if (name === "documentoResponsavel") {
       if (formattedValue.length === 11) {
-        // Aplicar máscara de CPF (XXX.XXX.XXX-XX)
         formattedValue = formattedValue.replace(
           /(\d{3})(\d{3})(\d{3})(\d{2})/,
           "$1.$2.$3-$4"
         );
       } else if (formattedValue.length >= 9 && formattedValue.length <= 10) {
-        // Aplicar máscara de RG (XX.XXX.XXX-XX)
         formattedValue = formattedValue.replace(
           /(\d{2})(\d{3})(\d{3})(\d{2})?/,
           (match, p1, p2, p3, p4) => {
@@ -329,20 +398,20 @@ const Atualizacao = () => {
         );
       }
   
-      // Limitar o tamanho do documento (não deve passar de 14 caracteres formatados)
+     
       if (formattedValue.replace(/\D/g, "").length > 11) {
-        formattedValue = formattedValue.substring(0, 14); // Máximo de caracteres visíveis (CPF ou RG)
+        formattedValue = formattedValue.substring(0, 14); 
       }
     }
   
-    // Atualizar o estado com o valor formatado
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : formattedValue,
     }));
   };
   
-  
+  const today = new Date();
   
 
   const handleDateChange = (date) => {
@@ -369,7 +438,7 @@ const Atualizacao = () => {
       const token = localStorage.getItem("token");
       console.log("Token JWT encontrado:", token);
 
-    // Validação da data de nascimento
+
     const dataNascimento = new Date(formData.dataNascimento);
     if (isNaN(dataNascimento.getTime())) {
       console.error("Data de nascimento inválida:", formData.dataNascimento);
@@ -384,7 +453,10 @@ const Atualizacao = () => {
         telefone: formData.telefone.replace(/\D/g, ''),
         documentoResponsavel: formData.documentoResponsavel?.replace(/\D/g, ''),
         telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, ''),
-        cep: formData.cep.replace(/\D/g, '')
+        cep: formData.cep.replace(/\D/g, ''),
+        id: formData.id,
+        otherInstitution: formData.otherInstitution,
+        primeiraComejaca: formData.primeiraComejaca
       };
 
       console.log("Payload preparado para envio:", payload);
@@ -399,13 +471,20 @@ const Atualizacao = () => {
       console.log("Resposta do backend:", response.data);
 
       if (response.data.success) {
-        console.log("Inscrição salva com sucesso, redirecionando para /confirmacao");
-        navigate('/confirmacao', { state: response.data });
+        console.log("Inscrição salva com sucesso, redirecionando...");
+        navigate('/painel');
       }
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
       console.log("Detalhes do erro:", error.response?.data);
-      setErrors(error.response?.data.details || [{ message: 'Erro ao salvar inscrição' }]);
+      const detalhes = error.response?.data.details;
+
+ 
+      if (Array.isArray(detalhes)) {
+        setErrors(detalhes);
+      } else {
+        setErrors([{ message: detalhes || 'Erro ao salvar inscrição' }]);
+      }
     } finally {
       console.log("Finalizando processo de envio");
       setIsSubmitting(false);
@@ -454,9 +533,12 @@ const Atualizacao = () => {
     }
   };
 
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
-      <Container>
+         
+    <ThemeProvider theme={theme}>      <Container>
+     
         <FormWrapper>
    
 
@@ -495,7 +577,7 @@ const Atualizacao = () => {
                   placeholder="Digite seu nome social"
                   value={formData.nomeSocial}
                   onChange={handleChange}
-                  required
+                  requird
                 />
               </InputGroup>
 
@@ -506,8 +588,13 @@ const Atualizacao = () => {
                   value={formData.dataNascimento}
                   onChange={handleDateChange}
                   format="dd/MM/yyyy"
-                  
+                  maxDate={today}
                   required
+                  style={{
+                    border: '1px solid black',  // Borda preta de 1px
+                    padding: '10px',
+                    fontSize: '16px',
+                    borderRadius: '4px',  }}// Borda arredondada, caso queira
                 />
               </InputGroup>
 
@@ -519,6 +606,7 @@ const Atualizacao = () => {
                       name="nomeCompletoResponsavel"
                       value={formData.nomeCompletoResponsavel}
                       onChange={handleChange}
+                      placeholder="Digite seu nome completo do responsável"
                       
                     />
                   </InputGroup>
@@ -552,7 +640,7 @@ const Atualizacao = () => {
               )}
 
               <InputGroup>
-                <InputLabel><FiUser /> Sexo *</InputLabel>
+                <InputLabel><FiUser /> Gênero *</InputLabel>
                 <Select
                   name="sexo"
                   value={formData.sexo}
@@ -562,11 +650,26 @@ const Atualizacao = () => {
                   <option value="">Selecione</option>
                   <option value="Masculino">Masculino</option>
                   <option value="Feminino">Feminino</option>
+                  <option value="prefironaoresponder">Prefiro não responder</option>
+                  <option value="outro">Outro</option>
+              
                 </Select>
               </InputGroup>
-
+     {formData.sexo === "outro" && (
+        <InputGroup>
+          <InputLabel>Especifique:</InputLabel>
+          <InputField
+            type="text"
+            name="outroGenero"
+            value={formData.outroGenero}
+            placeholder="Digite seu gênero"
+            onChange={handleChange}
+            required
+          />
+        </InputGroup>
+      )}
               <InputGroup>
-                <InputLabel><FiPhone /> Telefone *</InputLabel>
+                <InputLabel><FaWhatsapp /> Telefone (Whats App) *</InputLabel>
                 <InputField
          name="telefone"
          value={formData.telefone}
@@ -589,7 +692,7 @@ const Atualizacao = () => {
                 />
               </InputGroup>
 
-              <InputGroup>
+           {/*    <InputGroup>
                 <InputLabel><FiShoppingBag /> Deseja camisa? </InputLabel>
                 <CheckboxContainer>
                   <CheckboxInput
@@ -598,9 +701,9 @@ const Atualizacao = () => {
                     checked={formData.camisa}
                     onChange={handleChange}
                   />
-                  <CheckboxLabel>Sim, desejo comprar a camisa</CheckboxLabel>
+                  <CheckboxLabel>Sim, desejo comprar a camisa - R$ 20,00</CheckboxLabel>
                 </CheckboxContainer>
-              </InputGroup>
+              </InputGroup> */}
 
               {formData.camisa && (
                 <InputGroup>
@@ -645,13 +748,18 @@ const Atualizacao = () => {
                     
                   >
                     <option value="">Selecione</option>
-                    <option value="Recepcao">Recepção</option>
-                    <option value="Logistica">Logística</option>
-                    <option value="Alimentacao">Alimentação</option>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Atendimento Fraterno">Atendimento Fraterno</option>
+                    <option value="Coordenação Geral">Coordenação Geral</option>
+                    <option value="Divulgação">Divulgação</option>
+                    <option value="Estudos Doutrinários">Estudos Doutrinários</option>
+                    <option value="Multimeios">Multimeios</option>
+                    <option value="Secretaria">Secretaria</option>
+                    <option value="Serviços Gerais">Serviços Gerais</option>
+                    <option value="Recepção">Recepção</option>
                   </Select>
                 </InputGroup>
               )}
-
               {/* Endereço */}
               <InputGroup>
                 <InputLabel><FiMapPin /> CEP *</InputLabel>
@@ -739,9 +847,38 @@ const Atualizacao = () => {
                   <option value="">Selecione</option>
                   {institutions.map(inst => (
                     <option key={inst.id} value={inst.nome}>{inst.nome}</option>
+                    
                   ))}
+                      <option value="outro">Outro</option>
                 </Select>
               </InputGroup>
+
+              {formData.IE === 'outro' && (
+        <InputGroup>
+          <InputLabel>Nome da Instituição</InputLabel>
+          <InputField
+            type="text"
+            name="otherInstitution"
+            value={formData.otherInstitution}
+            onChange={handleChange}
+            placeholder="Digite o nome da instituição"
+            required
+          />
+        </InputGroup>
+      )}
+              <InputGroup>
+  <InputLabel><FiClock /> É sua primeira COMEJACA? *</InputLabel>
+  <CheckboxContainer>
+    <CheckboxInput
+      type="checkbox"
+      name="primeiraComejaca"
+      checked={formData.primeiraComejaca}
+      onChange={handleChange}
+    />
+    <CheckboxLabel>Sim, esta é minha primeira COMEJACA.</CheckboxLabel>
+  </CheckboxContainer>
+</InputGroup>
+
               <InputGroup>
                 <InputLabel>
                   <FiInfo /> Vegetarianismo *
@@ -752,13 +889,15 @@ const Atualizacao = () => {
                   onChange={handleChange}
                   required>
                   <option value="">Faz dieta vegetariana?</option>
-                  <option value="Sim">Sim</option>
                   <option value="Não">Não</option>
+                  <option value="Vegetariano">vegetariano</option>
+                  <option value="Vegano">Vegano</option>
+                 
                 </Select>
               </InputGroup>
               {/* Informações Adicionais */}
               <InputGroup>
-                <InputLabel><FiInfo /> Alergias</InputLabel>
+                <InputLabel><FiInfo /> Possui alguma alergia?</InputLabel>
                 <TextArea
                   name="alergia"
                   placeholder="Descreva suas alergias."
@@ -776,12 +915,118 @@ const Atualizacao = () => {
                   onChange={handleChange}
                 />
               </InputGroup>
+              <InputGroup>
+  <InputLabel><FiInfo /> Possui alguma deficiência?</InputLabel>
+  <CheckboxesContainer>
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaAuditiva"
+          checked={formData.deficienciaAuditiva}
+          onChange={handleChange}
+        />
+        Auditiva
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaAutismo"
+          checked={formData.deficienciaAutismo}
+          onChange={handleChange}
+        />
+        Autismo
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaIntelectual"
+          checked={formData.deficienciaIntelectual}
+          onChange={handleChange}
+        />
+        Intelectual
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaParalisiaCerebral"
+          checked={formData.deficienciaParalisiaCerebral}
+          onChange={handleChange}
+        />
+        Paralisia Cerebral
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaVisual"
+          checked={formData.deficienciaVisual}
+          onChange={handleChange}
+        />
+        Visual
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaFisica"
+          checked={formData.deficienciaFisica}
+          onChange={handleChange}
+        />
+        Física
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    {/* Opção "Outra" */}
+    <CheckboxWrapper>
+      <CheckboxLabel>
+        <input
+          type="checkbox"
+          name="deficienciaOutra"
+          checked={formData.deficienciaOutra}
+          onChange={handleChange}
+        />
+        Outra
+      </CheckboxLabel>
+    </CheckboxWrapper>
+
+    {/* Input aparece se "Outra" for selecionada */}
+    {formData.deficienciaOutra && (
+      <InputGroup>
+<StyledInput
+  type="text"
+  name="deficienciaOutraDescricao"
+  value={formData.deficienciaOutraDescricao}
+  onChange={handleChange}
+  placeholder="Informe a deficiência"
+
+/>
+      </InputGroup>
+    )}
+  </CheckboxesContainer>
+</InputGroup>
+
 
               <InputGroup>
                 <InputLabel><FiInfo /> Observações</InputLabel>
                 <TextArea
                   name="outrasInformacoes"
-                  placeholder="Informações adicionais sobre esta inscrição."
+                  placeholder="Deseja registrar alguma informação a
+relacionada a sua saúde física,
+mental, emocional?"
                   value={formData.outrasInformacoes}
                   onChange={handleChange}
                 />
@@ -800,6 +1045,7 @@ const Atualizacao = () => {
 
                 </CheckboxLabel>
               </CheckboxContainer>
+              
             <SubmitButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
@@ -809,15 +1055,16 @@ const Atualizacao = () => {
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                     <FiFileText />
-                    Atualizar inscrição
+                    Enviar Inscrição
                   </div>
                 )}
               </SubmitButton>
           </FormCard>
         </FormWrapper>
       </Container>
+      </ThemeProvider>
     </LocalizationProvider>
   );
 };
 
-export default Atualizacao;
+export default Formulario;

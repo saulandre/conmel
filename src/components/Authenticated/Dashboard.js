@@ -369,7 +369,6 @@ const Dashboard = () => {
 
 
   if (storedUser) {
-    console.log('Role do usuário:', storedUser.role); // 👈 Aqui está o console.log
   }
 
   if (storedUser?.role === 'admin') {
@@ -396,10 +395,9 @@ const handlePagamento = async (item) => {
     }
 
   } catch (error) {
-    console.error('Erro ao gerar link de pagamento:', error);
     alert('Erro ao processar pagamento.');
   } finally {
-    setLoadingItemId(null); // encerra o loading
+    setLoadingItemId(null); 
   }
 };
 
@@ -410,27 +408,23 @@ const handlePagamento = async (item) => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        console.log(token)
         const response = await axios.get(`${API_URL}/api/auth/obterinscricoes`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
     
-        console.log("Resposta da API:", response.data); // Depuração
         const role =  localStorage.getItem('role');
         if (role === 'admin') {
           setIsAdmin(true);
         }
-        // Verifique se a resposta tem a propriedade "data" que é um array
         if (!Array.isArray(response.data.data)) {
           throw new Error('Resposta da API não contém um array válido');
         }
     
-        setInscricoes(response.data.data); // Atualiza o estado com o array correto
+        setInscricoes(response.data.data); 
         setError(null);
       } catch (error) {
-        console.error('Erro ao buscar inscrições:', error);
         setError(error.response?.data?.error || 'Erro ao carregar inscrições');
         
         if (error.response?.status === 401) {
@@ -474,7 +468,7 @@ const handlePagamento = async (item) => {
 
   const menu = document.querySelector('.mobile-menu');
   const button = document.querySelector('.menu-button');
-  // Adicione este useEffect no componente Dashboard
+ 
 useEffect(() => {
   const handleClickOutside = (e) => {
  
@@ -490,63 +484,11 @@ useEffect(() => {
   return (
     <ThemeProvider theme={themes[theme]}>
       <Container>
-       {/*  <FloatingActions $isMenuOpen={isMenuOpen}>
-          <button onClick={toggleTheme} title="Alternar tema">
-            <FiMoon size={20} />  
-          </button>
-          <button onClick={handleLogout} title="Sair">
-            <FiLogOut size={20} />
-          </button>
-        </FloatingActions> */}
+
 
         <ContentWrapper>
           <FormCard>
-          {/*   <Header>
-              <Title>INSCRIÇÕES 2025</Title>
-              
-              <MobileMenuWrapper>
-                <MobileMenuButton onClick={toggleMenu}   className="menu-button">
-                  <FiMenu size={24} />
-                </MobileMenuButton>
-              </MobileMenuWrapper>
-
-              <ButtonContainer>
-                <ActionButton onClick={() => navigate('/inscrever')}>
-                  <FiPlus size={18} /> Inscrever
-                </ActionButton>
-                {isAdmin && (
-                <ActionButton onClick={() => navigate('/instituicao')}>
-                  <FiUpload size={18} /> IE
-                </ActionButton>
-                     )}
-                <ActionButton>
-                  <FiDownload size={18} /> Materiais
-                </ActionButton>
-                <ActionButton onClick={() => navigate('/perfil')}>
-                  <FiUser size={18} /> Perfil
-                </ActionButton>
-              </ButtonContainer>
-            </Header>
-
-            <MobileMenu $isOpen={isMenuOpen}   className="mobile-menu" >
-              <MobileMenuItem onClick={() => { navigate('/inscrever'); closeMenu(); }}>
-                <FiPlus size={18} /> Inscrever
-              </MobileMenuItem>
-              <MobileMenuItem onClick={() => { navigate('/perfil'); closeMenu(); }}>
-                <FiUser size={18} /> Perfil
-              </MobileMenuItem>
-              <MobileMenuItem>
-                <FiDownload size={18} /> Materiais
-              </MobileMenuItem>
-                   {isAdmin && (
-                
-             
-
-              <MobileMenuItem onClick={() => { navigate('/instituicao'); closeMenu(); }}>
-                <FiUpload size={18} /> IE
-              </MobileMenuItem>
-                   )}
-            </MobileMenu> */}
+   
 
             <SearchBoxContainer>
               <SearchIcon size={20} />

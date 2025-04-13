@@ -37,7 +37,8 @@ const ListaParticipantes = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-  
+      console.log('Dados recebidos da API:', response.data);
+
       setParticipantes((prev) =>
         prev.map((p) =>
           p.id === participanteId ? { ...p, statusPagamento: novoStatus } : p

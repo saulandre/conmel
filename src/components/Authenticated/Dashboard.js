@@ -587,7 +587,7 @@ useEffect(() => {
                     </tr>
                   </TableHead>
                   <tbody>
-                  {filteredData.map((item, index) => (
+                  {filteredData.map((item, index) => ( 
  <TableRow key={item.id}>
  <TableCell data-label="#">{index + 1}</TableCell>
  <TableCell data-label="Nome Completo">{item.nomeCompleto}</TableCell>

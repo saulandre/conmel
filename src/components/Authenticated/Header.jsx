@@ -328,7 +328,7 @@ const HeaderMain = ({className }) => {
           )}
          {pathname !== '/status' && isAdmin && (
             <Button onClick={() => navigate('/pagamentos')}>
-              <FiUpload size={20} /> Pagamentos
+              <FiUpload size={20} /> Financeiro
             </Button>
           )}
         </>
@@ -380,7 +380,7 @@ const HeaderMain = ({className }) => {
           )}
          {pathname !== '/status' && isAdmin && (
             <Button onClick={() => navigate('/pagamentos')}>
-              <FiUpload size={20} /> Pagamentos
+              <FiUpload size={20} /> Financeiro
             </Button>
           )}
                        </>

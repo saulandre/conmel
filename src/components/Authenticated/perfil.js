@@ -366,7 +366,6 @@ const Profile = () => {
   const handleSave = (e) => {
     e.preventDefault();
     // Lógica para salvar os dados alterados
-    console.log("Dados salvos");
   };
   
   localStorage.setItem('isVerified', 'true');

@@ -243,7 +243,6 @@ const fetchUserData = async (id) => {
       });
       return response.data;
     } catch (error) {
-      console.error("Erro ao buscar dados:", error);
       return null;
     }
   };
@@ -291,7 +290,7 @@ const getToken = () => {
           const response = await fetchUserData(id);
           setParticipant(response?.data || null);
         } catch (error) {
-          console.error("Erro ao buscar dados:", error);
+
         } finally {
           setLoading(false);
         }

@@ -4,8 +4,8 @@ import styled, { ThemeProvider } from 'styled-components';
 import { FiUser, FiMail, FiPhone, FiLock, FiChevronLeft } from "react-icons/fi";
 import InputMask from "react-input-mask";
 import { useEffect } from "react";
-import { FiLogOut, FiMoon, FiMenu, FiPlus, FiUpload, FiDownload, FiMobileMenu } from "react-icons/fi";
-import HeaderMain from "./Header";
+import axios from 'axios';
+
 // Estilos
 const Container = styled.div`
   min-height: 100vh;
@@ -353,6 +353,8 @@ const CheckboxLabel = styled.label`
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [nomeCompleto, setNomeCompleto] = useState('');
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("usuario@exemplo.com"); // E-mail fixo
@@ -367,6 +369,72 @@ const Profile = () => {
     e.preventDefault();
     // Lógica para salvar os dados alterados
   };
+  
+  useEffect(() => {
+    const nome = localStorage.getItem('nome');
+    const email = localStorage.getItem('email');
+  
+    if (nome) {
+      setNomeCompleto(nome);
+    }
+  
+    if (email) {
+      setEmail(email);
+    }
+  }, []);
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+  
+    if (newPassword !== confirmPassword) {
+      return alert('A nova senha e a confirmação não coincidem.');
+    }
+  
+    try {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+  
+if (userId) {
+  // Agora você pode usar o userId para acessar as informações do usuário, sem usar User.findById
+  console.log('Usuário logado com ID:', userId);
+} else {
+  console.log('Usuário não está logado');
+}
+      const response = await axios.put(
+        `${API_URL}/api/auth/atualizarPerfil/${userId}`,
+        {
+          name: nomeCompleto,
+          phone,
+          currentPassword,
+          newPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      // Atualiza localStorage com o novo nome (se quiser refletir no sistema)
+      localStorage.setItem('nome', nomeCompleto);
+  
+      alert('Perfil atualizado com sucesso!');
+      
+      // Opcional: resetar os campos de senha
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+  
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.error || 'Erro ao atualizar perfil.');
+    }
+  };
+  
+  const CustomMaskedInput = React.forwardRef((props, ref) => (
+    <InputMask {...props} ref={ref}>
+      {(inputProps) => <input {...inputProps} />}
+    </InputMask>
+  ));
   
   localStorage.setItem('isVerified', 'true');
 
@@ -383,6 +451,7 @@ const Profile = () => {
     
 
         <FormCard onSubmit={handleSave}>
+        <form onSubmit={handleUpdateProfile}>
           <HeaderDuo>
             <Title>Perfil</Title>
             <p>Atualize suas informações</p>
@@ -391,23 +460,32 @@ const Profile = () => {
           <FormGrid>
             {/* Campos de Perfil */}
             <InputGroup>
-              <InputLabel>
-                <FiUser /> Nome Completo *
-              </InputLabel>
-              <InputField type="text" placeholder="Nome completo" required />
-            </InputGroup>
+      <InputLabel htmlFor="nomeCompleto">
+        <FiUser /> Nome Completo *
+      </InputLabel>
+      <InputField
+        id="nomeCompleto"
+        type="text"
+        placeholder="Nome completo"
+        value={nomeCompleto}
+        onChange={(e) => setNomeCompleto(e.target.value)}
+        required
+      />
+    </InputGroup>
 
-            <InputGroup>
-              <InputLabel>
-                <FiMail /> E-mail *
-              </InputLabel>
-              <InputField 
-                type="email" 
-                value={email} 
-                disabled
-              />
-            </InputGroup>
-
+    <InputGroup>
+  <InputLabel>
+    <FiMail /> E-mail *
+  </InputLabel>
+  <InputField
+    type="email"
+    disabled
+    placeholder="E-mail"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    required
+  />
+</InputGroup>
             <InputGroup>
               <InputLabel>
                 <FiPhone /> Telefone
@@ -415,6 +493,7 @@ const Profile = () => {
               <InputMask
                 mask="(99) 99999-9999"
                 value={phone}
+                placeholder="Informe seu telefone"
                 onChange={(e) => setPhone(e.target.value)}
               >
                 {(inputProps) => <InputField {...inputProps} />}
@@ -484,7 +563,7 @@ const Profile = () => {
           </CheckboxGroup> */}
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "25px" }}>
-  <SubmitButton type="submit">Salvar</SubmitButton>
+  <SubmitButton onClick={handleUpdateProfile} type="submit">Atualizar</SubmitButton>
   <SubmitButton 
     type="button" 
     onClick={() => navigate(-1)} 
@@ -493,7 +572,9 @@ const Profile = () => {
     Voltar
   </SubmitButton>
 </div>
+</form>
 </FormCard>
+
         </FormWrapper>
 
   

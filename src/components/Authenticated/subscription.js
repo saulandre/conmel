@@ -329,23 +329,18 @@ const Formulario = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.log("Token não encontrado, redirecionando para /entrar");
       navigate("/painel");
       return;
     }
 
     const fetchInstitutions = async () => {
       try {
-        console.log("Buscando instituições...");
         const response = await axios.get(`${API_URL}/api/auth/instituicoes`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        console.log("Instituições carregadas:", response.data);
         setInstitutions(response.data);
       } catch (error) {
-        console.error('Erro ao carregar instituições:', error);
         if (error.response?.status === 401) {
-          console.log("Token inválido ou expirado, redirecionando para /entrar");
           navigate("/entrar");
         }
       }
@@ -369,7 +364,7 @@ const Formulario = () => {
       ...prevData,
       [name]: value,
     }));
-    console.log(`Campo alterado: ${name} = ${type === 'checkbox' ? checked : value}`);
+   
   
     let formattedValue = value;
   
@@ -415,7 +410,6 @@ const Formulario = () => {
   
 
   const handleDateChange = (date) => {
-    console.log("Data de nascimento selecionada:", date);
     setFormData(prev => ({
       ...prev,
       dataNascimento: date,
@@ -430,18 +424,15 @@ const Formulario = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Iniciando envio do formulário...");
     setIsSubmitting(true);
     setErrors([]);
 
     try {
       const token = localStorage.getItem("token");
-      console.log("Token JWT encontrado:", token);
 
 
     const dataNascimento = new Date(formData.dataNascimento);
     if (isNaN(dataNascimento.getTime())) {
-      console.error("Data de nascimento inválida:", formData.dataNascimento);
       setErrors([{ message: "Data de nascimento inválida." }]);
       return;
     }
@@ -459,7 +450,7 @@ const Formulario = () => {
         primeiraComejaca: formData.primeiraComejaca
       };
 
-      console.log("Payload preparado para envio:", payload);
+    
 
       const response = await axios.post(`${API_URL}/api/auth/inscrever`, payload, {
         headers: {
@@ -468,15 +459,12 @@ const Formulario = () => {
         }
       });
 
-      console.log("Resposta do backend:", response.data);
 
       if (response.data.success) {
-        console.log("Inscrição salva com sucesso, redirecionando...");
         navigate('/painel');
       }
     } catch (error) {
-      console.error("Erro ao enviar formulário:", error);
-      console.log("Detalhes do erro:", error.response?.data);
+
       const detalhes = error.response?.data.details;
 
  
@@ -486,7 +474,6 @@ const Formulario = () => {
         setErrors([{ message: detalhes || 'Erro ao salvar inscrição' }]);
       }
     } finally {
-      console.log("Finalizando processo de envio");
       setIsSubmitting(false);
     }
   };
@@ -528,7 +515,6 @@ const Formulario = () => {
           alert("CEP não encontrado");
         }
       } catch (error) {
-        console.error("Erro ao buscar CEP", error);
       }
     }
   };

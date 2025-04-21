@@ -542,7 +542,7 @@ useEffect(() => {
  </TableCell>
  <TableCell data-label="Ações">
    <ButtonGroup>
-     <SmallButton onClick={() => navigate(`/edit/${item.id}`)}>
+     <SmallButton onClick={() => navigate(`/atualizar/${item.id}`)}>
        <FiEdit size={14} /> Editar
      </SmallButton>
      <SmallButton onClick={() => navigate(`/imprimir/${item.id}`)}>

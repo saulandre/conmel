@@ -333,12 +333,10 @@ const Login = () => {
   }, [formData.email, formData.password]);
   
   const handleSubmit = async () => {
-    console.log("🔵 Tentando login automático...");
   
     try {
       setLoading(true);
       setError(null);
-      console.log("🚀 Enviando requisição automática para login...");
       localStorage.clear();
   
       const response = await axios.post(`${API_URL}/api/auth/entrar`, formData);

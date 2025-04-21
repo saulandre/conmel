@@ -356,8 +356,8 @@ const Profile = () => {
   const [nomeCompleto, setNomeCompleto] = useState('');
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("usuario@exemplo.com"); // E-mail fixo
+  const [telefone, setTelefone] = useState("");  // Definindo o estado para o telefone
+  const [email, setEmail] = useState("usuario@exemplo.com"); 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -392,20 +392,25 @@ const Profile = () => {
     try {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
+  console.log(userId)
+      if (!userId || !token) {
+        return alert('Usuário não autenticado.');
+      }
   
-if (userId) {
-  // Agora você pode usar o userId para acessar as informações do usuário, sem usar User.findById
-  console.log('Usuário logado com ID:', userId);
-} else {
-  console.log('Usuário não está logado');
-}
+      console.log('Usuário logado com ID:', userId);
+      console.log('Token:', token);
+      console.log('ID do usuário:', userId, 'Tipo do ID:', typeof userId);
+      const userIdInt = parseInt(userId, 10);
+
       const response = await axios.put(
-        `${API_URL}/api/auth/atualizarPerfil/${userId}`,
+        `${API_URL}/api/auth/atualizarPerfil`,
         {
-          name: nomeCompleto,
-          phone,
-          currentPassword,
-          newPassword
+          userIdInt,
+          nome: nomeCompleto,
+          email,
+          telefone,
+    
+          senha: newPassword || null, // só envia se tiver nova senha
         },
         {
           headers: {
@@ -418,17 +423,17 @@ if (userId) {
       localStorage.setItem('nome', nomeCompleto);
   
       alert('Perfil atualizado com sucesso!');
-      
+  
       // Opcional: resetar os campos de senha
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-  
     } catch (error) {
-      console.error(error);
+      console.error('Erro ao atualizar perfil:', error);
       alert(error.response?.data?.error || 'Erro ao atualizar perfil.');
     }
   };
+  
   
   const CustomMaskedInput = React.forwardRef((props, ref) => (
     <InputMask {...props} ref={ref}>
@@ -492,9 +497,9 @@ if (userId) {
               </InputLabel>
               <InputMask
                 mask="(99) 99999-9999"
-                value={phone}
+                value={telefone}
                 placeholder="Informe seu telefone"
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => setTelefone(e.target.value)}
               >
                 {(inputProps) => <InputField {...inputProps} />}
               </InputMask>
@@ -563,7 +568,7 @@ if (userId) {
           </CheckboxGroup> */}
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "25px" }}>
-  <SubmitButton onClick={handleUpdateProfile} type="submit">Atualizar</SubmitButton>
+  <SubmitButton onClick={handleUpdateProfile}>Salvar informações</SubmitButton>
   <SubmitButton 
     type="button" 
     onClick={() => navigate(-1)} 

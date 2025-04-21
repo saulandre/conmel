@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import  styled, { ThemeProvider } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -272,11 +272,11 @@ const SubmitButton = styled.button`
     to { transform: rotate(360deg); }
   }
 `;
-const Formulario = () => {
+const Atualizar = () => {
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const navigate = useNavigate();
-
+  const { id } = useParams(); 
   const [formData, setFormData] = useState({
     nomeCompleto: '',
     dataNascimento: '',
@@ -318,7 +318,38 @@ const Formulario = () => {
     deficienciaOutraDescricao: '',
   });
   
+  useEffect(() => {
+    const fetchDadosParticipante = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${API_URL}/api/auth/print/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
 
+        const dataNascimentoFormatada = response.data.data.dataNascimento 
+        ? new Date(response.data.data.dataNascimento) 
+        : null;
+  
+        // Preenche o formData com os dados recebidos
+        setFormData(prev => ({
+          ...prev,
+          ...response.data.data, // Agora estamos acessando o 'data' da resposta
+          dataNascimento: dataNascimentoFormatada,
+        }));
+      } catch (error) {
+      
+        setErrors([{ message: "Erro ao carregar dados do participante." }]);
+      }
+    };
+  
+    if (id) {
+      fetchDadosParticipante();
+    }
+  }, [id]);
+  
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -329,23 +360,18 @@ const Formulario = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.log("Token não encontrado, redirecionando para /entrar");
-      navigate("/painel");
+      navigate("/login");
       return;
     }
 
     const fetchInstitutions = async () => {
       try {
-        console.log("Buscando instituições...");
         const response = await axios.get(`${API_URL}/api/auth/instituicoes`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        console.log("Instituições carregadas:", response.data);
         setInstitutions(response.data);
       } catch (error) {
-        console.error('Erro ao carregar instituições:', error);
         if (error.response?.status === 401) {
-          console.log("Token inválido ou expirado, redirecionando para /entrar");
           navigate("/entrar");
         }
       }
@@ -353,7 +379,9 @@ const Formulario = () => {
 
     fetchInstitutions();
   }, [navigate, API_URL]);
+  useEffect(() => {
 
+  }, [formData]);
   const calculateAge = (date) => {
     const today = new Date();
     const birthDate = new Date(date);
@@ -369,7 +397,7 @@ const Formulario = () => {
       ...prevData,
       [name]: value,
     }));
-    console.log(`Campo alterado: ${name} = ${type === 'checkbox' ? checked : value}`);
+   
   
     let formattedValue = value;
   
@@ -415,7 +443,6 @@ const Formulario = () => {
   
 
   const handleDateChange = (date) => {
-    console.log("Data de nascimento selecionada:", date);
     setFormData(prev => ({
       ...prev,
       dataNascimento: date,
@@ -428,68 +455,89 @@ const Formulario = () => {
     setIsMinor(calculateAge(date) < 18);
   };
 
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log("Iniciando envio do formulário...");
     setIsSubmitting(true);
     setErrors([]);
-
+  
     try {
       const token = localStorage.getItem("token");
-      console.log("Token JWT encontrado:", token);
-
-
-    const dataNascimento = new Date(formData.dataNascimento);
-    if (isNaN(dataNascimento.getTime())) {
-      console.error("Data de nascimento inválida:", formData.dataNascimento);
-      setErrors([{ message: "Data de nascimento inválida." }]);
-      return;
-    }
-
+  
+      const dataNascimento = new Date(formData.dataNascimento);
+      if (isNaN(dataNascimento.getTime())) {
+        setErrors([{ message: "Data de nascimento inválida." }]);
+        setIsSubmitting(false);
+        return;
+      }
+  
       const payload = {
-        ...formData,
-        comissao: String(formData.comissao), 
-        dataNascimento: dataNascimento.toISOString().split('T')[0],
-        telefone: formData.telefone.replace(/\D/g, ''),
-        documentoResponsavel: formData.documentoResponsavel?.replace(/\D/g, ''),
-        telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, ''),
-        cep: formData.cep.replace(/\D/g, ''),
         id: formData.id,
-        otherInstitution: formData.otherInstitution,
-        primeiraComejaca: formData.primeiraComejaca
+        nomeCompleto: formData.nomeCompleto || "",
+        nomeSocial: formData.nomeSocial || "",
+        dataNascimento: new Date(formData.dataNascimento).toISOString(),
+        sexo: formData.sexo || "",
+        email: formData.email || "",
+        telefone: formData.telefone.replace(/\D/g, ""),
+        tipoParticipacao: formData.tipoParticipacao || "",
+        nomeCompletoResponsavel: formData.nomeCompletoResponsavel || "",
+        documentoResponsavel: formData.documentoResponsavel?.replace(/\D/g, "") || "",
+        telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, "") || "",
+        cep: formData.cep.replace(/\D/g, ""),
+        estado: formData.estado || "",
+        cidade: formData.cidade || "",
+        IE: formData.IE || "",
+        bairro: formData.bairro || "",
+        logradouro: formData.logradouro || "",
+        numero: formData.numero || "",
+        complemento: formData.complemento || "",
+        vegetariano: formData.vegetariano || false,
+        camisa: formData.camisa === "true" || formData.camisa === true,
+        tamanhoCamisa: formData.tamanhoCamisa || "",
+        primeiraComejaca: formData.primeiraComejaca || false,
+        deficienciaAuditiva: formData.deficienciaAuditiva || false,
+        deficienciaAutismo: formData.deficienciaAutismo || false,
+        deficienciaIntelectual: formData.deficienciaIntelectual || false,
+        deficienciaParalisiaCerebral: formData.deficienciaParalisiaCerebral || false,
+        deficienciaVisual: formData.deficienciaVisual || false,
+        deficienciaFisica: formData.deficienciaFisica || false,
+        deficienciaOutra: formData.deficienciaOutra || false,
+        deficienciaOutraDescricao: formData.deficienciaOutraDescricao || "",
+        medicacao: formData.medicacao || "",
+        alergia: formData.alergia || "",
+        outrasInformacoes: formData.outrasInformacoes || "",
+        outroGenero: formData.outroGenero || "",
+        valor: formData.valor || 0,
+        linkPagamento: formData.linkPagamento || "",
+        statusPagamento: formData.statusPagamento || "",
+        otherInstitution: formData.otherInstitution || "",
+        comissao: String(formData.comissao || "")
       };
-
-      console.log("Payload preparado para envio:", payload);
-
-      const response = await axios.post(`${API_URL}/api/auth/inscrever`, payload, {
+  
+      const response = await axios.put(`${API_URL}/api/auth/participante/${formData.id}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-
-      console.log("Resposta do backend:", response.data);
-
-      if (response.data.success) {
-        console.log("Inscrição salva com sucesso, redirecionando...");
+  
+      if (response.status === 200) {
         navigate('/painel');
+      } else {
+        setErrors([{ message: 'Erro ao atualizar inscrição.' }]);
       }
     } catch (error) {
-      console.error("Erro ao enviar formulário:", error);
-      console.log("Detalhes do erro:", error.response?.data);
-      const detalhes = error.response?.data.details;
-
- 
+      const detalhes = error.response?.data?.details;
+  
       if (Array.isArray(detalhes)) {
         setErrors(detalhes);
       } else {
-        setErrors([{ message: detalhes || 'Erro ao salvar inscrição' }]);
+        setErrors([{ message: detalhes || 'Erro ao atualizar inscrição' }]);
       }
     } finally {
-      console.log("Finalizando processo de envio");
       setIsSubmitting(false);
     }
   };
+  
 
   const formatPhone = (value) => {
     if (!value) return "";
@@ -528,7 +576,6 @@ const Formulario = () => {
           alert("CEP não encontrado");
         }
       } catch (error) {
-        console.error("Erro ao buscar CEP", error);
       }
     }
   };
@@ -542,10 +589,10 @@ const Formulario = () => {
         <FormWrapper>
    
 
-          <FormCard onSubmit={handleSubmit}>
+          <FormCard onSubmit={handleUpdate}>
             
             <Header>
-              <Title>FORMULÁRIO DE INSCRIÇÃO 2025</Title>
+              <Title>FORMULÁRIO DE ATUALIZAR INSCRIÇÃO 2025</Title>
               <p style={{ color: '#666' }}>Todos os campos marcados com * são obrigatórios</p>
               {errors.length > 0 && (
                 <div style={{ color: 'red', marginTop: '1rem' }}>
@@ -1055,7 +1102,7 @@ mental, emocional?"
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                     <FiFileText />
-                    Enviar Inscrição
+                    Salvar informações
                   </div>
                 )}
               </SubmitButton>
@@ -1067,4 +1114,4 @@ mental, emocional?"
   );
 };
 
-export default Formulario;
+export default Atualizar;

@@ -15,7 +15,7 @@ export const themes = {
     tableRowEvenBackground: '#f8f9fa',
     tableRowHoverBackground: '#f1f3f5',
     shadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-    mobileHeaderHeight: '160px'
+    mobileHeaderHeight: '5rem'
   },
   minimalista: {
     background: '#f5f5f5',

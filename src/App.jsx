@@ -4,7 +4,7 @@ import Login from './components/Unauthenticated/Login';
 import Register from './components/Unauthenticated/Register';
 import Verify from './components/Authenticated/VerificationCode';
 import InstituicaoEspirita from './components/Authenticated/InstituicaoEspirita';
-import Atualizacao from './components/Authenticated/update';
+import Atualizar from './components/Authenticated/update';
 import Perfil from './components/Authenticated/perfil';
 import Dashboard from './components/Authenticated/Dashboard';
 import GlobalStyle from './styles/globalStyles';
@@ -59,7 +59,7 @@ function App() {
           <AppContent />
         </AuthProvider>
 
-        <ServerStatus lassName="no-print-footer" />
+  {/*       <ServerStatus lassName="no-print-footer" /> */}
 
       </div>
     </>
@@ -80,7 +80,7 @@ function AppContent() {
       {/* Rotas Privadas */}
       <Route path="/verificar" element={<Verify />} />
       <Route path="/instituicao" element={<ProtectedRoute><InstituicaoEspirita /></ProtectedRoute>} />
-      <Route path="/atualizacao" element={<ProtectedRoute><Atualizacao /></ProtectedRoute>} />
+      <Route path="/atualizar/:id" element={<ProtectedRoute><Atualizar /></ProtectedRoute>} />
       <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
       <Route path="/painel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/inscrever" element={<ProtectedRoute><FormularioInscricao /></ProtectedRoute>} />

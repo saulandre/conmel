@@ -474,6 +474,7 @@ const Atualizar = () => {
         id: formData.id,
         nomeCompleto: formData.nomeCompleto || "",
         nomeSocial: formData.nomeSocial || "",
+        nomeCracha: formData.nomeCracha || "",
         dataNascimento: new Date(formData.dataNascimento).toISOString(),
         sexo: formData.sexo || "",
         email: formData.email || "",
@@ -628,7 +629,16 @@ const Atualizar = () => {
                 />
               </InputGroup>
 
-
+  <InputGroup>
+                <InputLabel><FiUser /> Nome no crachá *</InputLabel>
+                <InputField
+                  name="nomeCracha"
+                  placeholder="Digite o nome que aparecerá no crachá"
+                  value={formData.nomeCracha}
+                  onChange={handleChange}
+                  requird
+                />
+              </InputGroup>
               <InputGroup>
                 <InputLabel><FiCalendar /> Data de Nascimento *</InputLabel>
                 <StyledDatePicker
@@ -937,17 +947,17 @@ const Atualizar = () => {
                   required>
                   <option value="">Faz dieta vegetariana?</option>
                   <option value="Não">Não</option>
-                  <option value="Vegetariano">vegetariano</option>
+                  <option value="Vegetariano">Vegetariano</option>
                   <option value="Vegano">Vegano</option>
                  
                 </Select>
               </InputGroup>
               {/* Informações Adicionais */}
               <InputGroup>
-                <InputLabel><FiInfo /> Possui alguma alergia?</InputLabel>
+                <InputLabel><FiInfo /> Possui alguma alergia ou restrições alimentares?</InputLabel>
                 <TextArea
                   name="alergia"
-                  placeholder="Descreva suas alergias."
+                  placeholder="Descreva se há alergias ou restrições alimentares."
                   value={formData.alergia}
                   onChange={handleChange}
                 />

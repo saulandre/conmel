@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import  styled, { ThemeProvider } from "styled-components";
+import  styled, { ThemeProvider, keyframes } from "styled-components";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { FiClock, FiUser, FiMail, FiMapPin, FiCalendar, FiInfo, FiPhone , FiChevronLeft, FiFileText, FiShoppingBag, FiLoader } from "react-icons/fi";
@@ -154,12 +154,15 @@ const CheckboxContainer = styled.div`
   gap: 0.5rem;
   margin: 2rem 0;
   justify-content: flex-start; 
+  margin-top: 1rem;
 `;
 
 const CheckboxInput = styled.input`
   width: 18px;
   height: 18px;
   accent-color: #4a4e69;
+  margin-right: 0.5rem;
+
 `;
 
 /* const CheckboxLabel = styled.label`
@@ -218,6 +221,7 @@ const CheckboxLabel = styled.label`
   cursor: pointer;
   user-select: none;
   transition: color 0.2s ease;
+  
 
   &:hover {
     color: #0d1b2a;
@@ -272,14 +276,271 @@ const SubmitButton = styled.button`
     to { transform: rotate(360deg); }
   }
 `;
+
+
+
+
+// ANIMAÇÃO DE ENTRADA
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 80vw;
+  height:80vh;
+  position: relative;
+  animation: ${({ isVisible }) => (isVisible ? fadeIn : fadeOut)} 0.3s ease forwards;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // espaçamento entre seções principais
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+  }
+
+  ul {
+    margin: 0.5rem 0 1rem 1.5rem;
+    padding-left: 1rem;
+    list-style-type: disc;
+  }
+
+  ul li {
+    margin-bottom: 0.5rem;
+  }
+
+  blockquote {
+    background: #f5f5f5;
+    border-left: 4px solid #ccc;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+`;
+const ModalTitle = styled.h2`
+  text-align: center;
+  margin: 0;
+  padding: 0;
+`;
+
+const ModalSubtitle = styled.h3`
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+`;
+
+// BOTÃO DE FECHAR
+const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ccc;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+`;
+const LinkText = styled.span`
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
+
+
+const PlanoGeralModal = ({ isOpen, onClose }) => {
+  const [visible, setVisible] = useState(isOpen);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setVisible(true);
+    } else {
+      const timeout = setTimeout(() => setVisible(false), 300); // tempo da animação
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen]);
+
+  return (
+    <ModalOverlay isVisible={visible}>
+      {visible && (
+ <ModalContent isVisible={isOpen}>
+ <CloseButton onClick={onClose}>✖</CloseButton>
+
+ <ModalTitle>Plano Geral — XLVI COMEJACA 2025</ModalTitle>
+<ModalSubtitle>Confraternização das Mocidades Espíritas de Jacarepaguá</ModalSubtitle>
+
+
+
+ <section>
+   <h3>1. Dados de Identificação</h3>
+   <p><strong>1.1 Evento:</strong> XLVI COMEJACA – Confraternização das Mocidades Espíritas de Jacarepaguá.</p>
+   <p><strong>1.2 Promoção e Coordenação Geral:</strong> Área de Educação do 20º CEU I e II / CEERJ</p>
+   <p><strong>1.3 Período:</strong> 19 e 20 de julho de 2025</p>
+   <ul>
+     <li><strong>Início:</strong>19/07 (Sábado)</li>
+     <li><strong>Término:</strong>20/07 (Domingo)</li>
+   </ul>
+
+   <p><strong>1.4 Público-Alvo:</strong></p>
+   <ul>
+     <li><strong>Confraternistas:</strong> Jovens espíritas de 11 a 21 anos completos até a data do evento, <b>que estejam frequentando as reuniões do Setor de Juventude</b>, de uma Instituição Espírita com pelo menos 1 ano até a data da inscrição com 70% de presença.</li>
+     <li><strong>Tarefeiros do Bem:</strong>  Espíritas de 22 a 26 anos completos até a data do evento, vinculados ao setor de juventude ou a outro setor de uma Instituição Espírita, pelo período mínimo de 1 ano, com 70% de frequência. Este grupo, além das atividades de estudo, poderá participar de atividades nas Equipes, sendo elas: estágio e trabalho voluntário.</li>
+     <li><strong>Membros de Equipe:</strong> Espíritas a partir de 18 anos até a data do evento, que estejam participando ativamente a pelo menos 1 ano de uma Instituição Espírita. Ao se inscrever, convém que o participante liste as tarefas que tem habilidade para desempenhar, colocando-se à disposição da Coordenação Geral, para aproveitamento em alguma equipe. Para participar da equipe de estudos, é necessário que o participante esteja atuando como evangelizador de algum Ciclo de Juventude ou de infância, se for evangelizar Pequenos Companheiros.</li>
+     <li><strong>Pequenos Companheiros:</strong> Filhos de Membros de Equipe, a partir de 3 a 10 anos de idade, na data do evento, poderão participar, cumprindo a programação previamente elaborada em consonância com o tema central.</li>
+     <li><strong>Pais:</strong> Participantes há mais de 1 ano em uma Instituição Espírita e que sejam Pais ou Responsáveis de um jovem presente na Comejaca.</li>
+     <li><strong>Demais CEUs/CEERJ:</strong> Aceitar-se-ão inscrições de outros CEEU's, desde que atendam todos os critérios estabelecidos para Confraternistas, Tarefeiros do bem, Pais e Membros de equipe. A ficha de inscrição deve ser assinada pelo presidente da Instituição Espírita a que pertença.</li>
+   </ul>
+ </section>
+
+ <section>
+   <h3>2. Objetivo</h3>
+  <p><strong> 2.1	Oferecer aos participantes condições que os levem:</strong></p>
+   <ul>
+     <li>À valorização do estudo sistemático da Doutrina Espírita.</li>
+     <li>À sensibilização para a vivência dos ensinamentos cristãos, consigo mesmo, perante a família, a Instituição Espírita e a sociedade.</li>
+     <li>Fortalecer a unificação do Movimento Espírita local.</li>
+   </ul>
+ <p><strong>  2.2	Intensificar a Unificação do Movimento Espírita da região.</strong></p>
+ </section>
+
+ <section>
+   <h3>3. Metodologias de Ação</h3>
+   <ul>
+     <li>REUNIÕES DE ESTUDO</li>
+     <li>ATIVIDADES COMPLEMENTARES</li>
+     <li>ATIVIDADES DE DESENVOLVIMENTO INTERPESSOAL</li>
+   </ul>
+ </section>
+
+ <section>
+   <h3>4. Tema Central</h3>
+   <blockquote>
+     <p><strong>Mediunidade... precisamos conversar!</strong></p>
+     <footer>“Vossos filhos e vossas filhas profetizarão.” — Atos 2:17</footer>
+   </blockquote>
+ </section>
+
+ <section>
+   <h3>5. Inscrições</h3>
+
+   <p><strong>5.1 PERÍODO DE INSCRIÇÃO:</strong> 13/04/2025 a 15/06/2025 (Período em que o participante deve preencher a ficha e encaminhar ao Dirigente da Área de Educação da sua Instituição Espírita, para que ele possa colher as assinaturas)</p> 
+   <p><strong>5.2 REPASSE DAS FICHAS PARA A COORDENAÇÃO GERAL DO EVENTO:</strong> Até 15/06/2025 (Data limite para que o Dirigente da Área de Educação da sua Instituição Espírita repasse as fichas para a Coordenação Geral do evento)</p>
+   <p><strong>5.3 IMPORTANTE: O representante da Área de Educação da Instituição Espírita deve assegurar que  todos os dados da Ficha de Inscrição estejam preenchidos corretamente, principalmente a data de nascimento.</strong></p>
+
+   <h4>5.4 Investimento</h4>
+   <ul>
+     <li>R$ 60,00 ou mais — Confraternistas, Tarefeiros, Pais e Membros de Equipe</li>
+     <li>R$ 45,00 — Pequenos Companheiros</li>
+   </ul>
+   <p><em>Observação 1:</em> Este investimento destina-se às despesas de alimentação, material do estudo, material de limpeza e a materiais diversos necessários para a realização da Comejaca.
+
+</p>
+   <p><em>Observação 2:</em>  Todos deverão contribuir com a importância acima mencionada até a data limite da inscrição, e qualquer dificuldade deverá ser resolvida pela Instituição Espírita da qual o participante participe, que então repassará para a Coordenação Geral, através de um comunicado por escrito.</p>
+
+   <h4>5.5 DA CONTRIBUIÇÃO:</h4>
+   <p>PIX (E-mail): coordenacaogeral@comejaca.org.br ou através da Agência: 7151 e Conta Poupança: 08882-5, Banco Itaú (341). Favorecido: Vicente Jose L. Crisostomo. O comprovante deverá ser enviado por e-mail: coordenacaogeral@comejaca.org.br com a informação dos beneficiários deste pagamento. As fichas deverão ser entregues à Coordenação Geral até o dia 15 de junho de 2025 na 4ª RGP.</p>
+
+   <h4>5.6 NÃO SERÃO ACEITAS INSCRIÇÕES APÓS O DIA 15/06/2025, E NEM SERÃO FEITAS INSCRIÇÕES NO LOCAL DO EVENTO. </h4>
+  
+   <h4>5.7 A INSCRIÇÃO É PESSOAL E INTRANSFERÍVEL, NÃO SENDO PERMITIDAS SUBSTITUIÇÕES. </h4>
+
+   <h4>5.8 CONFIRMAÇÃO: </h4>
+
+   <p><strong>5.8.1	CONFIRMAÇÃO: Confraternistas, Tarefeiros do Bem, Peq. Companheiros e Pais:</strong> Através de comunicação da Coordenação Geral diretamente para os participantes via e-mail.
+</p>
+
+<p><strong>	5.8.2	Membros de Equipe:</strong> Através da participação nas Reuniões Gerais e nas reuniões de Equipe.
+</p>
+<p><em>Observação 1:</em> Procurar saber as datas das reuniões das equipes e cuidar de frequentá-las assiduamente (mínimo 70%), garantindo assim o seu direito de participar da COMEJACA.
+
+</p>
+<p style={{ textAlign: 'center', marginTop: '2rem' }}>
+  <a href="#" onClick={onClose} style={{ textDecoration: 'none', color: '#007BFF', cursor: 'pointer' }}>
+    Voltar
+  </a>
+</p>
+ </section>
+</ModalContent>
+
+
+  
+      )}
+    </ModalOverlay>
+  );
+};
+
 const Formulario = () => {
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const navigate = useNavigate();
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     nomeCompleto: '',
     dataNascimento: '',
+    nomeCracha: '',
     sexo: '',
     email: '',
     telefone: '',
@@ -567,7 +828,16 @@ const Formulario = () => {
                 />
               </InputGroup>
 
-
+              <InputGroup>
+                <InputLabel><FiUser /> Nome no crachá *</InputLabel>
+                <InputField
+                  name="nomeCracha"
+                  placeholder="Digite o nome que aparecerá no crachá"
+                  value={formData.nomeCracha}
+                  onChange={handleChange}
+                  requird
+                />
+              </InputGroup>
               <InputGroup>
                 <InputLabel><FiCalendar /> Data de Nascimento *</InputLabel>
                 <StyledDatePicker
@@ -876,21 +1146,21 @@ const Formulario = () => {
                   required>
                   <option value="">Faz dieta vegetariana?</option>
                   <option value="Não">Não</option>
-                  <option value="Vegetariano">vegetariano</option>
+                  <option value="Vegetariano">Vegetariano</option>
                   <option value="Vegano">Vegano</option>
                  
                 </Select>
               </InputGroup>
               {/* Informações Adicionais */}
-              <InputGroup>
-                <InputLabel><FiInfo /> Possui alguma alergia?</InputLabel>
-                <TextArea
-                  name="alergia"
-                  placeholder="Descreva suas alergias."
-                  value={formData.alergia}
-                  onChange={handleChange}
-                />
-              </InputGroup>
+                  <InputGroup>
+                    <InputLabel><FiInfo /> Possui alguma alergia ou restrições alimentares?</InputLabel>
+                    <TextArea
+                      name="alergia"
+                      placeholder="Descreva se há alergias ou restrições alimentares."
+                      value={formData.alergia}
+                      onChange={handleChange}
+                    />
+                  </InputGroup>
 
               <InputGroup>
                 <InputLabel><FiInfo /> Medicação</InputLabel>
@@ -1021,17 +1291,13 @@ mental, emocional?"
         
             </FormGrid>
             <CheckboxContainer>
-                <CheckboxInput
-                  type="checkbox"
-   
-                  required
-                />
-                <CheckboxLabel>
-                Declaro que li o plano geral e aceito o plano geral da XLVI COMEJACA. *
+        <CheckboxInput type="checkbox" required />
+        <CheckboxLabel>
+          Declaro que li e aceito as orientações contidas no <LinkText onClick={() => setModalOpen(true)}>plano geral</LinkText> da XLVI COMEJACA. *
+        </CheckboxLabel>
+      </CheckboxContainer>
 
-                </CheckboxLabel>
-              </CheckboxContainer>
-              
+      <PlanoGeralModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
             <SubmitButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>

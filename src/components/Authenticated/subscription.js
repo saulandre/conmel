@@ -311,19 +311,28 @@ const ModalOverlay = styled.div`
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
   display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
+  
   align-items: center;
   justify-content: center;
+
   width: 100vw;
   height: 100vh;
   z-index: 1000;
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    justify-content: flex-start;
+width: 100%
+
+  }
 `;
 
 const ModalContent = styled.div`
   background: white;
   padding: 2rem;
   border-radius: 8px;
-  max-width: 80vw;
+ width: 100%;
   height:80vh;
+  margin: 32px;
   position: relative;
   animation: ${({ isVisible }) => (isVisible ? fadeIn : fadeOut)} 0.3s ease forwards;
   overflow-y: auto;
@@ -375,6 +384,15 @@ const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    padding: 1rem;
+    margin: 0;
   }
 
 `;
@@ -517,7 +535,17 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
 
 </p>
 <p style={{ textAlign: 'center', marginTop: '2rem' }}>
-  <a href="#" onClick={onClose} style={{ textDecoration: 'none', color: '#007BFF', cursor: 'pointer' }}>
+  <a href="#" onClick={onClose}  style={{
+    display: 'inline-block',
+    textDecoration: 'none',
+    color: '#007BFF',
+    cursor: 'pointer',
+    fontWeight: '500',
+    marginBottom: '2rem',
+    textAlign: 'center',
+    width: '100%',
+  }}
+>
     Voltar
   </a>
 </p>

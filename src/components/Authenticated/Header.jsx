@@ -6,10 +6,10 @@ import { FiUser, FiLogOut, FiMoon,FiDownload, FiMenu, FiPlus, FiUpload } from "r
 // Temas otimizados
 export const themes = {
   professional: {
-    background: 'linear-gradient(135deg, #0d1b2a, #0d1b2a, #0d1b2a)',
+    background: 'linear-gradient(135deg, #6599FF, #6599FF, #6599FF)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #0d1b2a, #0d1b2a)',
+    buttonBackground: 'linear-gradient(135deg, #6599FF, #6599FF)',
     tableHeaderBackground: '#003049',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',

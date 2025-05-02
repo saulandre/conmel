@@ -55,7 +55,7 @@ const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #0d1b2a 0%, #0d1b2a 100%);
+  background: linear-gradient(135deg, #6599ff 0%, #6599ff 100%);
   margin-top: 1rem;
 /*   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -106,7 +106,7 @@ const InputWrapper = styled.div`
   }
   &:hover {
 
-    border: #0d1b2a 1px solid
+    border: #6599FF 1px solid
   }
 
   @media (max-width: 480px) {

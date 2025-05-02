@@ -89,7 +89,7 @@ const InputWrapper = styled.div`
   }
   &:hover {
 
-    border: #0d1b2a 1px solid
+    border: #6599FF 1px solid
   }
 
   @media (max-width: 480px) {

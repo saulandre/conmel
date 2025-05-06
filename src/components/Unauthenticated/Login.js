@@ -250,7 +250,7 @@ const FloatingButton = styled.button`
     border-radius: 0;
     transition: all 0.3s ease;
     cursor: pointer;
-    background: linear-gradient(135deg, #003049, #003049, #003049);
+    background: linear-gradient(135deg, #6599ff, #6599ff, #6599ff);
     
     &:active {
       transform: translateY(0);

@@ -1177,7 +1177,7 @@ const Formulario = () => {
       checked={formData.primeiraComejaca}
       onChange={handleChange}
     />
-    <CheckboxLabel>Sim, esta é minha primeira COMEJACA.</CheckboxLabel>
+    <CheckboxLabel>Sim, esta é minha primeira CONMEL.</CheckboxLabel>
   </CheckboxContainer>
 </InputGroup>
 
@@ -1339,7 +1339,7 @@ mental, emocional?"
             <CheckboxContainer>
         <CheckboxInput type="checkbox" required />
         <CheckboxLabel>
-          Declaro que li e aceito as orientações contidas no <LinkText onClick={() => setModalOpen(true)}>plano geral</LinkText> da XLVI COMEJACA. *
+          Declaro que li e aceito as orientações contidas no <LinkText onClick={() => setModalOpen(true)}>plano geral</LinkText> da 35º CONMEL. *
         </CheckboxLabel>
       </CheckboxContainer>
 

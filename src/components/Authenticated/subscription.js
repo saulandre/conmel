@@ -834,21 +834,6 @@ const Formulario = () => {
             <FormGrid>
               {/* Campos Pessoais */}
 
-              <InputGroup>
-                <InputLabel><FiUser /> Pronome *</InputLabel>
-                <Select
-                  name="sexo"
-                  value={formData.sexo}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Selecione</option>
-                  <option value="Ele">Ele/Dele</option>
-                  <option value="Ela">Ela/Dela</option>
-                  <option value="Elu">Elu/Delu</option>
-                         
-                </Select>
-              </InputGroup>
 
               <InputGroup>
                 <InputLabel><FiUser /> Nome Completo *</InputLabel>
@@ -939,6 +924,22 @@ const Formulario = () => {
                   </InputGroup>
                 </>
               )}
+              
+              <InputGroup>
+                <InputLabel><FiUser /> Pronome *</InputLabel>
+                <Select
+                  name="sexo"
+                  value={formData.sexo}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecione</option>
+                  <option value="Ele">Ele/Dele</option>
+                  <option value="Ela">Ela/Dela</option>
+                  <option value="Elu">Elu/Delu</option>
+                         
+                </Select>
+              </InputGroup>
 
           {/*     <InputGroup>
                 <InputLabel><FiUser /> Gênero *</InputLabel>

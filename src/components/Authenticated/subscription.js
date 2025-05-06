@@ -970,7 +970,7 @@ const Formulario = () => {
         </InputGroup>
       )} */}
               <InputGroup>
-                <InputLabel><FaWhatsapp /> Telefone (Whats App) *</InputLabel>
+                <InputLabel><FaWhatsapp /> Telefone (WhatsApp) *</InputLabel>
                 <InputField
          name="telefone"
          value={formData.telefone}

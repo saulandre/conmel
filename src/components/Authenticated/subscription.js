@@ -1169,7 +1169,7 @@ const Formulario = () => {
         </InputGroup>
       )}
               <InputGroup>
-  <InputLabel><FiClock /> É sua primeira CONMEL? *</InputLabel>
+  <InputLabel><FiClock /> É sua primeira CONMEL? </InputLabel>
   <CheckboxContainer>
     <CheckboxInput
       type="checkbox"
@@ -1177,7 +1177,7 @@ const Formulario = () => {
       checked={formData.primeiraComejaca}
       onChange={handleChange}
     />
-    <CheckboxLabel>Sim, esta é minha primeira CONMEL.</CheckboxLabel>
+    <CheckboxLabel>Sim, esta é minha primeira CONMEL. </CheckboxLabel>
   </CheckboxContainer>
 </InputGroup>
 

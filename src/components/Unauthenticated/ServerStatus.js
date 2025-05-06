@@ -27,10 +27,14 @@ const ServerStatus = ({className })  => {
   useEffect(() => {
     const checkServer = async () => {
       try {
-        const response = await axios.get('https://colmel-back-production.up.railway.app/api/health', {
-          withCredentials: true,
-
-        });
+        const baseURL =
+        window.location.hostname === 'localhost'
+          ? 'http://localhost:4000'
+          : 'https://colmel-back-production.up.railway.app';
+      
+      const response = await axios.get(`${baseURL}/api/health`, {
+        withCredentials: true,
+      });
      
 
         if (response.status === 200) {

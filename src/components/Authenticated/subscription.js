@@ -1052,7 +1052,7 @@ const Formulario = () => {
                     <option value="">Selecione</option>
                     <option value="Alimentação">Alimentação</option>
                     <option value="Atendimento Fraterno">Atendimento Fraterno</option>
-                    <option value="Coordenação Geral">Coordenação Geral</option>
+                    <option value="Núcleo Gestor">Núcleo Gestor</option>
                     <option value="Divulgação">Divulgação</option>
                     <option value="Estudos Doutrinários">Estudos Doutrinários</option>
                     <option value="Multimeios">Multimeios</option>

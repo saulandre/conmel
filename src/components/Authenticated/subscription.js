@@ -833,6 +833,23 @@ const Formulario = () => {
 
             <FormGrid>
               {/* Campos Pessoais */}
+
+              <InputGroup>
+                <InputLabel><FiUser /> Gênero *</InputLabel>
+                <Select
+                  name="sexo"
+                  value={formData.sexo}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecione</option>
+                  <option value="Ele">Ele/Dele</option>
+                  <option value="Ela">Ela/Dela</option>
+                  <option value="Elu">Elu/Delu</option>
+                         
+                </Select>
+              </InputGroup>
+
               <InputGroup>
                 <InputLabel><FiUser /> Nome Completo *</InputLabel>
                 <InputField
@@ -923,7 +940,7 @@ const Formulario = () => {
                 </>
               )}
 
-              <InputGroup>
+          {/*     <InputGroup>
                 <InputLabel><FiUser /> Gênero *</InputLabel>
                 <Select
                   name="sexo"
@@ -938,8 +955,8 @@ const Formulario = () => {
                   <option value="outro">Outro</option>
               
                 </Select>
-              </InputGroup>
-     {formData.sexo === "outro" && (
+              </InputGroup> */}
+  {/*    {formData.sexo === "outro" && (
         <InputGroup>
           <InputLabel>Especifique:</InputLabel>
           <InputField
@@ -951,7 +968,7 @@ const Formulario = () => {
             required
           />
         </InputGroup>
-      )}
+      )} */}
               <InputGroup>
                 <InputLabel><FaWhatsapp /> Telefone (Whats App) *</InputLabel>
                 <InputField

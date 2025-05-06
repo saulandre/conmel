@@ -1183,7 +1183,7 @@ const Formulario = () => {
 
               <InputGroup>
                 <InputLabel>
-                  <FiInfo /> Vegetarianismo *
+                  <FiInfo /> Prática alimentar *
                 </InputLabel>
                 <Select         name="vegetariano"
         

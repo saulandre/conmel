@@ -46,7 +46,7 @@ width: 100%;
     border: 1px solid #ddd;
 
     background: #f9f9f9;
-    color: #22223b;
+    color: #6599FF;
     font-family: 'Poppins', sans-serif;
     transition: all 0.3sease;
 `;

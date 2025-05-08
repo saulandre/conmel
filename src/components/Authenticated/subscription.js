@@ -994,7 +994,7 @@ const Formulario = () => {
                 />
               </InputGroup>
 
-           {/*    <InputGroup>
+            <InputGroup>
                 <InputLabel><FiShoppingBag /> Deseja camisa? </InputLabel>
                 <CheckboxContainer>
                   <CheckboxInput
@@ -1003,9 +1003,9 @@ const Formulario = () => {
                     checked={formData.camisa}
                     onChange={handleChange}
                   />
-                  <CheckboxLabel>Sim, desejo comprar a camisa - R$ 20,00</CheckboxLabel>
+                  <CheckboxLabel>Sim, desejo comprar a camisa - R$ 25,00</CheckboxLabel>
                 </CheckboxContainer>
-              </InputGroup> */}
+              </InputGroup> 
 
               {formData.camisa && (
                 <InputGroup>

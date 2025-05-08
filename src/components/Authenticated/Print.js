@@ -357,10 +357,10 @@ const getToken = () => {
         </LoaderWrapper>
       ) : (  <DocumentWrapper id="ficha-inscricao">
    <Header>
-        <img src="/favicon.png" alt="Logo COMEJACA" />
+        <img src="/favicon.png" alt="Logo CONMEL" />
         <div>
-          <h1>COMEJACA 2025</h1>
-          <h2>Confraternização das Mocidades Espíritas de Jacarepaguá</h2>
+          <h1>CONMEL 2025</h1>
+          <h2>Confraternização das Mocidades Espíritas da Leopoldina</h2>
         </div>
       </Header>
         <Section>
@@ -387,7 +387,7 @@ const getToken = () => {
             </FieldRow>
   
           <FieldRow>
-  <FieldLabel>Gênero: </FieldLabel>
+  <FieldLabel>Pronome: </FieldLabel>
   <FieldValue>
     {participant.sexo === "outro" ? participant.outroGenero : participant.sexo}
   </FieldValue>
@@ -576,7 +576,7 @@ const getToken = () => {
 
     {/* Linha para assinatura */}
     <FieldRow>
-      <FieldLabel>Autorização coordenador DIJ</FieldLabel>
+      <FieldLabel>Autorização Responsável <br></br> para menor de idade.</FieldLabel>
       <FieldValue>
         <div style={{ borderTop: "1px solid #fff", width: "100%", height: "15px" }}></div>
         <span style={{ fontSize: "12px", color: "#666" }}>Assinatura/data: _________________________________</span><br></br>

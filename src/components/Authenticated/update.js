@@ -697,7 +697,7 @@ const Atualizar = () => {
               )}
 
               <InputGroup>
-                <InputLabel><FiUser /> Gênero *</InputLabel>
+                <InputLabel><FiUser /> Pronome *</InputLabel>
                 <Select
                   name="sexo"
                   value={formData.sexo}

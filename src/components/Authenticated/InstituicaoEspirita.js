@@ -495,7 +495,7 @@ const IePage = () => {
             </Table>
           </TableContainer>
 
-          {error && <ErrorMessage>{error}</ErrorMessage>}
+         {/*  {error && <ErrorMessage>{error}</ErrorMessage>} */}
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '25px', marginBottom: '100px' }}>
             <SubmitButton onClick={handleSubmit} type="submit">

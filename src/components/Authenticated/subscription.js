@@ -1346,7 +1346,7 @@ mental, emocional?"
         </CheckboxLabel>
       </CheckboxContainer> */}
 
-      <PlanoGeralModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+{/*       <PlanoGeralModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} /> */}
             <SubmitButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>

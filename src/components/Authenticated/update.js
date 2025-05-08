@@ -190,7 +190,7 @@ export const themes = {
     background: 'linear-gradient(135deg, #e7ecef, #e7ecef, #e7ecef)',
     cardBackground: '#e7ecef',
     textColor: '#22223b',
-    buttonBackground: 'linear-gradient(135deg, #22223b, #22223b)',
+    buttonBackground: 'linear-gradient(135deg, #6599FF, #6599FF)',
     tableHeaderBackground: '#003049',
     tableHeaderColor: 'white',
     tableRowEvenBackground: '#f8f9fa',

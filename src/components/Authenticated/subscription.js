@@ -729,7 +729,8 @@ const Formulario = () => {
       const payload = {
         ...formData,
         comissao: String(formData.comissao), 
-        dataNascimento: `${String(dataNascimento.getDate()).padStart(2, '0')}-${String(dataNascimento.getMonth() + 1).padStart(2, '0')}-${dataNascimento.getFullYear()}`,
+        dataNascimento: `${dataNascimento.getFullYear()}-${String(dataNascimento.getMonth() + 1).padStart(2, '0')}-${String(dataNascimento.getDate()).padStart(2, '0')}`
+,
         telefone: formData.telefone.replace(/\D/g, ''),
         documentoResponsavel: formData.documentoResponsavel?.replace(/\D/g, ''),
         telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, ''),

@@ -426,7 +426,7 @@ const LinkText = styled.span`
   cursor: pointer;
 `;
 
-
+  /* 
 
 const PlanoGeralModal = ({ isOpen, onClose }) => {
   const [visible, setVisible] = useState(isOpen);
@@ -441,7 +441,7 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   return (
-    <ModalOverlay isVisible={visible}>
+  <ModalOverlay isVisible={visible}>
       {visible && (
  <ModalContent isVisible={isOpen}>
  <CloseButton onClick={onClose}>✖</CloseButton>
@@ -557,7 +557,7 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
       )}
     </ModalOverlay>
   );
-};
+}; */
 
 const Formulario = () => {
 
@@ -729,7 +729,7 @@ const Formulario = () => {
       const payload = {
         ...formData,
         comissao: String(formData.comissao), 
-        dataNascimento: dataNascimento.toISOString().split('T')[0],
+   /*      dataNascimento: dataNascimento.toISOString().split('T')[0], */
         telefone: formData.telefone.replace(/\D/g, ''),
         documentoResponsavel: formData.documentoResponsavel?.replace(/\D/g, ''),
         telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, ''),
@@ -1339,12 +1339,12 @@ mental, emocional?"
 
         
             </FormGrid>
-            <CheckboxContainer>
+   {/*          <CheckboxContainer>
         <CheckboxInput type="checkbox" required />
         <CheckboxLabel>
           Declaro que li e aceito as orientações contidas no <LinkText onClick={() => setModalOpen(true)}>plano geral</LinkText> da 35ª CONMEL. *
         </CheckboxLabel>
-      </CheckboxContainer>
+      </CheckboxContainer> */}
 
       <PlanoGeralModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
             <SubmitButton type="submit" disabled={isSubmitting}>

@@ -193,7 +193,7 @@ const TableCell = styled.td`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #0d1b2a, #0d1b2a);
+  background: linear-gradient(135deg, #6599FF, #6599FF);
   color: #fff;
   border: none;
   border-radius: 0.8rem;
@@ -354,7 +354,6 @@ const IePage = () => {
       };
 
       if (formMode === 'adicionar') {
-        console.log('Tentando adicionar nova instituição');
         await axios.post(`${API_URL}/api/auth/novainstituicao`, formData, config);
         alert('Instituição adicionada com sucesso!');
 

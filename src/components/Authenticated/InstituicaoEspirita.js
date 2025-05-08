@@ -93,7 +93,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ActionButton = styled.button`
-  background: linear-gradient(135deg, #0d1b2a, #0d1b2a);
+  background: linear-gradient(135deg, #6599FF, #6599FF);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -154,7 +154,7 @@ const Table = styled.table`
 `;
 
 const TableHead = styled.thead`
-  background: #0d1b2a;
+  background: #6599FF;
   color: white;
 `;
 

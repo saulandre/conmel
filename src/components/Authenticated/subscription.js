@@ -729,7 +729,7 @@ const Formulario = () => {
       const payload = {
         ...formData,
         comissao: String(formData.comissao), 
-        dataNascimento: dataNascimento.toISOString().split('T')[0],
+        dataNascimento: dataNascimento,
         telefone: formData.telefone.replace(/\D/g, ''),
         documentoResponsavel: formData.documentoResponsavel?.replace(/\D/g, ''),
         telefoneResponsavel: formData.telefoneResponsavel?.replace(/\D/g, ''),

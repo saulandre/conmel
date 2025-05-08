@@ -322,7 +322,7 @@ useEffect(() => {
       <AuthWrapper>
         <Title>PRÓXIMO PASSO</Title>
         <Paragraph>
-          Enviamos um código para o e-mail <strong>{storedUser?.userEmail}</strong>.
+          Enviamos um código para o e-mail <strong>{storedUser?.userEmail}<br></br>Caso a confirmação não chegue na<br></br>caixa de entrada verifique na caixa de Spam.</strong>.
         </Paragraph>
         <form onSubmit={handleSubmit}>
           <Input

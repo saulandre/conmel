@@ -758,7 +758,7 @@ const Atualizar = () => {
                     checked={formData.camisa}
                     onChange={handleChange}
                   />
-                  <CheckboxLabel>Sim, desejo comprar a camisa - R$ 20,00</CheckboxLabel>
+                  <CheckboxLabel>Sim, desejo comprar a camisa - R$ 25,00</CheckboxLabel>
                 </CheckboxContainer>
               </InputGroup>
 

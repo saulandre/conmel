@@ -507,7 +507,7 @@ useEffect(() => {
     </EmptyStateMessage>
   ) :  inscricoes.length === 0 ? (
     <EmptyStateMessage>
-      <FiPlus size={24} />
+    {/*   <FiPlus size={24} /> */}
       Estamos aguardando sua primeira inscrição
     </EmptyStateMessage>
   ) : filteredData.length === 0 ? (
@@ -556,7 +556,7 @@ useEffect(() => {
     {loadingItemId === item.id ? (
       <span className="flex items-center gap-2">
         <span className="animate-spin h-4 w-4 border-2 border-t-transparent border-white rounded-full" />
-        Carregando 
+          Concluído
         <LoadingSpinner />
       </span>
     ) : (

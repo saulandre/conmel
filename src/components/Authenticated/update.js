@@ -1096,7 +1096,7 @@ mental, emocional?"
 
         
             </FormGrid>
-            <CheckboxContainer>
+           {/*  <CheckboxContainer>
                 <CheckboxInput
                   type="checkbox"
    
@@ -1106,7 +1106,7 @@ mental, emocional?"
                 Declaro que li o plano geral e aceito o plano geral da 35ª CONMEL. *
 
                 </CheckboxLabel>
-              </CheckboxContainer>
+              </CheckboxContainer> */}
               
             <SubmitButton type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (

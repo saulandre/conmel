@@ -705,10 +705,10 @@ const Atualizar = () => {
                   required
                 >
                   <option value="">Selecione</option>
-                  <option value="Masculino">Masculino</option>
-                  <option value="Feminino">Feminino</option>
-                  <option value="prefironaoresponder">Prefiro não responder</option>
-                  <option value="outro">Outro</option>
+                  <option value="Ele">Ele/dele</option>
+                  <option value="Ela">Ela/dela</option>
+                  <option value="Elu">Elu/delu</option>
+                
               
                 </Select>
               </InputGroup>
@@ -749,7 +749,7 @@ const Atualizar = () => {
                 />
               </InputGroup>
 
-           {/*    <InputGroup>
+        <InputGroup>
                 <InputLabel><FiShoppingBag /> Deseja camisa? </InputLabel>
                 <CheckboxContainer>
                   <CheckboxInput
@@ -760,7 +760,7 @@ const Atualizar = () => {
                   />
                   <CheckboxLabel>Sim, desejo comprar a camisa - R$ 20,00</CheckboxLabel>
                 </CheckboxContainer>
-              </InputGroup> */}
+              </InputGroup>
 
               {formData.camisa && (
                 <InputGroup>
@@ -805,13 +805,17 @@ const Atualizar = () => {
                     
                   >
                     <option value="">Selecione</option>
+                    
                     <option value="Alimentação">Alimentação</option>
                     <option value="Atendimento Fraterno">Atendimento Fraterno</option>
-                    <option value="Coordenação Geral">Coordenação Geral</option>
+                    <option value="Artes">Artes</option>
                     <option value="Divulgação">Divulgação</option>
                     <option value="Estudos Doutrinários">Estudos Doutrinários</option>
-                    <option value="Multimeios">Multimeios</option>
-                    <option value="Secretaria">Secretaria</option>
+                    <option value="Núcleo Gestor">Núcleo Gestor</option>
+     
+      
+                  
+             
                     <option value="Serviços Gerais">Serviços Gerais</option>
                     <option value="Recepção">Recepção</option>
                   </Select>
@@ -924,7 +928,7 @@ const Atualizar = () => {
         </InputGroup>
       )}
               <InputGroup>
-  <InputLabel><FiClock /> É sua primeira COMEJACA? *</InputLabel>
+  <InputLabel><FiClock /> É sua primeira CONMEL? *</InputLabel>
   <CheckboxContainer>
     <CheckboxInput
       type="checkbox"
@@ -932,13 +936,13 @@ const Atualizar = () => {
       checked={formData.primeiraComejaca}
       onChange={handleChange}
     />
-    <CheckboxLabel>Sim, esta é minha primeira COMEJACA.</CheckboxLabel>
+    <CheckboxLabel>Sim, esta é minha primeira CONMEL.</CheckboxLabel>
   </CheckboxContainer>
 </InputGroup>
 
               <InputGroup>
                 <InputLabel>
-                  <FiInfo /> Vegetarianismo *
+                  <FiInfo /> Prática alimentar *
                 </InputLabel>
                 <Select         name="vegetariano"
         
@@ -1098,7 +1102,7 @@ mental, emocional?"
                   required
                 />
                 <CheckboxLabel>
-                Declaro que li o plano geral e aceito o plano geral da XLVI COMEJACA. *
+                Declaro que li o plano geral e aceito o plano geral da 35ª CONMEL. *
 
                 </CheckboxLabel>
               </CheckboxContainer>

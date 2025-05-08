@@ -192,7 +192,7 @@ const ButtonContainer = styled.div`
   }
 `;
 const Button = styled.button`
-  background-color: #003049;
+  background-color: #6599FF;
   color: white;
   font-size: 14px;
   font-weight: bold;

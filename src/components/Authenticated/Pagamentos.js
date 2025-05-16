@@ -28,6 +28,10 @@ const Title = styled.h1`
   font-weight: 700;
   color: #374151;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const CardsGrid = styled.div`

@@ -626,7 +626,7 @@ const Atualizar = () => {
                   placeholder="Digite seu nome social"
                   value={formData.nomeSocial}
                   onChange={handleChange}
-                  requird
+                  
                 />
               </InputGroup>
 
@@ -637,7 +637,7 @@ const Atualizar = () => {
                   placeholder="Digite o nome que aparecerá no crachá"
                   value={formData.nomeCracha}
                   onChange={handleChange}
-                  requird
+                  required
                 />
               </InputGroup>
               <InputGroup>

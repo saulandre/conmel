@@ -257,7 +257,7 @@ const handleSubmit = async (e) => {
         window.location.replace('http://localhost:3000/painel');
       } else {
         // Caso contrário, redireciona para o ambiente de produção
-        window.location.replace('https://www.comejaca.org.br/painel');
+        window.location.replace('https://www.conmelrj.com.br/painel');
       }
       setError(response.data.error || 'Erro desconhecido.');
     }

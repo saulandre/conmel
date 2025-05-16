@@ -172,7 +172,7 @@ const PaymentPage = () => {
 
   return (
     <Container>
-      <Title>Envio de Comprovante de Pagamento</Title>
+      <Title>PAGAMENTO DA INSCRIÇÃO</Title>
 
       <CardsGrid>
         <Card>
@@ -192,7 +192,7 @@ const PaymentPage = () => {
           <Label>PIX Copia e Cola</Label>
           <PixInput
             readOnly
-            value="00020126430014BR.GOV.BCB.PIX012117ceuceerj@gmail.com520400005303986540575.005802BR5901N6001C6212050835CONMEL63049732"
+            value="00020126360014BR.GOV.BCB.PIX0114+5521992733029520400005303986540575.005802BR5920Valeria Cid Carvalho6014Rio de Janeiro62070503***6304252B"
             onFocus={(e) => e.target.select()}
           />
         </Card>
@@ -201,7 +201,7 @@ const PaymentPage = () => {
       <InfoText>
         Chave PIX: <StrongText>17ceu.ceerj@gmail.com</StrongText> em nome de <StrongText>Valéria Cid Carvalho</StrongText>
       </InfoText>
-      <br></br><br></br>
+      <br></br>
     <Label htmlFor="nameInput">Nome do Inscrito</Label>
       <TextInput
         id="nameInput"

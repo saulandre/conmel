@@ -555,15 +555,14 @@ useEffect(() => {
     Imprimir
   </SmallButton>
 
-  <SmallButton
-    as="a"
-    href="https://conmelrj.com.br/enviar-comprovante"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <FiCreditCard size={14} style={{ marginRight: 6 }} />
-    Pagar
-  </SmallButton>
+ <SmallButton
+  onClick={() =>
+    window.open('https://conmelrj.com.br/enviar-comprovante', '_blank', 'noopener,noreferrer')
+  }
+>
+  <FiCreditCard size={14} style={{ marginRight: 6 }} />
+  Pagar
+</SmallButton>
 </ButtonGroup>
 
 

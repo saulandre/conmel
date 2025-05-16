@@ -1143,19 +1143,25 @@ const Formulario = () => {
 
               <InputGroup>
                 <InputLabel><FiMapPin /> Instituição Espírita *</InputLabel>
-                <Select
-                  name="IE"
-                  value={formData.IE}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Selecione</option>
-                  {institutions.map(inst => (
-                    <option key={inst.id} value={inst.nome}>{inst.nome}</option>
-                    
-                  ))}
-                      <option value="outro">Outro</option>
-                </Select>
+              <Select
+  name="IE"
+  value={formData.IE}
+  onChange={handleChange}
+  required
+>
+  <option value="">Selecione</option>
+
+  {[...institutions]
+    .sort((a, b) => a.nome.localeCompare(b.nome))
+    .map(inst => (
+      <option key={inst.id} value={inst.nome}>
+        {inst.nome}
+      </option>
+  ))}
+
+  <option value="outro">Outro</option>
+</Select>
+
               </InputGroup>
 
               {formData.IE === 'outro' && (

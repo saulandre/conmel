@@ -7,6 +7,7 @@ import {
   FiUpload, 
   FiDownload, 
   FiUser, 
+  FiCreditCard,
   FiLogOut, 
   FiSearch, 
   FiMenu,
@@ -535,29 +536,38 @@ useEffect(() => {
  <TableCell data-label="Nome Completo">{item.nomeCompleto}</TableCell>
 
  <TableCell data-label="Status">
-   <StatusPill $status={item.status}>{item.statusPagamento || 'Carregando...'}</StatusPill>
+   <StatusPill $status={item.status}>{item.statusPagamento || 'Concluído'}</StatusPill>
  </TableCell>
  <TableCell data-label="Data">
    {new Date(item.createdAt).toLocaleDateString('pt-BR')}
  </TableCell>
  <TableCell data-label="Ações">
-   <ButtonGroup>
-     <SmallButton onClick={() => navigate(`/atualizar/${item.id}`)}>
-       <FiEdit size={14} /> Editar
-     </SmallButton>
-     <SmallButton onClick={() => navigate(`/imprimir/${item.id}`)}>
-       <FiPrinter size={14} /> Imprimir
-     </SmallButton>
-   <SmallButton
+
+
+<ButtonGroup>
+  <SmallButton onClick={() => navigate(`/atualizar/${item.id}`)}>
+    <FiEdit size={14} style={{ marginRight: 6 }} />
+    Editar
+  </SmallButton>
+
+  <SmallButton onClick={() => navigate(`/imprimir/${item.id}`)}>
+    <FiPrinter size={14} style={{ marginRight: 6 }} />
+    Imprimir
+  </SmallButton>
+
+  <SmallButton
     as="a"
     href="https://conmelrj.com.br/enviar-comprovante"
     target="_blank"
     rel="noopener noreferrer"
   >
-    💳 Pagar
+    <FiCreditCard size={14} style={{ marginRight: 6 }} />
+    Pagar
   </SmallButton>
+</ButtonGroup>
 
-   </ButtonGroup>
+
+
  </TableCell>
 </TableRow>
 

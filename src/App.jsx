@@ -17,6 +17,7 @@ import { AuthProvider } from './context/AuthContext';
 import ServerStatus from './components/Unauthenticated/ServerStatus';
 import SessaoInfo from './components/Unauthenticated/SessaoInfo';
 import HeaderMain from './components/Authenticated/Header';
+import Pagamentos from './components/Authenticated/Pagamentos.js';
 import ChangePassword from './components/Unauthenticated/ChangePassword';
 import {toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -89,6 +90,8 @@ function AppContent() {
       <Route path="/pendente" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
       <Route path="/imprimir/:id" element={<ProtectedRoute><FichaInscricao /></ProtectedRoute>} />
       <Route path="/pagamentos" element={<ProtectedRoute><ListaParticipantes /></ProtectedRoute>} />
+      <Route path="/enviar-comprovante" element={<ProtectedRoute><Pagamentos /></ProtectedRoute>} />
+
     </Routes>
   );
 }

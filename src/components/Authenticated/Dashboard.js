@@ -548,24 +548,14 @@ useEffect(() => {
      <SmallButton onClick={() => navigate(`/imprimir/${item.id}`)}>
        <FiPrinter size={14} /> Imprimir
      </SmallButton>
-     {item.status !== 'Pago' && (
-  <SmallButton
-    onClick={() => handlePagamento(item.id)}
-    disabled={loadingItemId === item.id}
+   <SmallButton
+    as="a"
+    href="https://conmelrj.com.br/enviar-comprovante"
+    target="_blank"
+    rel="noopener noreferrer"
   >
-    {loadingItemId === item.id ? (
-      <span className="flex items-center gap-2">
-        <span className="animate-spin h-4 w-4 border-2 border-t-transparent border-white rounded-full" />
-          Concluído
-        <LoadingSpinner />
-      </span>
-    ) : (
-      <>
-        💳 Pagar
-      </>
-    )}
+    💳 Pagar
   </SmallButton>
-)}
 
    </ButtonGroup>
  </TableCell>

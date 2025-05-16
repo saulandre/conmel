@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -7,11 +7,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `;
+const TextInput = styled.input`
+  width: 200px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
 
+  &:focus {
+    outline: none;
+    border-color: #6599FF;
+  }
+`;
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 700;
@@ -55,7 +66,7 @@ const QRImage = styled.img`
 
 const Label = styled.label`
   display: block;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #4b5563;
   margin-bottom: 0.5rem;
@@ -74,13 +85,13 @@ const PixInput = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: #6599FF;
     background: #fff;
   }
 `;
 
 const InfoText = styled.p`
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #4b5563;
   margin-top: 2.5rem;
   margin-bottom: 0.5rem;
@@ -91,35 +102,78 @@ const StrongText = styled.strong`
 `;
 
 const FileInput = styled.input`
-  width: 100%;
-  margin-bottom: 1rem;
+  width: 200px;
+  margin-bottom: 0.5rem;
 `;
 
 const SendButton = styled.button`
-  width: 100%;
-  background-color: #7c3aed;
+  width: 200px;
+  background-color: ${props => (props.disabled ? '#6599FF' : '#6599FF')};
   color: white;
   padding: 0.75rem;
   border: none;
+  margin-top: 50px;
   border-radius: 0.375rem;
   font-weight: 600;
-  cursor: pointer;
+  font-size: 1rem;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
-    background-color: #5b21b6;
+    background-color: ${props => (props.disabled ? '#f39c12' : '#f39c12')};
   }
 `;
 
+const FeedbackMessage = styled.p`
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  color: ${props => (props.error ? '#dc2626' : '#16a34a')};
+  font-weight: 600;
+  min-height: 24px;
+`;
+
 const PaymentPage = () => {
+  const [file, setFile] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [feedback, setFeedback] = useState(null); // { error: bool, message: string }
+  const [name, setName] = useState('');
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setFeedback(null); // limpa feedback quando troca arquivo
+  };
+
+  const handleSend = () => {
+    if (!file) return;
+
+    setSending(true);
+    setFeedback(null);
+
+    // Simula envio com delay (ex: chamada API)
+    setTimeout(() => {
+      // Simula sucesso (80%) ou erro (20%)
+      const success = Math.random() > 0.2;
+      if (success) {
+        setFeedback({ error: false, message: "Comprovante enviado com sucesso!" });
+        setFile(null);
+      } else {
+        setFeedback({ error: true, message: "Erro ao enviar comprovante. Tente novamente." });
+      }
+      setSending(false);
+    }, 2000);
+  };
+
   return (
     <Container>
-      <Title>Pagamento da Inscrição</Title>
+      <Title>Envio de Comprovante de Pagamento</Title>
 
       <CardsGrid>
         <Card>
           <CardTitle>Inscrição sem Camisa R$ 50,00</CardTitle>
-          <QRImage src="/inscricao-sem-camisa.png" alt="QR Code Inscrição sem Camisa" />
+          <QRImage src="/qrcode50.png" alt="QR Code Inscrição sem Camisa" />
           <Label>PIX Copia e Cola</Label>
           <PixInput
             readOnly
@@ -130,7 +184,7 @@ const PaymentPage = () => {
 
         <Card>
           <CardTitle>Inscrição com Camisa R$ 75,00</CardTitle>
-          <QRImage src="/inscricao-com-camisa.png" alt="QR Code Inscrição com Camisa" />
+          <QRImage src="/qrcode75.png" alt="QR Code Inscrição com Camisa" />
           <Label>PIX Copia e Cola</Label>
           <PixInput
             readOnly
@@ -143,10 +197,36 @@ const PaymentPage = () => {
       <InfoText>
         Chave PIX: <StrongText>17ceu.ceerj@gmail.com</StrongText> em nome de <StrongText>Valéria Cid Carvalho</StrongText>
       </InfoText>
-
+      <br></br><br></br>
+    <Label htmlFor="nameInput">Nome do Inscrito</Label>
+      <TextInput
+        id="nameInput"
+        type="text"
+        placeholder="Digite seu nome completo"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        disabled={sending}
+      />
       <Label htmlFor="fileInput">Envie aqui seu comprovante de pagamento</Label>
-      <FileInput id="fileInput" type="file" />
-      <SendButton>Enviar</SendButton>
+      <FileInput
+        id="fileInput"
+        type="file"
+        onChange={handleFileChange}
+        disabled={sending}
+        accept="image/*,.pdf"
+      />
+      {file && <InfoText>Arquivo selecionado: <StrongText>{file.name}</StrongText></InfoText>}
+
+      <SendButton
+        disabled={!file || sending}
+        onClick={handleSend}
+      >
+        {sending ? "Enviando..." : "Enviar comprovante"}
+      </SendButton>
+
+      <FeedbackMessage error={feedback?.error}>
+        {feedback?.message || "\u00A0" /* espaço para manter altura */}
+      </FeedbackMessage>
     </Container>
   );
 };

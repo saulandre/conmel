@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import axios from "axios";
 const Container = styled.div`
   min-height: 100vh;
   background-color: #f3f4f6;
@@ -140,35 +140,71 @@ const FeedbackMessage = styled.p`
 `;
 
 const PaymentPage = () => {
-  const [file, setFile] = useState(null);
+ const [file, setFile] = useState(null);
   const [sending, setSending] = useState(false);
-  const [feedback, setFeedback] = useState(null); // { error: bool, message: string }
+  const [feedback, setFeedback] = useState(null);
   const [name, setName] = useState('');
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setFeedback(null); // limpa feedback quando troca arquivo
   };
 
-  const handleSend = () => {
-    if (!file) return;
+const handleSend = async () => {
+  if (!file || !name.trim()) {  // Verifica se o nome não está vazio
+    setFeedback({ error: true, message: "Preencha todos os campos corretamente!" });
+    return;
+  }
 
-    setSending(true);
-    setFeedback(null);
+  setSending(true);
+  setFeedback(null);
 
-    // Simula envio com delay (ex: chamada API)
-    setTimeout(() => {
-      // Simula sucesso (80%) ou erro (20%)
-      const success = Math.random() > 0.2;
-      if (success) {
-        setFeedback({ error: false, message: "Comprovante enviado com sucesso!" });
-        setFile(null);
-      } else {
-        setFeedback({ error: true, message: "Erro ao enviar comprovante. Tente novamente." });
+  try {
+    const formData = new FormData();
+    formData.append("nome", name.trim());  // Remove espaços extras
+    formData.append("comprovante", file);
+
+        const response = await axios.post(`${API_URL}/api/auth/enviar-comprovante`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // Adicione se necessário:
+          // "Authorization": `Bearer ${token}`
+        },
+        timeout: 10000 // 10 segundos timeout
       }
-      setSending(false);
-    }, 2000);
-  };
+    );
+
+    if (response.data.success) {
+      setFeedback({ 
+        error: false, 
+        message: "Enviado com sucesso! Aguarde confirmação." 
+      });
+      // Reset mais completo
+      document.getElementById("fileInput").value = ""; // Limpa o input file
+      setFile(null);
+      setName("");
+    }
+  } catch (error) {
+    let errorMessage = "Erro ao enviar comprovante";
+    
+    if (error.response) {
+      // Erros 4xx/5xx
+      errorMessage = error.response.data?.message || 
+                   error.response.data?.error || 
+                   "Erro no servidor";
+    } else if (error.request) {
+      // Sem resposta do servidor
+      errorMessage = "Sem resposta do servidor - verifique sua conexão";
+    }
+    
+    setFeedback({ error: true, message: errorMessage });
+  } finally {
+    setSending(false);
+  }
+};
 
   return (
     <Container>

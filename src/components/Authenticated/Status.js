@@ -243,7 +243,7 @@ const Table = styled.table`
 `;
 
 const TableHead = styled.thead`
-  background: #0d1b2a;
+  background: #6599FF;
   color: white;
 `;
 

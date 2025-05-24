@@ -151,56 +151,32 @@ const PaymentPage = () => {
     setFeedback(null); // limpa feedback quando troca arquivo
   };
 
-const handleSend = async () => {
-  if (!file || !name.trim()) {  // Verifica se o nome não está vazio
-    setFeedback({ error: true, message: "Preencha todos os campos corretamente!" });
+ const handleSend = async () => {
+  if (!file || !name) {
+    setFeedback({ error: true, message: 'Preencha todos os campos antes de enviar.' });
     return;
   }
 
-  setSending(true);
-  setFeedback(null);
+  const formData = new FormData();
+  formData.append('nomeCompleto', name);
+  formData.append('arquivo', file);
 
   try {
-    const formData = new FormData();
-    formData.append("nome", name.trim());  // Remove espaços extras
-    formData.append("comprovante", file);
+    setSending(true);
 
-        const response = await axios.post(`${API_URL}/api/auth/enviar-comprovante`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          // Adicione se necessário:
-          // "Authorization": `Bearer ${token}`
-        },
-        timeout: 10000 // 10 segundos timeout
-      }
-    );
+    const response = await axios.post(`${API_URL}/api/auth/enviar-comprovante`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-    if (response.data.success) {
-      setFeedback({ 
-        error: false, 
-        message: "Enviado com sucesso! Aguarde confirmação." 
-      });
-      // Reset mais completo
-      document.getElementById("fileInput").value = ""; // Limpa o input file
-      setFile(null);
-      setName("");
-    }
-  } catch (error) {
-    let errorMessage = "Erro ao enviar comprovante";
-    
-    if (error.response) {
-      // Erros 4xx/5xx
-      errorMessage = error.response.data?.message || 
-                   error.response.data?.error || 
-                   "Erro no servidor";
-    } else if (error.request) {
-      // Sem resposta do servidor
-      errorMessage = "Sem resposta do servidor - verifique sua conexão";
-    }
-    
-    setFeedback({ error: true, message: errorMessage });
+    setFeedback({ error: false, message: response.data.mensagem || 'Comprovante enviado com sucesso!' });
+    setName('');
+    setFile(null);
+    document.getElementById('fileInput').value = ''; // limpa o input file
+  } catch (err) {
+    const msg = err.response?.data?.erro || 'Erro ao enviar. Tente novamente.';
+    setFeedback({ error: true, message: msg });
   } finally {
     setSending(false);
   }

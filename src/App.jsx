@@ -10,7 +10,6 @@ import Dashboard from './components/Authenticated/Dashboard';
 import GlobalStyle from './styles/globalStyles';
 import FormularioInscricao from './components/Authenticated/subscription';
 import FichaInscricao from './components/Authenticated/Print';
-import ForgotPassword from './components/Unauthenticated/ForgotPassword';
 import NotFound from './components/Unauthenticated/NotFound';
 import ProtectedRoute from './routes/ProtectedRoutes';
 import { AuthProvider } from './context/AuthContext';
@@ -18,7 +17,6 @@ import ServerStatus from './components/Unauthenticated/ServerStatus';
 import SessaoInfo from './components/Unauthenticated/SessaoInfo';
 import HeaderMain from './components/Authenticated/Header';
 import Pagamentos from './components/Authenticated/Pagamentos.js';
-import ChangePassword from './components/Unauthenticated/ChangePassword';
 import {toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/globalStyles.css'; 
@@ -26,6 +24,8 @@ import PendingPage from './components/Authenticated/PendingPage';
 import FailurePage from './components/Authenticated/FailurePage';
 import SuccessPage from './components/Authenticated/SuccessPage';
 import ListaParticipantes from './components/Authenticated/Status.js';
+import ChangePassword from './components/Unauthenticated/NovaSenha.js';
+import ForgotPassword from './components/Unauthenticated/ForgotPassword';
 
 function App() {
   return (
@@ -74,7 +74,8 @@ function AppContent() {
       <Route path="/" element={<Login />} />
       <Route path="/registrar" element={<Register />} />
       <Route path="/recuperarsenha" element={<ForgotPassword />} />
-      <Route path="/recuperarsenha/route" element={<ChangePassword />} />
+  
+    <Route path="/novasenha" element={<ChangePassword />} />
 
       <Route path="*" element={<NotFound />} />
 

@@ -27,7 +27,7 @@ export const AuthWrapper = styled.div`
 `;
 
 export const Title = styled.h2`
-  color: #1b263b;
+  color: #000;
   margin-bottom: 30px;
 `;
 
@@ -41,7 +41,7 @@ export const StyledInput = styled.input`
 `;
 
 export const StyledButton = styled.button`
-  background-color: #1b263b;
+  background-color: #6599FF;
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -59,7 +59,7 @@ export const StyledButton = styled.button`
 
 export const LinkVoltar = styled.div`
   margin-top: 5rem;
-  color: #0d1b2a;
+  color: #000;
   a {
     color: inherit;
     text-decoration: none;

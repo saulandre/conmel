@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import {
@@ -9,18 +8,27 @@ import {
   StyledInput,
   StyledButton,
   LinkVoltar,
-} from "./SharedAuthStyles"; // ajuste o caminho conforme necessário
+} from "./SharedAuthStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+// SharedAuthStyles.js
+import styled from "styled-components";
+
+
+
+
+
+
+
+
+
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
-    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
@@ -38,16 +46,22 @@ const ChangePassword = () => {
 
     try {
       setLoading(true);
-      await axios.post(`${API_URL}/api/auth/change-password`, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+
+      // Envia apenas a nova senha
+      await axios.post(
+        `${API_URL}/api/auth/change-password`,
+        { newPassword: formData.newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
       toast.success("Senha alterada com sucesso!");
-      navigate("/");
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Erro ao alterar senha."
+        error.response?.data?.message || "Erro ao alterar a senha."
       );
     } finally {
       setLoading(false);
@@ -61,14 +75,6 @@ const ChangePassword = () => {
           <FontAwesomeIcon icon={faLock} /> Alterar Senha
         </Title>
         <form onSubmit={handleSubmit}>
-          <StyledInput
-            type="password"
-            name="currentPassword"
-            placeholder="Senha atual"
-            value={formData.currentPassword}
-            onChange={handleChange}
-            required
-          />
           <StyledInput
             type="password"
             name="newPassword"

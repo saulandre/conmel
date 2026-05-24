@@ -446,7 +446,7 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
  <ModalContent isVisible={isOpen}>
  <CloseButton onClick={onClose}>✖</CloseButton>
 
- <ModalTitle>Plano Geral — XLVI COMEJACA 2025</ModalTitle>
+ <ModalTitle>Plano Geral — 35ª CONMEL 2026</ModalTitle>
 <ModalSubtitle>Confraternização das Mocidades Espíritas de Jacarepaguá</ModalSubtitle>
 
 
@@ -455,7 +455,7 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
    <h3>1. Dados de Identificação</h3>
    <p><strong>1.1 Evento:</strong> XLVI COMEJACA – Confraternização das Mocidades Espíritas de Jacarepaguá.</p>
    <p><strong>1.2 Promoção e Coordenação Geral:</strong> Área de Educação do 20º CEU I e II / CEERJ</p>
-   <p><strong>1.3 Período:</strong> 19 e 20 de julho de 2025</p>
+   <p><strong>1.3 Período:</strong> 19 e 20 de julho de 2026</p>
    <ul>
      <li><strong>Início:</strong>19/07 (Sábado)</li>
      <li><strong>Término:</strong>20/07 (Domingo)</li>
@@ -503,8 +503,8 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
  <section>
    <h3>5. Inscrições</h3>
 
-   <p><strong>5.1 PERÍODO DE INSCRIÇÃO:</strong> 13/04/2025 a 15/06/2025 (Período em que o participante deve preencher a ficha e encaminhar ao Dirigente da Área de Educação da sua Instituição Espírita, para que ele possa colher as assinaturas)</p> 
-   <p><strong>5.2 REPASSE DAS FICHAS PARA A COORDENAÇÃO GERAL DO EVENTO:</strong> Até 15/06/2025 (Data limite para que o Dirigente da Área de Educação da sua Instituição Espírita repasse as fichas para a Coordenação Geral do evento)</p>
+   <p><strong>5.1 PERÍODO DE INSCRIÇÃO:</strong> 13/04/2026 a 15/06/2026 (Período em que o participante deve preencher a ficha e encaminhar ao Dirigente da Área de Educação da sua Instituição Espírita, para que ele possa colher as assinaturas)</p> 
+   <p><strong>5.2 REPASSE DAS FICHAS PARA A COORDENAÇÃO GERAL DO EVENTO:</strong> Até 15/06/2026 (Data limite para que o Dirigente da Área de Educação da sua Instituição Espírita repasse as fichas para a Coordenação Geral do evento)</p>
    <p><strong>5.3 IMPORTANTE: O representante da Área de Educação da Instituição Espírita deve assegurar que  todos os dados da Ficha de Inscrição estejam preenchidos corretamente, principalmente a data de nascimento.</strong></p>
 
    <h4>5.4 Investimento</h4>
@@ -518,9 +518,9 @@ const PlanoGeralModal = ({ isOpen, onClose }) => {
    <p><em>Observação 2:</em>  Todos deverão contribuir com a importância acima mencionada até a data limite da inscrição, e qualquer dificuldade deverá ser resolvida pela Instituição Espírita da qual o participante participe, que então repassará para a Coordenação Geral, através de um comunicado por escrito.</p>
 
    <h4>5.5 DA CONTRIBUIÇÃO:</h4>
-   <p>PIX (E-mail): coordenacaogeral@comejaca.org.br ou através da Agência: 7151 e Conta Poupança: 08882-5, Banco Itaú (341). Favorecido: Vicente Jose L. Crisostomo. O comprovante deverá ser enviado por e-mail: coordenacaogeral@comejaca.org.br com a informação dos beneficiários deste pagamento. As fichas deverão ser entregues à Coordenação Geral até o dia 15 de junho de 2025 na 4ª RGP.</p>
+   <p>PIX (E-mail): coordenacaogeral@comejaca.org.br ou através da Agência: 7151 e Conta Poupança: 08882-5, Banco Itaú (341). Favorecido: Vicente Jose L. Crisostomo. O comprovante deverá ser enviado por e-mail: coordenacaogeral@comejaca.org.br com a informação dos beneficiários deste pagamento. As fichas deverão ser entregues à Coordenação Geral até o dia 15 de junho de 2026 na 4ª RGP.</p>
 
-   <h4>5.6 NÃO SERÃO ACEITAS INSCRIÇÕES APÓS O DIA 15/06/2025, E NEM SERÃO FEITAS INSCRIÇÕES NO LOCAL DO EVENTO. </h4>
+   <h4>5.6 NÃO SERÃO ACEITAS INSCRIÇÕES APÓS O DIA 15/06/2026, E NEM SERÃO FEITAS INSCRIÇÕES NO LOCAL DO EVENTO. </h4>
   
    <h4>5.7 A INSCRIÇÃO É PESSOAL E INTRANSFERÍVEL, NÃO SENDO PERMITIDAS SUBSTITUIÇÕES. </h4>
 
@@ -820,7 +820,7 @@ const Formulario = () => {
           <FormCard onSubmit={handleSubmit}>
             
             <Header>
-              <Title>FORMULÁRIO DE INSCRIÇÃO 2025</Title>
+              <Title>FORMULÁRIO DE INSCRIÇÃO 2026</Title>
               <p style={{ color: '#666' }}>Todos os campos marcados com * são obrigatórios</p>
               {errors.length > 0 && (
                 <div style={{ color: 'red', marginTop: '1rem' }}>

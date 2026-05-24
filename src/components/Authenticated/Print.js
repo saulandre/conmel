@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
+import { DEFAULT_EVENT_YEAR } from "../../constants/eventYear";
 
 import { jsPDF } from "jspdf"; 
 
@@ -343,6 +344,9 @@ const getToken = () => {
   
     const age = calculateAge(participant.dataNascimento);
     const isMinor = age < 18;
+    const editionYear = participant.createdAt
+      ? new Date(participant.createdAt).getFullYear()
+      : DEFAULT_EVENT_YEAR;
   
     return (
 
@@ -359,7 +363,7 @@ const getToken = () => {
    <Header>
         <img src="/favicon.png" alt="Logo CONMEL" />
         <div>
-          <h1>CONMEL 2025</h1>
+          <h1>CONMEL {editionYear}</h1>
           <h2>Confraternização das Mocidades Espíritas da Leopoldina</h2>
         </div>
       </Header>
@@ -592,7 +596,7 @@ const getToken = () => {
             <p>
               Eu, {participant.nomeCompletoResponsavel || "[Nome do Responsável]"}, portador(a) do{" "}
               {participant.documentoResponsavel || "[Documento]"}, autorizo a participação de{" "}
-              {participant.nomeCompleto} no evento COMEJACA 2025 nos dias x e y de Julho de 2025.
+              {participant.nomeCompleto} no evento CONMEL {editionYear}.
             </p>
           </AuthorizationBox>
         )} */}

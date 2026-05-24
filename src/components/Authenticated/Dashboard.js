@@ -17,6 +17,7 @@ import {
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { DEFAULT_EVENT_YEAR, EVENT_YEAR_OPTIONS } from '../../constants/eventYear';
 
 const LoadingSpinner = styled.div`
   @keyframes spin {
@@ -156,6 +157,21 @@ const SearchBoxContainer = styled.div`
   position: relative;
   width: 100%;
   margin-bottom: 2rem;
+`;
+
+const YearFilterRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+
+  select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+  }
 `;
 
 const SearchIcon = styled(FiSearch)`
@@ -430,6 +446,7 @@ const handlePagamento = async (item) => {
         setLoading(true);
         const token = localStorage.getItem('token');
         const response = await axios.get(`${API_URL}/api/auth/obterinscricoes`, {
+          params: { ano: anoFiltro },
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -458,7 +475,7 @@ const handlePagamento = async (item) => {
     
 
     fetchInscricoes();
-  }, []);
+  }, [anoFiltro, API_URL]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'professional' ? 'minimalista' : 'professional'));
@@ -526,6 +543,18 @@ useEffect(() => {
                 onChange={handleSearch}
               />
             </SearchBoxContainer>
+            <YearFilterRow>
+              <label htmlFor="ano-inscricoes">Edição:</label>
+              <select
+                id="ano-inscricoes"
+                value={anoFiltro}
+                onChange={(e) => setAnoFiltro(Number(e.target.value))}
+              >
+                {EVENT_YEAR_OPTIONS.map((y) => (
+                  <option key={y} value={y}>{y}</option>
+                ))}
+              </select>
+            </YearFilterRow>
             {
   loading ? (
     <EmptyStateMessage>

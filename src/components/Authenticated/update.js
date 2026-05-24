@@ -594,7 +594,7 @@ const Atualizar = () => {
           <FormCard onSubmit={handleUpdate}>
             
             <Header>
-              <Title>FORMULÁRIO DE ATUALIZAR INSCRIÇÃO 2025</Title>
+              <Title>FORMULÁRIO DE ATUALIZAR INSCRIÇÃO 2026</Title>
               <p style={{ color: '#666' }}>Todos os campos marcados com * são obrigatórios</p>
               {errors.length > 0 && (
                 <div style={{ color: 'red', marginTop: '1rem' }}>

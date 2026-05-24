@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { DEFAULT_EVENT_YEAR, EVENT_YEAR_OPTIONS } from '../../constants/eventYear';
 
 const ListaParticipantes = () => {
   const [participantes, setParticipantes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtroIE, setFiltroIE] = useState('');
+  const [anoFiltro, setAnoFiltro] = useState(DEFAULT_EVENT_YEAR);
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
   useEffect(() => {
     const fetchParticipantes = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/auth/pagamentos/`, {
+          params: { ano: anoFiltro },
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -27,7 +30,7 @@ const ListaParticipantes = () => {
     };
 
     fetchParticipantes();
-  }, []);
+  }, [anoFiltro, API_URL]);
   const handleStatusChange = async (participanteId, novoStatus) => {
     try {
       const response = await axios.put(`${API_URL}/api/auth/pagamentos/${participanteId}/status`, {
@@ -58,7 +61,7 @@ const ListaParticipantes = () => {
     let pendente = 0;
     let N_A = 0;
 
-    participantes.forEach((p) => {
+    participantesFiltrados.forEach((p) => {
       if (p.statusPagamento === 'pago') {
         pago++;
       } else if (p.statusPagamento === 'pendente') {
@@ -81,6 +84,16 @@ const ListaParticipantes = () => {
             <Title>HISTORICO DE PAGAMENTOS</Title>
           </Header>
           <FilterWrapper>
+            <label htmlFor="ano-pagamentos">Edição:</label>
+            <select
+              id="ano-pagamentos"
+              value={anoFiltro}
+              onChange={(e) => setAnoFiltro(Number(e.target.value))}
+            >
+              {EVENT_YEAR_OPTIONS.map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
             <label>Filtrar por Instituição Espírita:</label>
             <input
               type="text"
@@ -95,7 +108,7 @@ const ListaParticipantes = () => {
 
             <>
             <StatusCounts>
-            <p>Total de Inscritos: {participantes.length}</p>
+            <p>Total de Inscritos ({anoFiltro}): {participantesFiltrados.length}</p>
             <p>Total Pagos: {pago}</p>
             <p>Total Pendentes: {pendente}</p>
             <p>Total N/A: {N_A}</p>
@@ -285,7 +298,8 @@ const FilterWrapper = styled.div`
     font-weight: 600;
   }
 
-  input {
+  input,
+  select {
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid #ccc;

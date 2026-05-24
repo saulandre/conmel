@@ -74,8 +74,9 @@ function AppContent() {
       <Route path="/" element={<Login />} />
       <Route path="/registrar" element={<Register />} />
       <Route path="/recuperarsenha" element={<ForgotPassword />} />
-  
-    <Route path="/novasenha" element={<ChangePassword />} />
+      {/* Links antigos de e-mail que apontavam para /recuperarsenha/route */}
+      <Route path="/recuperarsenha/route" element={<ChangePassword />} />
+      <Route path="/novasenha" element={<ChangePassword />} />
 
       <Route path="*" element={<NotFound />} />
 

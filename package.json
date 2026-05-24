@@ -42,6 +42,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:password-reset": "node scripts/test-password-reset-static.js",
     "eject": "react-scripts eject"
   },
   "browserslist": {

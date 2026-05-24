@@ -288,14 +288,20 @@ const HeaderMain = ({className }) => {
     const savedTheme = localStorage.getItem("theme") || "professional";
     setTheme(savedTheme === "professional" ? themes.professional : themes.minimalista);
   }, []);
-  const estaNaHomeOuRegistrar = pathname === '/' || pathname === '/registrar' || pathname === '/recuperarsenha' || pathname === '/verificar';
+  const estaNaHomeOuRegistrar =
+    pathname === '/' ||
+    pathname === '/registrar' ||
+    pathname === '/recuperarsenha' ||
+    pathname === '/novasenha' ||
+    pathname.startsWith('/recuperarsenha/') ||
+    pathname === '/verificar';
   return (
     <ThemeProvider theme={theme}>
       
       <Container>
         <Header className={className}>
           <Wrapper><ImagemResponsiva src="/favicon.png" alt="Banner do evento" />
-          <Title>35ª CONMEL 2026</Title>
+          <Title>36ª CONMEL 2026</Title>
     </Wrapper>          <Nav>
 
 

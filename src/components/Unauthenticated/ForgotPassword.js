@@ -62,17 +62,17 @@ export const StyledInput = styled.input`
   transition: border-color 0.3s, box-shadow 0.3s;
 
   &:hover {
-    border-color: #6599FF;
+    border-color: #d64042;
   }
 
   &:focus {
-    border-color: #6599FF;
+    border-color: #d64042;
     outline: none;
   }
 `;
 
 const StyledButton = styled.button`
-  background-color: #6599FF;
+  background-color: #d64042;
   color: #fff;
   padding: 10px 20px;
   border: none;

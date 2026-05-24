@@ -24,8 +24,10 @@ import PendingPage from './components/Authenticated/PendingPage';
 import FailurePage from './components/Authenticated/FailurePage';
 import SuccessPage from './components/Authenticated/SuccessPage';
 import ListaParticipantes from './components/Authenticated/Status.js';
-import ChangePassword from './components/Unauthenticated/NovaSenha.js';
+import NovaSenha from './components/Unauthenticated/NovaSenha.js';
 import ForgotPassword from './components/Unauthenticated/ForgotPassword';
+import RedirectRecuperarSenhaRoute from './components/Unauthenticated/RedirectRecuperarSenhaRoute';
+import PasswordRecoveryErrorBoundary from './components/Unauthenticated/PasswordRecoveryErrorBoundary';
 
 function App() {
   return (
@@ -73,12 +75,30 @@ function AppContent() {
       {/* Rotas Públicas */}
       <Route path="/" element={<Login />} />
       <Route path="/registrar" element={<Register />} />
-      <Route path="/recuperarsenha" element={<ForgotPassword />} />
-      {/* Links antigos de e-mail que apontavam para /recuperarsenha/route */}
-      <Route path="/recuperarsenha/route" element={<ChangePassword />} />
-      <Route path="/novasenha" element={<ChangePassword />} />
-
-      <Route path="*" element={<NotFound />} />
+      <Route
+        path="/recuperarsenha"
+        element={
+          <PasswordRecoveryErrorBoundary>
+            <ForgotPassword />
+          </PasswordRecoveryErrorBoundary>
+        }
+      />
+      <Route
+        path="/recuperarsenha/route"
+        element={
+          <PasswordRecoveryErrorBoundary>
+            <RedirectRecuperarSenhaRoute />
+          </PasswordRecoveryErrorBoundary>
+        }
+      />
+      <Route
+        path="/novasenha"
+        element={
+          <PasswordRecoveryErrorBoundary>
+            <NovaSenha />
+          </PasswordRecoveryErrorBoundary>
+        }
+      />
 
       {/* Rotas Privadas */}
       <Route path="/verificar" element={<Verify />} />
@@ -94,6 +114,7 @@ function AppContent() {
       <Route path="/pagamentos" element={<ProtectedRoute><ListaParticipantes /></ProtectedRoute>} />
       <Route path="/enviar-comprovante" element={<ProtectedRoute><Pagamentos /></ProtectedRoute>} />
 
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

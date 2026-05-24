@@ -1,8 +1,13 @@
 import React, { useState, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { getApiBaseUrl, AUTH_PATHS } from "../../config/api";
+import {
+  getApiBaseUrl,
+  AUTH_PATHS,
+  getPasswordResetTokenFromUrl,
+  getApiErrorMessage,
+} from "../../config/api";
 import {
   AuthContainer,
   AuthWrapper,
@@ -17,6 +22,7 @@ import {
   faArrowLeft,
   faCheckCircle,
   faExclamationTriangle,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
@@ -50,16 +56,13 @@ const LoginLinkButton = styled(Link)`
   font-weight: bold;
   text-decoration: none;
   line-height: 30px;
+  text-align: center;
 `;
 
 const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
 
 const NovaSenha = () => {
-  const [searchParams] = useSearchParams();
-  const token = useMemo(
-    () => (searchParams.get("token") || "").trim(),
-    [searchParams]
-  );
+  const token = useMemo(() => getPasswordResetTokenFromUrl(), []);
 
   const [formData, setFormData] = useState({
     newPassword: "",
@@ -68,8 +71,6 @@ const NovaSenha = () => {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [formError, setFormError] = useState("");
-
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,40 +82,51 @@ const NovaSenha = () => {
     e.preventDefault();
     setFormError("");
 
+    if (loading) return;
+
     const password = formData.newPassword;
-
-    if (password !== formData.confirmPassword) {
-      setFormError("As senhas não coincidem.");
-      return toast.error("As senhas não coincidem.");
-    }
-
-    if (!PASSWORD_REGEX.test(password)) {
-      const msg =
-        "A senha deve ter pelo menos 6 caracteres, uma letra maiúscula e um número.";
-      setFormError(msg);
-      return toast.error(msg);
-    }
 
     if (!token) {
       setFormError("Link inválido. Solicite uma nova recuperação de senha.");
       return;
     }
 
+    if (password !== formData.confirmPassword) {
+      const msg = "As senhas não coincidem.";
+      setFormError(msg);
+      toast.error(msg, { position: "bottom-center" });
+      return;
+    }
+
+    if (!PASSWORD_REGEX.test(password)) {
+      const msg =
+        "A senha deve ter pelo menos 6 caracteres, uma letra maiúscula e um número.";
+      setFormError(msg);
+      toast.error(msg, { position: "bottom-center" });
+      return;
+    }
+
     try {
       setLoading(true);
-      await axios.post(
+
+      const { data } = await axios.post(
         `${getApiBaseUrl()}${AUTH_PATHS.resetPassword}`,
         { token, newPassword: password },
         { timeout: 30000 }
       );
 
       setDone(true);
-      toast.success("Senha redefinida com sucesso!");
+      toast.success(
+        data?.message || "Senha redefinida com sucesso!",
+        { position: "bottom-center" }
+      );
     } catch (error) {
-      const msg =
-        error.response?.data?.message || "Erro ao redefinir senha. Tente novamente.";
+      const msg = getApiErrorMessage(
+        error,
+        "Erro ao redefinir senha. Tente novamente."
+      );
       setFormError(msg);
-      toast.error(msg);
+      toast.error(msg, { position: "bottom-center" });
     } finally {
       setLoading(false);
     }
@@ -186,7 +198,13 @@ const NovaSenha = () => {
                 disabled={loading}
               />
               <StyledButton type="submit" disabled={loading}>
-                {loading ? "Salvando..." : "Redefinir senha"}
+                {loading ? (
+                  <>
+                    <FontAwesomeIcon icon={faSpinner} spin /> Salvando...
+                  </>
+                ) : (
+                  "Redefinir senha"
+                )}
               </StyledButton>
             </form>
           </>

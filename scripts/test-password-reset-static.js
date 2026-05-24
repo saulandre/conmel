@@ -40,7 +40,7 @@ record('F8 Forgot: getApiBaseUrl + AUTH_PATHS', forgot.includes('getApiBaseUrl')
 record('F9 Forgot: ErrorBox inline', forgot.includes('ErrorBox'));
 
 const nova = read('src/components/Unauthenticated/NovaSenha.js');
-record('F10 NovaSenha: token via searchParams', nova.includes('useSearchParams'));
+record('F10 NovaSenha: token via URL (sem Suspense)', nova.includes('getPasswordResetTokenFromUrl'));
 record(
   'F11 NovaSenha: sem navigate forçado sem token',
   !/useEffect[\s\S]*navigate\(['"]\/['"]\)/.test(nova)

@@ -11,10 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { getApiBaseUrl, AUTH_PATHS } from "../../config/api";
-
-const GENERIC_SUCCESS_MESSAGE =
-  "Se o e-mail estiver cadastrado, você receberá instruções para redefinir a senha em instantes.";
+import {
+  getApiBaseUrl,
+  AUTH_PATHS,
+  getApiErrorMessage,
+  isLegacyForgotPasswordNotFound,
+  FORGOT_PASSWORD_GENERIC_MESSAGE,
+} from "../../config/api";
 
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -135,15 +138,34 @@ const ForgotPassword = () => {
         });
       }, 1000);
     }
-    return () => clearInterval(timer);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, [disabled]);
+
+  const showSuccess = (message) => {
+    setSubmitted(true);
+    setDisabled(true);
+    setErrorMessage("");
+    try {
+      toast.success(message, {
+        position: "bottom-center",
+        autoClose: 5000,
+      });
+    } catch {
+      /* toast opcional */
+    }
+  };
 
   const handleReset = async (e) => {
     e.preventDefault();
+
+    if (loading || disabled) return;
+
     setErrorMessage("");
     setLoading(true);
 
-    const trimmed = email.trim();
+    const trimmed = (email || "").trim();
     if (!trimmed) {
       setErrorMessage("Informe seu e-mail.");
       setLoading(false);
@@ -151,55 +173,40 @@ const ForgotPassword = () => {
     }
 
     try {
+      const apiBase = getApiBaseUrl();
+      const url = `${apiBase}${AUTH_PATHS.forgotPassword}`;
+
       const { data } = await axios.post(
-        `${getApiBaseUrl()}${AUTH_PATHS.forgotPassword}`,
+        url,
         { email: trimmed },
-        { timeout: 30000 }
+        {
+          timeout: 30000,
+          headers: { "Content-Type": "application/json" },
+        }
       );
 
-      setSubmitted(true);
-      setDisabled(true);
-      toast.success(data?.message || GENERIC_SUCCESS_MESSAGE, {
-        position: "bottom-center",
-        autoClose: 5000,
-      });
+      const message =
+        (data && typeof data === "object" && data.message) ||
+        FORGOT_PASSWORD_GENERIC_MESSAGE;
+
+      showSuccess(message);
     } catch (error) {
-      const status = error.response?.status;
-      const apiMessage = error.response?.data?.message || "";
-
-      // Compatibilidade: backend antigo em produção devolvia 404 se e-mail não existia
-      const legacyNotFound =
-        status === 404 &&
-        /n[aã]o encontrado|not found/i.test(apiMessage);
-
-      if (legacyNotFound) {
-        setSubmitted(true);
-        setDisabled(true);
-        toast.success(GENERIC_SUCCESS_MESSAGE, {
-          position: "bottom-center",
-          autoClose: 5000,
-        });
+      if (isLegacyForgotPasswordNotFound(error)) {
+        showSuccess(FORGOT_PASSWORD_GENERIC_MESSAGE);
         return;
       }
 
-      if (!error.response) {
-        setErrorMessage(
-          "Sem conexão com o servidor. Verifique sua internet e tente novamente."
-        );
-        toast.error("Falha de conexão. Tente novamente.", {
-          position: "bottom-center",
-        });
-        return;
-      }
-
-      const msg =
-        status >= 500
-          ? "Serviço temporariamente indisponível. Tente em alguns minutos."
-          : apiMessage ||
-            "Não foi possível processar sua solicitação. Tente novamente.";
+      const msg = getApiErrorMessage(
+        error,
+        "Não foi possível processar sua solicitação. Tente novamente."
+      );
 
       setErrorMessage(msg);
-      toast.error(msg, { position: "bottom-center" });
+      try {
+        toast.error(msg, { position: "bottom-center" });
+      } catch {
+        /* toast opcional */
+      }
     } finally {
       setLoading(false);
     }
@@ -222,17 +229,19 @@ const ForgotPassword = () => {
           </SuccessBox>
         ) : (
           <>
-            {errorMessage && <ErrorBox role="alert">{errorMessage}</ErrorBox>}
+            {errorMessage ? (
+              <ErrorBox role="alert">{errorMessage}</ErrorBox>
+            ) : null}
             <form onSubmit={handleReset} noValidate>
               <StyledInput
                 type="email"
                 name="email"
                 placeholder="Digite seu e-mail"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(ev) => setEmail(ev.target.value)}
                 autoComplete="email"
                 required
-                disabled={loading}
+                disabled={loading || disabled}
               />
               <StyledButton type="submit" disabled={loading || disabled}>
                 {loading ? (

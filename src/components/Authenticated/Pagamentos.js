@@ -188,23 +188,23 @@ const PaymentPage = () => {
 
       <CardsGrid>
         <Card>
-          <CardTitle>Inscrição sem Camisa R$ 50,00</CardTitle>
+          <CardTitle>Inscrição sem Camisa R$ 55,00</CardTitle>
           <QRImage src="/qrcode50.png" alt="QR Code Inscrição sem Camisa" />
           <Label>PIX Copia e Cola</Label>
           <PixInput
             readOnly
-            value="00020126430014BR.GOV.BCB.PIX012117ceu.ceerj@gmail.com520400005303986540550.005802BR5901N6001C6212050835CONMEL63049284"
+            value="00020126430014BR.GOV.BCB.PIX012117ceu.ceerj@gmail.com520400005303986540555.005802BR5901N6001C62120508CONMEL5563041B38"
             onFocus={(e) => e.target.select()}
           />
         </Card>
 
         <Card>
-          <CardTitle>Inscrição com Camisa R$ 75,00</CardTitle>
+          <CardTitle>Inscrição com Camisa R$ 80,00</CardTitle>
           <QRImage src="/qrcode75.png" alt="QR Code Inscrição com Camisa" />
           <Label>PIX Copia e Cola</Label>
           <PixInput
             readOnly
-            value="00020126360014BR.GOV.BCB.PIX0114+5521992733029520400005303986540575.005802BR5920Valeria Cid Carvalho6014Rio de Janeiro62070503***6304252B"
+            value="00020126720014BR.GOV.BCB.PIX0150Pix Copia-e-cola: 00020126430014BR.GOV.BCB.PIX0121520400005303986540580.005802BR5901N6001C62120508CONMEL80630436DD"
             onFocus={(e) => e.target.select()}
           />
         </Card>

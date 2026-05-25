@@ -70,3 +70,10 @@ export function isLegacyForgotPasswordNotFound(error) {
 
 export const FORGOT_PASSWORD_GENERIC_MESSAGE =
   "Se o e-mail estiver cadastrado, você receberá instruções para redefinir a senha em instantes.";
+
+/** Extrai lista de inscrições/participantes de respostas variadas da API. */
+export function normalizeListPayload(responseData) {
+  if (Array.isArray(responseData?.data)) return responseData.data;
+  if (Array.isArray(responseData)) return responseData;
+  return [];
+}

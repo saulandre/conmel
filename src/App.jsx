@@ -28,6 +28,15 @@ import NovaSenha from './components/Unauthenticated/NovaSenha.js';
 import ForgotPassword from './components/Unauthenticated/ForgotPassword';
 import RedirectRecuperarSenhaRoute from './components/Unauthenticated/RedirectRecuperarSenhaRoute';
 import PasswordRecoveryErrorBoundary from './components/Unauthenticated/PasswordRecoveryErrorBoundary';
+import AppErrorBoundary from './components/AppErrorBoundary';
+
+function ProtectedPage({ children }) {
+  return (
+    <ProtectedRoute>
+      <AppErrorBoundary>{children}</AppErrorBoundary>
+    </ProtectedRoute>
+  );
+}
 
 function App() {
   return (
@@ -102,17 +111,17 @@ function AppContent() {
 
       {/* Rotas Privadas */}
       <Route path="/verificar" element={<Verify />} />
-      <Route path="/instituicao" element={<ProtectedRoute><InstituicaoEspirita /></ProtectedRoute>} />
-      <Route path="/atualizar/:id" element={<ProtectedRoute><Atualizar /></ProtectedRoute>} />
-      <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
-      <Route path="/painel" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/inscrever" element={<ProtectedRoute><FormularioInscricao /></ProtectedRoute>} />
-      <Route path="/falha" element={<ProtectedRoute><FailurePage /></ProtectedRoute>} />
-      <Route path="/sucesso" element={<ProtectedRoute><SuccessPage /></ProtectedRoute>} />
-      <Route path="/pendente" element={<ProtectedRoute><PendingPage /></ProtectedRoute>} />
-      <Route path="/imprimir/:id" element={<ProtectedRoute><FichaInscricao /></ProtectedRoute>} />
-      <Route path="/pagamentos" element={<ProtectedRoute><ListaParticipantes /></ProtectedRoute>} />
-      <Route path="/enviar-comprovante" element={<ProtectedRoute><Pagamentos /></ProtectedRoute>} />
+      <Route path="/instituicao" element={<ProtectedPage><InstituicaoEspirita /></ProtectedPage>} />
+      <Route path="/atualizar/:id" element={<ProtectedPage><Atualizar /></ProtectedPage>} />
+      <Route path="/perfil" element={<ProtectedPage><Perfil /></ProtectedPage>} />
+      <Route path="/painel" element={<ProtectedPage><Dashboard /></ProtectedPage>} />
+      <Route path="/inscrever" element={<ProtectedPage><FormularioInscricao /></ProtectedPage>} />
+      <Route path="/falha" element={<ProtectedPage><FailurePage /></ProtectedPage>} />
+      <Route path="/sucesso" element={<ProtectedPage><SuccessPage /></ProtectedPage>} />
+      <Route path="/pendente" element={<ProtectedPage><PendingPage /></ProtectedPage>} />
+      <Route path="/imprimir/:id" element={<ProtectedPage><FichaInscricao /></ProtectedPage>} />
+      <Route path="/pagamentos" element={<ProtectedPage><ListaParticipantes /></ProtectedPage>} />
+      <Route path="/enviar-comprovante" element={<ProtectedPage><Pagamentos /></ProtectedPage>} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

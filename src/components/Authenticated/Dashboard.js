@@ -18,6 +18,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DEFAULT_EVENT_YEAR, EVENT_YEAR_OPTIONS } from '../../constants/eventYear';
+import { getApiBaseUrl, getApiErrorMessage, normalizeListPayload } from '../../config/api';
+import { getStoredRole } from '../../utils/safeStorage';
 
 const LoadingSpinner = styled.div`
   @keyframes spin {
@@ -387,37 +389,37 @@ const ButtonGroup = styled.div`
   }
 `;
 
+const ErrorBanner = styled(EmptyStateMessage)`
+  background: #ffebee;
+  color: #b71c1c;
+  border-color: #ef9a9a;
+`;
+
 const Dashboard = () => {
   const [search, setSearch] = useState('');
   const [inscricoes, setInscricoes] = useState([]);
+  const [anoFiltro, setAnoFiltro] = useState(DEFAULT_EVENT_YEAR);
   const [theme, setTheme] = useState('professional');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const apiBase = getApiBaseUrl();
   const [loadingItemId, setLoadingItemId] = useState(null);
- const [isAdmin, setIsAdmin] = useState(false);
- const storedUser = JSON.parse(localStorage.getItem('user'));
+  const [isAdmin, setIsAdmin] = useState(false);
 
-
-
- useEffect(() => {
-
-
-  if (storedUser) {
-  }
-
-  if (storedUser?.role === 'admin') {
-    setIsAdmin(true);
-  }
-}, []);
+  useEffect(() => {
+    const role = getStoredRole();
+    if (role === 'admin') {
+      setIsAdmin(true);
+    }
+  }, []);
 const handlePagamento = async (item) => {
   setLoadingItemId(item);
   try {
     const token = localStorage.getItem('token');
 
-    const response = await axios.get(`${API_URL}/api/auth/pagamento/${item}`, {
+    const response = await axios.get(`${apiBase}/api/auth/pagamento/${item}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -440,42 +442,71 @@ const handlePagamento = async (item) => {
 
 
   
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('isVerified');
+    localStorage.removeItem('role');
+    navigate('/');
+  };
+
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/', { replace: true });
+      return;
+    }
+
+    let cancelled = false;
+
     const fetchInscricoes = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/api/auth/obterinscricoes`, {
+        setError(null);
+
+        const response = await axios.get(`${apiBase}/api/auth/obterinscricoes`, {
           params: { ano: anoFiltro },
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
+          timeout: 30000,
         });
-    
-        const role =  localStorage.getItem('role');
+
+        if (cancelled) return;
+
+        const role = getStoredRole();
         if (role === 'admin') {
           setIsAdmin(true);
         }
-        if (!Array.isArray(response.data.data)) {
-          throw new Error('Resposta da API não contém um array válido');
-        }
-    
-        setInscricoes(response.data.data); 
+
+        setInscricoes(normalizeListPayload(response?.data));
         setError(null);
-      } catch (error) {
-        setError(error.response?.data?.error || 'Erro ao carregar inscrições');
-        
-        if (error.response?.status === 401) {
+      } catch (err) {
+        if (cancelled) return;
+
+        const status = err?.response?.status;
+        if (status === 401 || status === 403) {
           handleLogout();
+          return;
         }
+
+        setInscricoes([]);
+        setError(
+          getApiErrorMessage(err, 'Não foi possível carregar suas inscrições. Tente novamente.')
+        );
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
-    
 
     fetchInscricoes();
-  }, [anoFiltro, API_URL]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [anoFiltro, apiBase, navigate]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'professional' ? 'minimalista' : 'professional'));
@@ -483,13 +514,6 @@ const handlePagamento = async (item) => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('isVerified');
-    navigate('/');
-  };
 
   const handleSearch = (e) => setSearch(e.target.value);
 
@@ -504,25 +528,28 @@ const handlePagamento = async (item) => {
     })
   : [];
 
-  const menu = document.querySelector('.mobile-menu');
-  const button = document.querySelector('.menu-button');
- 
-
-    const handleInscrever = () => {
+  const handleInscrever = () => {
     window.open('https://conmelrj.com.br/inscrever', '_blank');
   };
-useEffect(() => {
-  const handleClickOutside = (e) => {
- 
-    
-    if (isMenuOpen && !menu.contains(e.target) && !button.contains(e.target)) {
-      setIsMenuOpen(false);
-    }
-  };
 
-  document.addEventListener('mousedown', handleClickOutside);
-  return () => document.removeEventListener('mousedown', handleClickOutside);
-}, [isMenuOpen]);
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const handleClickOutside = (e) => {
+      const menu = document.querySelector('.mobile-menu');
+      const button = document.querySelector('.menu-button');
+      if (!menu || !button) {
+        setIsMenuOpen(false);
+        return;
+      }
+      if (!menu.contains(e.target) && !button.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
   return (
     <ThemeProvider theme={themes[theme]}>
       <Container>
@@ -534,6 +561,12 @@ useEffect(() => {
           <FormCard>
    
 
+            {error && !loading ? (
+              <ErrorBanner role="alert">
+                <FiAlertTriangle size={20} />
+                {error}
+              </ErrorBanner>
+            ) : null}
             <SearchBoxContainer>
               <SearchIcon size={20} />
               <SearchBox
@@ -600,12 +633,12 @@ useEffect(() => {
 
 
 <ButtonGroup>
-  <SmallButton onClick={() => navigate(`/atualizar/${item.id}`)}>
+  <SmallButton onClick={() => item?.id && navigate(`/atualizar/${item.id}`)} disabled={!item?.id}>
     <FiEdit size={14} style={{ marginRight: 6 }} />
     Editar
   </SmallButton>
 
-  <SmallButton onClick={() => navigate(`/imprimir/${item.id}`)}>
+  <SmallButton onClick={() => item?.id && navigate(`/imprimir/${item.id}`)} disabled={!item?.id}>
     <FiPrinter size={14} style={{ marginRight: 6 }} />
     Imprimir
   </SmallButton>

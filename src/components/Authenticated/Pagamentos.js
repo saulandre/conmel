@@ -199,12 +199,34 @@ const PaymentPage = () => {
         </Card>
 
         <Card>
-          <CardTitle>Inscrição com Camisa R$ 80,00</CardTitle>
+          <CardTitle>Inscrição pequeno companheiro com Camisa R$ 80,00</CardTitle>
           <QRImage src="/qrcode75.png" alt="QR Code Inscrição com Camisa" />
           <Label>PIX Copia e Cola</Label>
           <PixInput
             readOnly
             value="00020126720014BR.GOV.BCB.PIX0150Pix Copia-e-cola: 00020126430014BR.GOV.BCB.PIX0121520400005303986540580.005802BR5901N6001C62120508CONMEL80630436DD"
+            onFocus={(e) => e.target.select()}
+          />
+        </Card>
+
+        <Card>
+          <CardTitle>Inscrição Pequenos Companheiros R$ 50,00</CardTitle>
+          <QRImage src="/qrcode-pix50.png" alt="QR Code Inscrição Pequenos Companheiros" />
+          <Label>PIX Copia e Cola</Label>
+          <PixInput
+            readOnly
+            value="00020126430014BR.GOV.BCB.PIX012117ceu.ceerj@gmail.com520400005303986540550.005802BR5901N6001C62120508PEQUENOS6304809F"
+            onFocus={(e) => e.target.select()}
+          />
+        </Card>
+
+        <Card>
+          <CardTitle>Inscrição Confraternistas e Trabalhadores com Camisa R$ 85,00</CardTitle>
+          <QRImage src="/qrcode-pix85.png" alt="QR Code Inscrição Confraternistas e Trabalhadores com Camisa" />
+          <Label>PIX Copia e Cola</Label>
+          <PixInput
+            readOnly
+            value="00020126430014BR.GOV.BCB.PIX012117ceu.ceerj@gmail.com520400005303986540585.005802BR5901N6001C62220518CAMISAPARTICIPANTE630450EE"
             onFocus={(e) => e.target.select()}
           />
         </Card>

@@ -323,17 +323,17 @@ const Login = () => {
     }));
   };
 
-  useEffect(() => {
-    const emailPreenchido = formData.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
-    const senhaPreenchida = formData.password && formData.password.length >= 8;
-  
-    if (emailPreenchido && senhaPreenchida) {
-      handleSubmit();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const emailValido = formData.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
+    const senhaValida = formData.password && formData.password.length >= 8;
+
+    if (!emailValido || !senhaValida) {
+      setError('Preencha um e-mail válido e uma senha com pelo menos 8 caracteres.');
+      return;
     }
-  }, [formData.email, formData.password]);
-  
-  const handleSubmit = async () => {
-  
+
     try {
       setLoading(true);
       setError(null);
@@ -357,7 +357,7 @@ const Login = () => {
       const redirectPath = user.isVerified ? '/painel' : '/verificar';
       navigate(redirectPath);
     } catch (err) {
-      console.error("❌ Erro no login automático:", err);
+      console.error("❌ Erro no login:", err);
       if (err.response) {
         if (err.response.status === 401) {
           setError('Usuário ou senha incorretos.');

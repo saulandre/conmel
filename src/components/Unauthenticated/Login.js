@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { faArrowRight, faKey } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,12 +23,15 @@ const AuthContainer = styled.div`
   padding: 2rem;
   box-sizing: border-box;
   background: #e7ecef;
-  @media (max-width: 480px) {
+
+  @media (max-width: 768px) {
+    height: 100vh;
+    min-height: 100vh;
     padding: 0;
   }
 
   @media (max-width: 480px) {
-    padding: 0 0rem 27px; 
+    padding: 0;
   }
 `;
 
@@ -47,7 +49,8 @@ const Title = styled.h1`
   text-align:center;
   margin-bottom: 2.5rem;
   @media (max-width: 768px) {
-    font-size: 2.4rem;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
   }
 `;
 
@@ -65,10 +68,10 @@ const Button = styled.button`
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, #e36414 0%, #e36414 100%);
   }
+
   @media (max-width: 768px) {
-    position: fixed;
-    zIndex: 9999;
-    bottom: 0;
+    width: 100%;
+    margin-top: 0.25rem;
   }
 `;
 
@@ -81,7 +84,10 @@ const Form = styled.form`
   flex-direction: column;
   gap: 15px;
   text-align: center;
-  
+
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
 `;
 
 
@@ -127,13 +133,21 @@ const AuthWrapper = styled.div`
   border-radius: 5px;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: 1.25rem 1rem;
     margin: 0;
     border-radius: 0;
-    height: 100vh; /* Garante que o conteúdo ocupa toda a tela */
-
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem 0.75rem;
+    padding-top: 1.25rem;
   }
 `;
 
@@ -194,14 +208,44 @@ const AuthLink = styled.a`
     transform: translateX(2px);
     color: #0f3460
   }
+`;
+
+const MobileForgotPasswordLink = styled.a`
+  display: none;
 
   @media (max-width: 768px) {
-    &:first-child {
-      display: none;
+    display: block;
+    color: #0d1b2a;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: right;
+    margin-top: -4px;
+    padding: 0.15rem 0;
+    transition: color 0.3s ease;
+
+    &:hover,
+    &:active {
+      text-decoration: underline;
+      color: #0f3460;
     }
   }
+`;
 
+const AuthLinksWrapper = styled.div`
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.75rem;
 
+  @media (max-width: 768px) {
+    margin-top: 0.75rem;
+    gap: 0.5rem;
+  }
+`;
+
+const DesktopForgotPasswordLink = styled(AuthLink)`
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const AuthLinkConta = styled.a`
@@ -221,59 +265,6 @@ const AuthLinkConta = styled.a`
 
   
 `;
-const FloatingButtonContainer = styled.div`
-  @media (max-width: 768px) {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  
-    width: 100vw;
-    background: linear-gradient(135deg, #f8edeb, #403d39, #f8edeb);
-    padding: 0;
-    border-top: 1px solid #e0e0e0;
-    z-index: 1000; /* Garante que o botão fique sempre visível */
-  }
-`;
-const FloatingButton = styled.button`
-  display: none;
-
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 1.2rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 0;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    background: linear-gradient(135deg, #6599ff, #6599ff, #6599ff);
-    
-    &:active {
-      transform: translateY(0);
-    }
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
-    }
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-`;
-
-
-
 
 const LoadingSpinner = styled.div`
   @keyframes spin {
@@ -300,12 +291,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-  const [areFieldsFilled, setAreFieldsFilled] = useState(false);
-
-  useEffect(() => {
-    const filled = formData.email.length > 0 && formData.password.length > 0;
-    setAreFieldsFilled(filled);
-  }, [formData.email, formData.password]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -403,37 +388,20 @@ type='password'
        
             />
           </InputWrapper>
+          <MobileForgotPasswordLink href="/recuperarsenha">
+            Esqueci a senha
+          </MobileForgotPasswordLink>
           {error && <ErrorMessage>{error}</ErrorMessage>}
 
-<Button type="submit" disabled={loading}>
-  {loading ? <LoadingSpinner  /> : 'Entrar'}
-</Button>
-<div style={{ marginTop: '1.5rem', display: 'grid', gap: '0.75rem' }}>
-            <AuthLink href="/recuperarsenha"> Esqueci a senha</AuthLink>
+          <Button type="submit" disabled={loading}>
+            {loading ? <LoadingSpinner /> : 'Entrar'}
+          </Button>
+          <AuthLinksWrapper>
+            <DesktopForgotPasswordLink href="/recuperarsenha">
+              Esqueci a senha
+            </DesktopForgotPasswordLink>
             <AuthLinkConta href="/registrar">Nova conta</AuthLinkConta>
-          </div>
-          <FloatingButtonContainer>
-          {areFieldsFilled ? (
-  <FloatingButton primary type="submit" disabled={loading}>
-    {loading ? (
-      <LoadingSpinner />
-    ) : (
-      <>
-        <FontAwesomeIcon  style={{ color: 'white', marginRight: '8px' }}  icon={faKey} />
-        Entrar
-      </>
-    )}
-  </FloatingButton>
-) : (
-<FloatingButton as="a" href="/recuperarsenha">
-  <FontAwesomeIcon 
-    icon={faArrowRight}  
-    style={{ color: 'white', marginRight: '8px' }} 
-  />
-  <span style={{ color: 'white' }}> Esqueci a senha</span>
-</FloatingButton>
-)}
-        </FloatingButtonContainer>
+          </AuthLinksWrapper>
         </Form>
       </AuthWrapper>
     </AuthContainer>

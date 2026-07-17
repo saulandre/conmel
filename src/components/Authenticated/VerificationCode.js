@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -152,136 +152,84 @@ const SuccessMessage = styled.p`
   font-family: 'Poppins', sans-serif;
 `;
 
+function getStoredUser() {
+  try {
+    return JSON.parse(localStorage.getItem('user') || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function resolveUserId(storedUser) {
+  if (storedUser?.id != null) {
+    return Number(storedUser.id);
+  }
+  const fromStorage = localStorage.getItem('userId');
+  return fromStorage ? Number(fromStorage) : null;
+}
+
+function resolveUserEmail(storedUser) {
+  return (
+    storedUser?.userEmail ||
+    storedUser?.email ||
+    localStorage.getItem('userEmail') ||
+    localStorage.getItem('email') ||
+    ''
+  );
+}
+
 const VerificationCode = () => {
   const navigate = useNavigate();
-      useEffect(() => {
-        const token = localStorage.getItem("token");
-      
-        if (!token) {
-          navigate("/");
-        }
-      }, [navigate]);
-     
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [isResendDisabled, setIsResendDisabled] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Adicionando estado para controlar a submissão
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
   const token = localStorage.getItem('token');
-  const userEmail = localStorage.getItem('userEmail');
+  const storedUser = getStoredUser();
+  const userId = resolveUserId(storedUser);
+  const displayEmail = resolveUserEmail(storedUser);
 
-   // Corrigido para o nome correto da chave
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-  const userId = storedUser?.id;  
-  console.log("E-mail salvo:", storedUser?.userEmail);
-  
-  console.log("Token:", token);
-  console.log("ID do usuário:", userId);
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
+  const [verified, setVerified] = useState(false);
+  const [resendMessage, setResendMessage] = useState('');
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-
-if (storedUser) {
-  console.log("ID salvo no localStorage:", storedUser.id);
-} else {
-  console.log("Nenhum usuário encontrado no localStorage.");
-}
-
-// Verifica se o token existe
-if (token) {
-  console.log("Token:", token);
-} else {
-  console.log("Nenhum token encontrado no localStorage.");
-}
-
-
-
-
-// Modificação do Input onChange para permitir apenas números
-const handleCodeChange = (e) => {
-  const inputValue = e.target.value;
-
-  // Filtra para permitir apenas números e limita a 6 dígitos
-  if (/^\d{0,6}$/.test(inputValue)) {
-    setCode(inputValue);  // Atualiza o estado com o valor filtrado
-  }
-};
-
-useEffect(() => {
-  const token = localStorage.getItem("token");
-console.log("token: " + token);
-  if (!token) {
-    navigate("/");  // Caso não haja token, redireciona para a página inicial
-  }
-}, [navigate]);
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("ID do usuário:", userId);  // Verificar o ID do usuário
-  if (code.length !== 6) {
-    setError('Por favor, insira um código válido de 6 dígitos.');
-    return;
-  }
-
-  setIsSubmitting(true); // Indicando que a submissão está em andamento
-
-  try {
-   const response = await axios.post(`${API_URL}/api/auth/verificar`,
-      {
-        userId: userId,
-        verificationCode: code, // Envia o código digitado pelo usuário
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(userId, code, token);
-
-    // Verifica se o usuário foi verificado
-    if (response.data.user && response.data.user.isVerified) {
-      
-      setSuccess(true);
-      setCode(''); // Limpa o campo de código
-      localStorage.removeItem('verificationCode'); // Limpa o código de verificação do localStorage
-
-      // Salva as informações do usuário e o token no localStorage
-      const { id, name, email } = response.data.user;
-      localStorage.setItem('user', JSON.stringify({ id, name, email }));
-  
-      alert('Conta verificada com sucesso!');
-      localStorage.setItem('isVerified', 'true');
-            if (window.location.hostname === 'localhost') {
-        // Se estiver em localhost, redireciona para o ambiente local
-        window.location.replace('http://localhost:3000/painel');
-      } else {
-        // Caso contrário, redireciona para o ambiente de produção
-        window.location.replace('https://www.conmelrj.com.br/painel');
-      }
-      setError(response.data.error || 'Erro desconhecido.');
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
     }
-  } catch (err) {
-    console.error('Erro ao verificar o código:', err);
-    setError('Ocorreu um erro ao verificar o código. Tente novamente.');
-  } finally {
-    setIsSubmitting(false); // Finaliza o estado de submissão
-  }
-};
-useEffect(() => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  console.log("Usuário no localStorage:", user);  // Verificar o usuário no localStorage
-}, []);
-  const handleResendCode = async () => {
-  
-    setIsResendDisabled(true);
-    setCountdown(60);
+  }, [navigate, token]);
+
+  const handleCodeChange = (e) => {
+    const inputValue = e.target.value;
+    if (/^\d{0,6}$/.test(inputValue)) {
+      setCode(inputValue);
+    }
+  };
+
+  const handleSubmit = useCallback(async (e) => {
+    e?.preventDefault?.();
+
+    if (!userId) {
+      setError('Sessão inválida. Faça login novamente.');
+      return;
+    }
+
+    if (code.length !== 6) {
+      setError('Por favor, insira um código válido de 6 dígitos.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError('');
+    setResendMessage('');
 
     try {
       const response = await axios.post(
-        `${API_URL}/api/auth/enviarcodigo`,
+        `${API_URL}/api/auth/verificar`,
         {
-          email: userEmail,
+          userId,
+          verificationCode: code,
         },
         {
           headers: {
@@ -290,15 +238,70 @@ useEffect(() => {
         }
       );
 
-      if (response.data.success) {
-        setError(''); // Limpa mensagens de erro anteriores
-        setSuccess('Novo código enviado com sucesso!');
-      } else {
-        setError(response.data.message || 'Erro ao enviar o novo código.');
+      if (response.data.user?.isVerified) {
+        setVerified(true);
+        setCode('');
+        localStorage.removeItem('verificationCode');
+
+        const { id, name, email } = response.data.user;
+        localStorage.setItem(
+          'user',
+          JSON.stringify({ id, name, email, userEmail: email })
+        );
+        localStorage.setItem('userId', String(id));
+        localStorage.setItem('email', email);
+        localStorage.setItem('nome', name);
+        localStorage.setItem('isVerified', 'true');
+
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+        }
+
+        alert('Conta verificada com sucesso!');
+        if (window.location.hostname === 'localhost') {
+          window.location.replace('http://localhost:3000/painel');
+        } else {
+          window.location.replace('https://www.conmelrj.com.br/painel');
+        }
       }
-    } catch (error) {
-      console.error('Erro ao solicitar um novo código:', error);
-      setError('Erro ao solicitar um novo código.');
+    } catch (err) {
+      const message =
+        err.response?.data?.error ||
+        'Ocorreu um erro ao verificar o código. Tente novamente.';
+      setError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [API_URL, code, token, userId]);
+
+  const handleResendCode = async () => {
+    setIsResendDisabled(true);
+    setCountdown(60);
+    setError('');
+    setResendMessage('');
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/enviarcodigo`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setResendMessage(response.data.message || 'Novo código enviado com sucesso!');
+      } else {
+        setError(response.data.message || response.data.error || 'Erro ao enviar o novo código.');
+      }
+    } catch (err) {
+      const message =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        'Erro ao solicitar um novo código.';
+      setError(message);
     }
   };
 
@@ -306,23 +309,26 @@ useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
-    } else {
-      setIsResendDisabled(false);
     }
+    setIsResendDisabled(false);
   }, [countdown]);
 
   useEffect(() => {
-    if (code.length === 6) {
-      handleSubmit(new Event('submit')); // Submete o formulário automaticamente
+    if (code.length === 6 && !isSubmitting && !verified) {
+      handleSubmit();
     }
-  }, [code]);
+  }, [code, handleSubmit, isSubmitting, verified]);
 
   return (
     <AuthContainer>
       <AuthWrapper>
         <Title>PRÓXIMO PASSO</Title>
         <Paragraph>
-          Enviamos um código para o e-mail <strong>{storedUser?.userEmail}<br></br>Caso a confirmação não chegue na<br></br>caixa de entrada verifique a caixa de Spam.</strong>.
+          Enviamos um código para o e-mail <strong>{displayEmail}</strong>.
+          <br />
+          O código é válido por <strong>15 minutos</strong>.
+          <br />
+          Caso a confirmação não chegue na caixa de entrada, verifique a caixa de Spam.
         </Paragraph>
         <form onSubmit={handleSubmit}>
           <Input
@@ -337,7 +343,8 @@ useEffect(() => {
             {isSubmitting ? 'Ativando...' : 'Ativar'}
           </Button>
         </form>
-        {success && <SuccessMessage>Código verificado com sucesso! 🎉</SuccessMessage>}
+        {verified && <SuccessMessage>Código verificado com sucesso! 🎉</SuccessMessage>}
+        {resendMessage && <SuccessMessage>{resendMessage}</SuccessMessage>}
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <ButtonGroup>
           <SecondaryButton onClick={handleResendCode} disabled={isResendDisabled}>

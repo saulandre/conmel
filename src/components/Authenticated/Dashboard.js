@@ -13,13 +13,20 @@ import {
   FiMenu,
   FiMoon,
   FiLoader,
-  FiAlertTriangle
+  FiAlertTriangle,
+  FiCopy,
+  FiExternalLink,
+  FiLink,
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DEFAULT_EVENT_YEAR, EVENT_YEAR_OPTIONS } from '../../constants/eventYear';
 import { getApiBaseUrl, getApiErrorMessage, normalizeListPayload } from '../../config/api';
 import { getStoredRole } from '../../utils/safeStorage';
+import {
+  fetchPublicRegistrationsOpen,
+  PUBLIC_INSCRICAO_URL,
+} from '../../utils/registrationStatus';
 
 const LoadingSpinner = styled.div`
   @keyframes spin {
@@ -153,6 +160,75 @@ const MobileOnlyButton = styled.button`
     &:hover {
       background-color: #6599FF;
     }
+  }
+`;
+
+const PublicLinkCard = styled.div`
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+const PublicLinkRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #22223b;
+  word-break: break-all;
+`;
+
+const StatusBadge = styled.span`
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: ${({ $open }) => ($open ? '#d1e7dd' : '#f8d7da')};
+  color: ${({ $open }) => ($open ? '#0f5132' : '#842029')};
+`;
+
+const LinkActionButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #6599FF;
+  background: #fff;
+  color: #6599FF;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover {
+    background: #eef4ff;
+  }
+`;
+
+const AdminInscreverButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.1rem;
+  background: #6599FF;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 1.25rem;
+
+  &:hover {
+    filter: brightness(0.95);
   }
 `;
 const SearchBoxContainer = styled.div`
@@ -407,12 +483,24 @@ const Dashboard = () => {
   const apiBase = getApiBaseUrl();
   const [loadingItemId, setLoadingItemId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [publicRegistrationsOpen, setPublicRegistrationsOpen] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState('');
 
   useEffect(() => {
     const role = getStoredRole();
     if (role === 'admin') {
       setIsAdmin(true);
     }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPublicRegistrationsOpen().then((open) => {
+      if (!cancelled) setPublicRegistrationsOpen(open);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 const handlePagamento = async (item) => {
   setLoadingItemId(item);
@@ -529,7 +617,22 @@ const handlePagamento = async (item) => {
   : [];
 
   const handleInscrever = () => {
-    window.open('https://conmelrj.com.br/inscrever', '_blank');
+    window.open(PUBLIC_INSCRICAO_URL, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleAdminInscrever = () => {
+    navigate('/inscrever');
+  };
+
+  const handleCopyPublicLink = async () => {
+    try {
+      await navigator.clipboard.writeText(PUBLIC_INSCRICAO_URL);
+      setCopyFeedback('Link copiado!');
+      setTimeout(() => setCopyFeedback(''), 2000);
+    } catch {
+      setCopyFeedback('Não foi possível copiar');
+      setTimeout(() => setCopyFeedback(''), 2000);
+    }
   };
 
   useEffect(() => {
@@ -555,11 +658,40 @@ const handlePagamento = async (item) => {
       <Container>
         <br></br><br></br>
      <MobileOnlyButton onClick={handleInscrever}>
-        Inscrever
+        {publicRegistrationsOpen ? 'Inscrever' : 'Ver link público'}
       </MobileOnlyButton>
         <ContentWrapper>
           <FormCard>
-   
+            <PublicLinkCard>
+              <PublicLinkRow>
+                <FiLink size={16} />
+                <strong>Link público:</strong>
+                <span>{PUBLIC_INSCRICAO_URL}</span>
+              </PublicLinkRow>
+              <PublicLinkRow>
+                <StatusBadge $open={publicRegistrationsOpen}>
+                  {publicRegistrationsOpen
+                    ? 'Inscrições públicas abertas'
+                    : 'Inscrições públicas encerradas'}
+                </StatusBadge>
+                {copyFeedback ? <span>{copyFeedback}</span> : null}
+              </PublicLinkRow>
+              <PublicLinkRow>
+                <LinkActionButton type="button" onClick={handleCopyPublicLink}>
+                  <FiCopy size={14} /> Copiar link
+                </LinkActionButton>
+                <LinkActionButton type="button" onClick={handleInscrever}>
+                  <FiExternalLink size={14} /> Abrir link
+                </LinkActionButton>
+              </PublicLinkRow>
+            </PublicLinkCard>
+
+            {isAdmin && (
+              <AdminInscreverButton type="button" onClick={handleAdminInscrever}>
+                <FiPlus size={18} />
+                Realizar inscrição administrativa
+              </AdminInscreverButton>
+            )}
 
             {error && !loading ? (
               <ErrorBanner role="alert">

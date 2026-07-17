@@ -9,6 +9,11 @@ import { ptBR } from "date-fns/locale";
 import axios from 'axios';
 import HeaderMain from './Header'
 import { FaWhatsapp } from "react-icons/fa";
+import {
+  fetchPublicRegistrationsOpen,
+  isStoredAdmin,
+  PUBLIC_REGISTRATION_CLOSED_UI_MESSAGE,
+} from '../../utils/registrationStatus';
 
 const Container = styled.div`
   background: ${({ theme }) => theme.background};
@@ -614,28 +619,67 @@ const Formulario = () => {
   const [institutions, setInstitutions] = useState([]);
   const [isMinor, setIsMinor] = useState(false);
   const [theme, setTheme] = useState(themes.professional);
+  const [statusLoading, setStatusLoading] = useState(true);
+  const [canRegister, setCanRegister] = useState(false);
+  const [publicOpen, setPublicOpen] = useState(false);
+  const [registrationsClosedMessage, setRegistrationsClosedMessage] = useState(
+    PUBLIC_REGISTRATION_CLOSED_UI_MESSAGE
+  );
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/painel");
-      return;
-    }
+    let cancelled = false;
 
-    const fetchInstitutions = async () => {
+    const bootstrap = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/auth/instituicoes`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setInstitutions(response.data);
-      } catch (error) {
-        if (error.response?.status === 401) {
-          navigate("/entrar");
+        setStatusLoading(true);
+        const open = await fetchPublicRegistrationsOpen();
+        const admin = isStoredAdmin();
+        const allowed = open || admin;
+
+        if (cancelled) return;
+
+        setPublicOpen(open);
+        setCanRegister(allowed);
+        if (!open) {
+          setRegistrationsClosedMessage(PUBLIC_REGISTRATION_CLOSED_UI_MESSAGE);
+        }
+
+        const token = localStorage.getItem("token");
+
+        // Inscrições abertas exigem autenticação; encerradas: público vê a mensagem (sem redirect).
+        if (allowed && !token) {
+          navigate("/", { replace: true });
+          return;
+        }
+
+        if (!allowed) {
+          return;
+        }
+
+        try {
+          const response = await axios.get(`${API_URL}/api/auth/instituicoes`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (!cancelled) {
+            setInstitutions(response.data);
+          }
+        } catch (error) {
+          if (error.response?.status === 401) {
+            navigate("/", { replace: true });
+          }
+        }
+      } finally {
+        if (!cancelled) {
+          setStatusLoading(false);
         }
       }
     };
 
-    fetchInstitutions();
+    bootstrap();
+
+    return () => {
+      cancelled = true;
+    };
   }, [navigate, API_URL]);
 
   const calculateAge = (date) => {
@@ -753,14 +797,15 @@ const Formulario = () => {
         navigate('/painel');
       }
     } catch (error) {
+      const apiError = error.response?.data?.error;
+      const detalhes = error.response?.data?.details;
 
-      const detalhes = error.response?.data.details;
-
- 
       if (Array.isArray(detalhes)) {
         setErrors(detalhes);
       } else {
-        setErrors([{ message: detalhes || 'Erro ao salvar inscrição' }]);
+        setErrors([{
+          message: apiError || detalhes || 'Erro ao salvar inscrição',
+        }]);
       }
     } finally {
       setIsSubmitting(false);
@@ -815,13 +860,42 @@ const Formulario = () => {
     <ThemeProvider theme={theme}>      <Container>
      
         <FormWrapper>
-   
+          {statusLoading ? (
+            <FormCard as="div">
+              <Header>
+                <Title>FORMULÁRIO DE INSCRIÇÃO 2026</Title>
+                <p style={{ color: '#666' }}>Carregando...</p>
+              </Header>
+            </FormCard>
+          ) : !canRegister ? (
+            <FormCard as="div">
+              <Header>
+                <Title>FORMULÁRIO DE INSCRIÇÃO 2026</Title>
+                <p
+                  style={{
+                    color: '#22223b',
+                    fontSize: '1.1rem',
+                    lineHeight: 1.5,
+                    marginTop: '1.5rem',
+                    fontWeight: 500,
+                  }}
+                >
+                  {registrationsClosedMessage}
+                </p>
+              </Header>
+            </FormCard>
+          ) : (
 
           <FormCard onSubmit={handleSubmit}>
             
             <Header>
               <Title>FORMULÁRIO DE INSCRIÇÃO 2026</Title>
               <p style={{ color: '#666' }}>Todos os campos marcados com * são obrigatórios</p>
+              {isStoredAdmin() && !publicOpen && (
+                <p style={{ color: '#6599FF', marginTop: '0.5rem', fontSize: '0.95rem' }}>
+                  Inscrição administrativa — as inscrições públicas estão encerradas, mas administradores podem cadastrar.
+                </p>
+              )}
               {errors.length > 0 && (
                 <div style={{ color: 'red', marginTop: '1rem' }}>
                   {errors.map((err, index) => (
@@ -1367,6 +1441,7 @@ mental, emocional?"
                 )}
               </SubmitButton>
           </FormCard>
+          )}
         </FormWrapper>
       </Container>
       </ThemeProvider>

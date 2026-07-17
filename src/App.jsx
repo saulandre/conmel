@@ -115,7 +115,7 @@ function AppContent() {
       <Route path="/atualizar/:id" element={<ProtectedPage><Atualizar /></ProtectedPage>} />
       <Route path="/perfil" element={<ProtectedPage><Perfil /></ProtectedPage>} />
       <Route path="/painel" element={<ProtectedPage><Dashboard /></ProtectedPage>} />
-      <Route path="/inscrever" element={<ProtectedPage><FormularioInscricao /></ProtectedPage>} />
+      <Route path="/inscrever" element={<AppErrorBoundary><FormularioInscricao /></AppErrorBoundary>} />
       <Route path="/falha" element={<ProtectedPage><FailurePage /></ProtectedPage>} />
       <Route path="/sucesso" element={<ProtectedPage><SuccessPage /></ProtectedPage>} />
       <Route path="/pendente" element={<ProtectedPage><PendingPage /></ProtectedPage>} />

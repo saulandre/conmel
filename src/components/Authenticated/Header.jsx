@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import styled, { ThemeProvider } from 'styled-components';
 import { FiUser, FiLogOut, FiMoon,FiDownload, FiMenu, FiPlus, FiUpload } from "react-icons/fi";
+import { fetchPublicRegistrationsOpen } from '../../utils/registrationStatus';
 
 // Temas otimizados
 export const themes = {
@@ -264,7 +265,8 @@ const HeaderMain = ({className }) => {
   const estaNaVerificar = pathname === '/verificar';
 
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const [publicRegistrationsOpen, setPublicRegistrationsOpen] = useState(false);
+  const hasToken = Boolean(localStorage.getItem('token'));
 
   useEffect(() => {
     const storedRole = localStorage.getItem('role');
@@ -273,7 +275,24 @@ const HeaderMain = ({className }) => {
       setIsAdmin(true);
     }
   }, []);
-  
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPublicRegistrationsOpen().then((open) => {
+      if (!cancelled) setPublicRegistrationsOpen(open);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const showInscreverButton =
+    pathname !== '/inscrever' &&
+    hasToken &&
+    (publicRegistrationsOpen || isAdmin);
+
+  const inscreverLabel =
+    !publicRegistrationsOpen && isAdmin ? 'Nova inscrição' : 'Inscrever'; 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -295,6 +314,7 @@ const HeaderMain = ({className }) => {
     pathname === '/novasenha' ||
     pathname.startsWith('/recuperarsenha/') ||
     pathname === '/verificar';
+  const hideAuthNav = estaNaHomeOuRegistrar || (!hasToken && pathname === '/inscrever');
   return (
     <ThemeProvider theme={theme}>
       
@@ -306,7 +326,7 @@ const HeaderMain = ({className }) => {
 
 
       {/* Os demais botões são exibidos apenas se não estiver em '/' ou '/registrar' */}
-      {!estaNaHomeOuRegistrar && (
+      {!hideAuthNav && (
         <>
           {pathname !== '/painel' && (
             <Button onClick={() => navigate('/painel')}>
@@ -314,9 +334,9 @@ const HeaderMain = ({className }) => {
             </Button>
           )}
 
-          {pathname !== '/inscrever' && (
+          {showInscreverButton && (
             <Button onClick={() => navigate('/inscrever')}>
-              <FiPlus size={20} /> Inscrever
+              <FiPlus size={20} /> {inscreverLabel}
             </Button>
           )}
 
@@ -355,7 +375,7 @@ const HeaderMain = ({className }) => {
 
         <MobileMenu $isOpen={isMenuOpen}>
 
-        {!estaNaHomeOuRegistrar && (
+        {!hideAuthNav && (
         <>
           {pathname !== '/painel' && (
     
@@ -363,10 +383,9 @@ const HeaderMain = ({className }) => {
             <FiPlus size={20} /> Home
           </Button>
             )}
-  {pathname !== '/inscrever' && (
-
+  {showInscreverButton && (
           <Button onClick={() => { navigate('/inscrever'); setIsMenuOpen(false) }}>
-            <FiPlus size={20} /> Inscrever
+            <FiPlus size={20} /> {inscreverLabel}
           </Button>
              )}
            
